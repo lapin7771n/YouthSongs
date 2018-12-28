@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/homeTab"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/homeLabel" />
+
+    <item android:id="@+id/featuredTab"
+        android:icon="@drawable/ic_star_black"
+        android:title="@string/featuredLabel" />
+
+    <item android:icon="@drawable/ic_settings_black_24dp"
+        android:id="@+id/settingsTab"
+        android:title="@string/settingsLabel"/>
+</menu>
