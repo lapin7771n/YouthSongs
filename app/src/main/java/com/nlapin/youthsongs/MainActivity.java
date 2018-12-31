@@ -1,19 +1,21 @@
 package com.nlapin.youthsongs;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nlapin.youthsongs.adapters.DataAdapter;
 import com.nlapin.youthsongs.fragments.FeaturesFragment;
 import com.nlapin.youthsongs.fragments.HomeFragment;
 import com.nlapin.youthsongs.fragments.SettingsFragment;
+import com.nlapin.youthsongs.fragments.SongFragment;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -31,13 +33,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ButterKnife.bind(this);
 
-        DataAdapter dataAdapter = new DataAdapter(this);
+        new DataAdapter(this);
 
         homeFragment = new HomeFragment();
+        homeFragment.setParentActivity(MainActivity.this);
         featuresFragment = new FeaturesFragment();
+        featuresFragment.setParentActivity(MainActivity.this);
         settingsFragment = new SettingsFragment();
 
         setFragment(homeFragment);
@@ -68,9 +73,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setFragment(Fragment fragment) {
+    public void setFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainFrame, fragment);
+        if (fragment instanceof SongFragment) {
+            transaction.addToBackStack(null);
+        }
         transaction.commit();
     }
 }

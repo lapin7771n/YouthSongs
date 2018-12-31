@@ -1,14 +1,15 @@
 package com.nlapin.youthsongs.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nlapin.youthsongs.CustomItemClickListener;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.model.Song;
 
@@ -19,11 +20,13 @@ import butterknife.ButterKnife;
 
 public class SongRVAdapter extends RecyclerView.Adapter<SongRVAdapter.ViewHolder> {
 
-    private List<Song> songList = DataAdapter.cachedSongs;
-    private final Context context;
+    private List<Song> songList;
+    CustomItemClickListener clickListener;
 
-    public SongRVAdapter(Context context) {
-        this.context = context;
+
+    public SongRVAdapter(List<Song> songList, CustomItemClickListener clickListener) {
+        this.songList = songList;
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -35,7 +38,13 @@ public class SongRVAdapter extends RecyclerView.Adapter<SongRVAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.song_item, viewGroup, false);
-        return new ViewHolder(itemView);
+        ViewHolder viewHolder = new ViewHolder(itemView);
+        try {
+            itemView.setOnClickListener(v -> clickListener.onItemClick(v, viewHolder.getLayoutPosition()));
+        }catch (NullPointerException e){
+            Toast.makeText(viewGroup.getContext(), "This song unavailable", Toast.LENGTH_SHORT).show();
+        }
+        return viewHolder;
     }
 
     @Override
@@ -45,14 +54,6 @@ public class SongRVAdapter extends RecyclerView.Adapter<SongRVAdapter.ViewHolder
 
         viewHolder.songNumberTV.setText(String.valueOf(songNumber));
         viewHolder.songNameTV.setText(songName);
-
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Item " + position + " clicked", Toast.LENGTH_SHORT).show();
-
-            }
-        });
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -65,4 +66,5 @@ public class SongRVAdapter extends RecyclerView.Adapter<SongRVAdapter.ViewHolder
             ButterKnife.bind(this, itemView);
         }
     }
+
 }

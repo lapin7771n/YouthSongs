@@ -3,14 +3,87 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.SongFragment">
 
-    <TextView
-        android:id="@+id/songTextTV"
-        android:text="@string/song_text"
-        android:textSize="20sp"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/songFragmentTitle"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/toolbarColor"
+        android:elevation="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/songNumToolBarTV"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginEnd="5dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:hint="@string/songNumber"
+                android:textStyle="bold"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/songNameToolBarTV"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:layout_toStartOf="@+id/featuredBtn"
+                android:layout_toEndOf="@+id/songNumToolBarTV"
+                android:gravity="center_vertical"
+                android:hint="@string/songName"
+                android:maxLines="1" />
+
+            <ToggleButton
+                android:id="@+id/featuredBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/button_favourite"
+                android:checked="false"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/featuredBtnAnimation"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="5dp"
+                app:lottie_autoPlay="false"
+                app:lottie_fileName="like_button.json"
+                app:lottie_loop="false" />
+
+
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"/>
+        android:layout_marginTop="60dp">
+
+        <TextView
+            android:id="@+id/songTextTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:paddingBottom="40dp"
+            android:text="@string/song_text"
+            android:textSize="20sp" />
+
+    </ScrollView>
 
 </FrameLayout>

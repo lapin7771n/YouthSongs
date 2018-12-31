@@ -6,7 +6,7 @@
         android:title="@string/homeLabel" />
 
     <item android:id="@+id/featuredTab"
-        android:icon="@drawable/ic_star_black"
+        android:icon="@drawable/ic_favorite"
         android:title="@string/featuredLabel" />
 
     <item android:icon="@drawable/ic_settings_black_24dp"

@@ -4,13 +4,13 @@ import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper{
 
@@ -30,6 +30,17 @@ public class DataBaseHelper extends SQLiteOpenHelper{
         DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
     }
 
+    public void updateDataBase() throws IOException {
+        if (true) {
+            File dbFile = new File(DB_PATH + DB_NAME);
+            if (dbFile.exists())
+                dbFile.delete();
+
+            copyDataBase();
+            mNeedUpdate = false;
+        }
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
 
@@ -37,7 +48,20 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        try {
+            updateDataBase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        try {
+            updateDataBase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createDataBase() throws IOException
