@@ -13,6 +13,8 @@ import com.nlapin.youthsongs.CustomItemClickListener;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.model.Song;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,8 +26,8 @@ public class SongRVAdapter extends RecyclerView.Adapter<SongRVAdapter.ViewHolder
     CustomItemClickListener clickListener;
 
 
-    public SongRVAdapter(List<Song> songList, CustomItemClickListener clickListener) {
-        this.songList = songList;
+    public SongRVAdapter(Collection<Song> songList, CustomItemClickListener clickListener) {
+        this.songList = new ArrayList<>(songList);
         this.clickListener = clickListener;
     }
 

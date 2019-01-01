@@ -1,8 +1,8 @@
 package com.nlapin.youthsongs.model;
 
-public class Song {
+public class Song implements Comparable<Song> {
     private final long id;
-    private boolean favourite;
+    private boolean favorite;
     private final String name;
     private final String text;
     private final String chorus;
@@ -22,12 +22,12 @@ public class Song {
         return name;
     }
 
-    public void setFavourite(boolean isFavourite) {
-        this.favourite = isFavourite;
+    public boolean isFavorite() {
+        return favorite;
     }
 
-    public boolean isFavourite() {
-        return favourite;
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     /**
@@ -42,5 +42,10 @@ public class Song {
         songText = songText.replace(CHORUS_REPEAT_MARKER, "<b>" + chorus + "</b>");
         songText = songText.replace("\n", "<br>");
         return songText;
+    }
+
+    @Override
+    public int compareTo(Song o) {
+        return Long.compare(this.getId(), o.getId());
     }
 }

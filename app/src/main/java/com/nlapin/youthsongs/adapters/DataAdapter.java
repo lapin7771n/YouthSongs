@@ -5,21 +5,28 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.nlapin.youthsongs.model.DataBaseHelper;
+import com.nlapin.youthsongs.model.FavoriteDBHelper;
 import com.nlapin.youthsongs.model.Song;
 import com.nlapin.youthsongs.model.SongsDAO;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class DataAdapter implements SongsDAO {
 
-    public static List<Song> cachedSongs = null;
+    public static List<Song> cachedSongs = new ArrayList<>();
     public static List<Song> favoriteSongs = new ArrayList<>();
 
     private SQLiteDatabase database;
 
-    private static final String TABLE_NAME = "Songs";
+    private Context context;
+
+    private static final String DEFAULT_TABLE = "Songs";
 
     private static final String FIELD_ID = "Number";
     private static final String FIELD_NAME = "Name";
@@ -27,6 +34,13 @@ public class DataAdapter implements SongsDAO {
     private static final String FIELD_CHORUS = "Chorus";
 
     public DataAdapter(Context context) {
+        this.context = context;
+
+        initCache();
+        favoriteSongs = new ArrayList<>(getAllFromFavorites());
+    }
+
+    public void initCache() {
         DataBaseHelper dataBaseHelper = new DataBaseHelper(context);
 
         try {
@@ -35,9 +49,8 @@ public class DataAdapter implements SongsDAO {
         } catch (IOException e) {
             throw new Error("Can`t create DB");
         }
-
         database = dataBaseHelper.getReadableDatabase();
-        cachedSongs = getAll();
+        cachedSongs = getAll(DEFAULT_TABLE);
     }
 
     /**
@@ -45,9 +58,9 @@ public class DataAdapter implements SongsDAO {
      * @return List of Song (ArrayList)
      */
     @Override
-    public List<Song> getAll() {
+    public List<Song> getAll(String tableName) {
         ArrayList<Song> songs = new ArrayList<>();
-        String sql = "SELECT * FROM " + TABLE_NAME;
+        String sql = "SELECT * FROM " + tableName;
         Cursor cursor = database.rawQuery(sql, null);
 
         while (cursor.moveToNext()) {
@@ -73,7 +86,7 @@ public class DataAdapter implements SongsDAO {
     @Override
     public Song getById(int songID) {
         Song song = null;
-        String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id=" + songID;
+        String sql = "SELECT * FROM " + DEFAULT_TABLE + " WHERE id=" + songID;
         Cursor cursor = database.rawQuery(sql, null);
         if (cursor.moveToNext()) {
             long id = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_ID));
@@ -118,4 +131,24 @@ public class DataAdapter implements SongsDAO {
 
         return song;
     }
+
+    public boolean addToFavorite(int id) {
+        return new FavoriteDBHelper(context).create(id);
+    }
+
+    public boolean removeFromFavorite(int id) {
+        return new FavoriteDBHelper(context).delete(id);
+    }
+
+    public ArrayList<Song> getAllFromFavorites() {
+        ArrayList<Song> songsSet = new ArrayList<>();
+        Set<Integer> setOfIds = new HashSet<>(new FavoriteDBHelper(context).read());
+        for (Integer id : setOfIds) {
+            Song inCache = getByIdInCache(id);
+            inCache.setFavorite(true);
+            songsSet.add(inCache);
+        }
+        return songsSet;
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.nlapin.youthsongs.fragments;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -15,6 +17,8 @@ import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.adapters.DataAdapter;
 import com.nlapin.youthsongs.model.Song;
 
+import java.util.Objects;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.TextViewCompat;
@@ -28,6 +32,9 @@ import butterknife.ButterKnife;
  */
 public class SongFragment extends Fragment {
 
+    SharedPreferences settings;
+
+    DataAdapter dataAdapter;
 
     @BindView(R.id.songTextTV) TextView songTextTV;
     @BindView(R.id.songNameToolBarTV) TextView songNameToolBarTV;
@@ -52,15 +59,26 @@ public class SongFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
+        dataAdapter = new DataAdapter(getContext());
+
+        settings = Objects.requireNonNull(getContext()).getSharedPreferences(SettingsFragment.APP_PREFERENCES, Context.MODE_PRIVATE);
+        float textSizeFromSettings = settings.getFloat(SettingsFragment.PREF_TEXT_SIZE, SettingsFragment.TEXT_SIZE_MED);
+
+        String name = shownSong.getName();
         String songText = shownSong.getSongText();
-        String name = shownSong.getName().substring(0, 19) + "...";
+        if (name.length() > 20) {
+            name = shownSong.getName().substring(0, 19) + "...";
+        }
 
         songTextTV.setText(Html.fromHtml(songText));
+        songTextTV.setTextSize(textSizeFromSettings);
         songNameToolBarTV.setText(name);
 
         TextViewCompat.setAutoSizeTextTypeWithDefaults(songNameToolBarTV, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
 
-        featuredBtn.setChecked(shownSong.isFavourite());
+        if (shownSong.isFavorite()) {
+            featuredBtn.setChecked(true);
+        }
         featuredBtn.setOnCheckedChangeListener(new FeaturedOnClickListener());
 
         float textSize = songNameToolBarTV.getTextSize();
@@ -75,14 +93,14 @@ public class SongFragment extends Fragment {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if (isChecked) {
-                shownSong.setFavourite(true);
-                DataAdapter.favoriteSongs.add(shownSong);
+                dataAdapter.addToFavorite((int) shownSong.getId());
+
                 featuredBtn.setBackgroundDrawable(null);
                 featuredBtnAnimation.setSpeed(1f);
                 featuredBtnAnimation.playAnimation();
             } else {
-                shownSong.setFavourite(false);
-                DataAdapter.favoriteSongs.remove(shownSong);
+                dataAdapter.removeFromFavorite((int) shownSong.getId());
+
                 featuredBtnAnimation.setSpeed(-2.5f);
                 featuredBtnAnimation.playAnimation();
                 featuredBtn.setBackgroundResource(R.drawable.button_favourite);
@@ -94,7 +112,7 @@ public class SongFragment extends Fragment {
         this.shownSong = shownSong;
     }
 
-    public static SongFragment getSongFragment(Song shownSong) {
+    static SongFragment getSongFragment(Song shownSong) {
         SongFragment songFragment = new SongFragment();
         songFragment.setShownSong(shownSong);
         return songFragment;

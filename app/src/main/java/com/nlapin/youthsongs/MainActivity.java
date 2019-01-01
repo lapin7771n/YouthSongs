@@ -7,7 +7,7 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nlapin.youthsongs.adapters.DataAdapter;
-import com.nlapin.youthsongs.fragments.FeaturesFragment;
+import com.nlapin.youthsongs.fragments.FavoritesFragment;
 import com.nlapin.youthsongs.fragments.HomeFragment;
 import com.nlapin.youthsongs.fragments.SettingsFragment;
 import com.nlapin.youthsongs.fragments.SongFragment;
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.mainFrame) FrameLayout mainFrame;
 
     private HomeFragment homeFragment;
-    private FeaturesFragment featuresFragment;
+    private FavoritesFragment favoritesFragment;
     private SettingsFragment settingsFragment;
 
 
@@ -41,9 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
         homeFragment = new HomeFragment();
         homeFragment.setParentActivity(MainActivity.this);
-        featuresFragment = new FeaturesFragment();
-        featuresFragment.setParentActivity(MainActivity.this);
+        favoritesFragment = new FavoritesFragment();
+        favoritesFragment.setParentActivity(MainActivity.this);
         settingsFragment = new SettingsFragment();
+        settingsFragment.setParentActivity(MainActivity.this);
 
         setFragment(homeFragment);
 
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.featuredTab:
-                    setFragment(featuresFragment);
+                    setFragment(favoritesFragment);
                     return true;
 
                 case R.id.settingsTab:

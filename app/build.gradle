@@ -7,7 +7,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "0.1 BETA"
     }
     buildTypes {
         release {
@@ -34,5 +34,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha02'
 
     implementation "com.airbnb.android:lottie:2.8.0"
+    implementation 'com.github.jrvansuita:MaterialAbout:+'
 
 }

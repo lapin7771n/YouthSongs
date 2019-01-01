@@ -14,7 +14,8 @@ import com.nlapin.youthsongs.adapters.DataAdapter;
 import com.nlapin.youthsongs.adapters.SongRVAdapter;
 import com.nlapin.youthsongs.model.Song;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FeaturesFragment extends Fragment {
+public class FavoritesFragment extends Fragment {
 
     @BindView(R.id.emptyBoxAnim) LottieAnimationView emptyBoxAnim;
     @BindView(R.id.emptyLabel) TextView emptyLabel;
@@ -35,7 +36,7 @@ public class FeaturesFragment extends Fragment {
     MainActivity parentActivity;
 
 
-    public FeaturesFragment() {
+    public FavoritesFragment() {
         // Required empty public constructor
     }
 
@@ -46,10 +47,10 @@ public class FeaturesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_features, container, false);
         ButterKnife.bind(this, view);
 
-
-        List<Song> favoriteSongs = DataAdapter.favoriteSongs;
+        ArrayList<Song> favoriteSongs = new DataAdapter(getContext()).getAllFromFavorites();
 
         if (favoriteSongs.size() > 0) {
+            favoriteSongsRV.setVisibility(View.VISIBLE);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
             SongRVAdapter songRVAdapter = new SongRVAdapter(favoriteSongs, (v, position) -> {
                 TextView viewById = v.findViewById(R.id.songNumberTV);
