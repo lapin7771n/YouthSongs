@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "827029243921",
+    "firebase_url": "https://youth-songs-development.firebaseio.com",
+    "project_id": "youth-songs-development",
+    "storage_bucket": "youth-songs-development.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827029243921:android:ec5b34f6b8410ff6",
+        "android_client_info": {
+          "package_name": "com.nlapin.youthsongs.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827029243921-u60lj7msq1ntv9s0b0m0ilj41tlm873k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGWF67yZlk2uhZnr4n-BDVYaoE38BI0XA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

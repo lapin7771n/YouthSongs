@@ -15,4 +15,5 @@
     <string name="smallLabel">Small</string>
     <string name="mediumLabel">Medium</string>
     <string name="largeLabel">Large</string>
+    <string name="search">Search</string>
 </resources>

@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/homeTab"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/homeLabel" />
+        android:icon="@drawable/ic_home"
+        android:title="" />
 
-    <item android:id="@+id/featuredTab"
+    <item android:id="@+id/favoriteTab"
         android:icon="@drawable/ic_favorite"
-        android:title="@string/featuredLabel" />
+        android:title="" />
 
-    <item android:icon="@drawable/ic_settings_black_24dp"
+    <item android:icon="@drawable/ic_settings"
         android:id="@+id/settingsTab"
-        android:title="@string/settingsLabel"/>
+        android:title=""/>
 </menu>
