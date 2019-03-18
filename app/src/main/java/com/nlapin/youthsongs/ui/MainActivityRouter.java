@@ -3,12 +3,11 @@ package com.nlapin.youthsongs.ui;
 import android.os.Bundle;
 
 import com.nlapin.youthsongs.BaseRouter;
-import com.nlapin.youthsongs.R;
-import com.nlapin.youthsongs.ui.song.SongActivity;
+import com.nlapin.youthsongs.ui.about.AboutActivity;
+import com.nlapin.youthsongs.ui.songScreen.SongActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivityRouter extends BaseRouter {
 
@@ -20,16 +19,16 @@ public class MainActivityRouter extends BaseRouter {
     }
 
     public void switchFragment(Fragment fragment) {
-        FragmentTransaction transaction =
-                activity.getSupportFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.mainFrame, fragment);
-        transaction.commit();
+        openFragment(fragment);
     }
 
     public void openSongScreen(int songId) {
         Bundle bundle = new Bundle();
         bundle.putInt(SongActivity.Constants.SONG_ID, songId);
         openActivityWithExtra(new SongActivity(), bundle);
+    }
+
+    public void openAboutAppScreen(){
+        openActivity(new AboutActivity());
     }
 }

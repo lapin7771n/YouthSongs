@@ -16,7 +16,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DataBaseHelper";
 
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 1;
 
     private static final String DB_NAME = "songs.db";
 
@@ -41,8 +41,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public DataBaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
-
         DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
+
+        //createDataBase();
     }
 
     @Override

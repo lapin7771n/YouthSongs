@@ -34,35 +34,39 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_toEndOf="@id/songNumberTV"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Я колени склоню, и услышит Всевышний"
             android:textSize="20sp"
-            card_view:layout_constraintEnd_toStartOf="@+id/imageView"
-            card_view:layout_constraintStart_toEndOf="@+id/songNumberTV"
-            card_view:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:elevation="12dp"
-            android:id="@+id/imageView"
-            style="@style/wrapStyle"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_chords"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            style="@style/chorusKeyStyle"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="10dp"
-            android:text="Dm"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toEndOf="@+id/songNumberTV"
-            card_view:layout_constraintTop_toBottomOf="@+id/songNameTV"
-            card_view:layout_constraintVertical_bias="0.433" />
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <!--<ImageView-->
+            <!--android:id="@+id/imageView"-->
+            <!--style="@style/wrapStyle"-->
+            <!--android:layout_marginTop="18dp"-->
+            <!--android:layout_marginEnd="15dp"-->
+            <!--android:elevation="12dp"-->
+            <!--android:src="@drawable/ic_chords"-->
+            <!--android:visibility="invisible"-->
+            <!--card_view:layout_constraintEnd_toEndOf="parent"-->
+            <!--card_view:layout_constraintTop_toTopOf="parent" />-->
+
+        <!--<TextView-->
+            <!--style="@style/chorusKeyStyle"-->
+            <!--android:layout_marginStart="28dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:text="Dm"-->
+            <!--android:visibility="invisible"-->
+            <!--card_view:layout_constraintBottom_toBottomOf="parent"-->
+            <!--card_view:layout_constraintStart_toEndOf="@+id/songNumberTV"-->
+            <!--card_view:layout_constraintTop_toBottomOf="@+id/songNameTV"-->
+            <!--card_view:layout_constraintVertical_bias="0.433" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
 

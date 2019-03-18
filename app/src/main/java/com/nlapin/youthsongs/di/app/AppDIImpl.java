@@ -10,7 +10,7 @@ import com.nlapin.youthsongs.data.SongsRepositoryImpl;
 
 public class AppDIImpl implements AppDI {
 
-    Context context;
+    private Context context;
 
     public AppDIImpl(Context context) {
         this.context = context;

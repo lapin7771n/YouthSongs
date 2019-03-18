@@ -17,4 +17,7 @@
     <color name="ic_launcher_background">#101116</color>
 
     <color name="chorusMarkColor">#7C7C7C</color>
+
+    <color name="colorAboutPrimary">#FFD231</color>
+    <color name="colorAboutPrimaryDark">#B49525</color>
 </resources>

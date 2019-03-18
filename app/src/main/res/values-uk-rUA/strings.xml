@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Пошук</string>
+    <string name="settingsLabel">Налаштування</string>
+    <string name="featuredLabel">Улюблене</string>
+    <string name="homeLabel">Додому</string>
+    <string name="songName">Назва пiснi</string>
+    <string name="song_text">Текст пiснi</string>
+    <string name="emptyFavLabel">У вас немає улюблених пісень</string>
+    <string name="smallLabel">Маленький</string>
+    <string name="mediumLabel">Середній</string>
+    <string name="largeLabel">Великий</string>
+</resources>

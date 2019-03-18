@@ -20,18 +20,12 @@ public class HomePresenter
 
     @Override
     public void loadData() {
-        getView().showProgressBar();
-
         List<Song> songs = songsRepository.getAll();
-        Log.d("dd", "loadData: songsCount: " + songs.size());
         getView().showSongs(songs);
-
-        getView().hideProgressBar();
     }
 
     @Override
     public Song onItemClick(int position) {
-        Log.d("dd", "onItemClick: pos: " + position);
         return songsRepository.getByID(position);
     }
 

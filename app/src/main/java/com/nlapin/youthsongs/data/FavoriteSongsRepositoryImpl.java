@@ -16,8 +16,6 @@ public class FavoriteSongsRepositoryImpl
     private DataBaseHelper dataBaseHelper;
     private SongsRepository songsRepository;
 
-    private static List<Song> cache = new ArrayList<>();
-
     private static final String TABLE_FAVORITE_SONGS = "FavoriteSongs";
 
     private static final String KEY_SONG_ID = "song_id";
@@ -27,7 +25,6 @@ public class FavoriteSongsRepositoryImpl
                                        SongsRepository songsRepository) {
         this.dataBaseHelper = dataBaseHelper;
         this.songsRepository = songsRepository;
-        loadCache();
     }
 
     /**
@@ -43,8 +40,6 @@ public class FavoriteSongsRepositoryImpl
         SQLiteDatabase db = dataBaseHelper.getWritableDatabase();
 
         db.insert(TABLE_FAVORITE_SONGS, null, values);
-
-        loadCache();
     }
 
     /**
@@ -59,32 +54,10 @@ public class FavoriteSongsRepositoryImpl
         db.delete(TABLE_FAVORITE_SONGS,
                 KEY_SONG_ID + " = ?",
                 new String[]{String.valueOf(songID)});
-
-        loadCache();
     }
 
-    /**
-     * Work with cached song for higher performance
-     *
-     * @return cached favorite songs id
-     */
     @Override
     public List<Song> getAll() {
-        return cache;
-    }
-
-    /**
-     * Work with cached song for higher performance
-     *
-     * @param id unique identifier of favorite song
-     * @return id of REGULAR song
-     */
-    @Override
-    public Song getByID(int id) {
-        return cache.get(++id);
-    }
-
-    private void loadCache() {
         ArrayList<Integer> favoriteSongsID = new ArrayList<>();
         String sql = "SELECT * FROM " + TABLE_FAVORITE_SONGS;
 
@@ -104,17 +77,27 @@ public class FavoriteSongsRepositoryImpl
         }
 
         cursor.close();
-        refreshCache(favoriteSongs);
+        return favoriteSongs;
     }
 
-    /**
-     * Setting new cache
-     * Invokes after add/delete table operations
-     *
-     * @param newCache latest favorite songs in Table
-     */
-    private void refreshCache(List<Song> newCache) {
-        cache.clear();
-        cache.addAll(newCache);
+    @Override
+    public Song getByID(int id) {
+        Song song = null;
+
+        String sql = "SELECT * FROM " + TABLE_FAVORITE_SONGS + " WHERE " + KEY_SONG_ID + "=" + id;
+
+        SQLiteDatabase db = dataBaseHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while (cursor.moveToNext()) {
+            int songID = cursor.getInt(
+                    cursor.getColumnIndexOrThrow(KEY_SONG_ID)
+            );
+            song = songsRepository.getByID(songID);
+
+        }
+
+        cursor.close();
+        return song;
     }
 }

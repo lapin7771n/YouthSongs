@@ -3,8 +3,8 @@ package com.nlapin.youthsongs.ui.main;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nlapin.youthsongs.R;
@@ -27,8 +27,10 @@ public class MainActivity
     private HomeFragment homeFragment;
     private FavoritesFragment favoritesFragment;
     private SettingsFragment settingsFragment;
+    private static int latestFragment;
 
-    MainActivityRouter router;
+    private MainActivityRouter router;
+    private MenuItem searchItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +48,21 @@ public class MainActivity
         favoritesFragment = new FavoritesFragment();
         settingsFragment = new SettingsFragment();
 
-
-        router.switchFragment(homeFragment);
-
         bottomNavBar.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.homeTab:
                     router.switchFragment(homeFragment);
+                    latestFragment = Constants.HOME_FRAGMENT;
                     return true;
 
                 case R.id.favoriteTab:
                     router.switchFragment(favoritesFragment);
+                    latestFragment = Constants.FAVORITES_FRAGMENT;
                     return true;
 
                 case R.id.settingsTab:
                     router.switchFragment(settingsFragment);
+                    latestFragment = Constants.SETTINGS_FRAGMENT;
                     return true;
 
                 default:
@@ -70,9 +72,34 @@ public class MainActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        switch (latestFragment) {
+            case Constants.HOME_FRAGMENT:
+                router.switchFragment(homeFragment);
+                break;
+            case Constants.FAVORITES_FRAGMENT:
+                router.switchFragment(favoritesFragment);
+                break;
+            case Constants.SETTINGS_FRAGMENT:
+                router.switchFragment(settingsFragment);
+                break;
+            default:
+                router.switchFragment(homeFragment);
+                break;
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
+        searchItem = menu.findItem(R.id.searchBtn);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return false;
     }
 
     @Override
@@ -83,5 +110,21 @@ public class MainActivity
     @Override
     public void hideProgressBar() {
 
+    }
+
+    public MainActivityRouter getRouter() {
+        return router;
+    }
+
+    public MenuItem getSearchItem() {
+        return searchItem;
+    }
+
+    interface Constants {
+
+        //Fragments constants
+        int HOME_FRAGMENT = 1;
+        int FAVORITES_FRAGMENT = 2;
+        int SETTINGS_FRAGMENT = 3;
     }
 }

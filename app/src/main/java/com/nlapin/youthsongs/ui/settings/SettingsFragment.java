@@ -15,11 +15,16 @@ import android.widget.Toast;
 
 import com.nlapin.youthsongs.PresenterManager;
 import com.nlapin.youthsongs.R;
+import com.nlapin.youthsongs.ui.MainActivityRouter;
+import com.nlapin.youthsongs.ui.main.MainActivity;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.nlapin.youthsongs.data.PreferenceHelper.Constants.APP_PREFERENCES;
+import static com.nlapin.youthsongs.data.PreferenceHelper.Constants.PREF_TEXT_SIZE;
 
 
 /**
@@ -29,12 +34,10 @@ public class SettingsFragment
         extends Fragment
         implements SettingsContract.View {
 
-    public static final String APP_PREFERENCES = "appSettings";
-    public static final String PREF_TEXT_SIZE = "textSizePref";
-
     private SettingsPresenter presenter;
 
     private SharedPreferences settings;
+    private MainActivityRouter router;
 
     @BindView(R.id.textSizeRG) RadioGroup textSizeRG;
 
@@ -59,6 +62,8 @@ public class SettingsFragment
         } else {
             presenter = PresenterManager.getInstance().restorePresenter(savedInstanceState);
         }
+
+        router = getMainActivityRouter();
 
         settings = getContext()
                 .getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
@@ -91,9 +96,11 @@ public class SettingsFragment
 
 
         aboutBtn.setOnClickListener(v -> {
-            //parentActivity.setFragment(new AboutFragment());
+            router.openAboutAppScreen();
         });
+
         presenter.setUpRadioBtn();
+        ((MainActivity) getActivity()).getSearchItem().setVisible(false);
         return view;
     }
 
@@ -125,6 +132,16 @@ public class SettingsFragment
                 textSizeLargeRB.setChecked(true);
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((MainActivity) getActivity()).getSearchItem().setVisible(true);
+    }
+
+    private MainActivityRouter getMainActivityRouter() {
+        return ((MainActivity) getActivity()).getRouter();
     }
 }
 

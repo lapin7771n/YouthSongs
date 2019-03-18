@@ -1,6 +1,4 @@
-package com.nlapin.youthsongs.ui.song;
-
-import android.util.Log;
+package com.nlapin.youthsongs.ui.songScreen;
 
 import com.nlapin.youthsongs.BasePresenter;
 import com.nlapin.youthsongs.data.FavoriteSongsRepository;
@@ -31,8 +29,6 @@ public class SongPresenter
 
     @Override
     public void favoriteClicked(boolean b) {
-        song.setFavorite(b);
-        Log.d("dd", "favoriteClicked: " + b);
         if (b) {
             favoriteSongsRepository.addToFavorite(songID);
         } else {
@@ -42,26 +38,15 @@ public class SongPresenter
 
     @Override
     public void loadSong(int songID) {
-        getView().showProgressBar();
-
         this.songID = songID;
-
         song = songsRepository.getByID(songID);
-
-        getView().setToolbar(song.getId() + " " + song.getName());
-        getView().setSongTextSize(textSize);
-        getView().setSongText(song.getSongText());
-
-        getView().hideProgressBar();
+        getView().setSong(song);
     }
 
     @Override
     public void setUpFavoriteBtn() {
-        if (song.isFavorite()) {
-            getView().showFavorite();
-        } else {
-            getView().hideFavorite();
-        }
+        Song favoriteSong = favoriteSongsRepository.getByID(songID);
+        getView().setIsFavorite(favoriteSong != null);
     }
 
     @Override

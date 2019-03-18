@@ -7,6 +7,8 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingStart="20dp"
+    android:background="@color/primaryColor"
+
     android:paddingEnd="20dp"
     tools:context=".ui.settings.SettingsFragment">
 
@@ -17,7 +19,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="40dp"
         android:text="Text Size"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +56,7 @@
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:text="@string/smallLabel"
-            android:textColor="@color/black" />
+            android:textColor="@android:color/white" />
 
         <RadioButton
             android:id="@+id/textSizeMedium"
@@ -70,7 +72,7 @@
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:text="@string/mediumLabel"
-            android:textColor="@color/black" />
+            android:textColor="@android:color/white" />
 
         <RadioButton
             android:id="@+id/textSizeLarge"
@@ -87,7 +89,7 @@
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:text="@string/largeLabel"
-            android:textColor="@color/black" />
+            android:textColor="@android:color/white" />
     </RadioGroup>
 
     <TextView
@@ -97,9 +99,12 @@
         android:text="Будь прославлений, як рясний плід дає земля,
 Як в достатку тече ріка, будь прославлений."
         android:textSize="15sp"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textSizeRG" />
+
+
 
     <Button
         android:id="@+id/aboutBtn"
@@ -122,5 +127,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/aboutBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textSizeDemo"
+        app:layout_constraintVertical_bias="0.116" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

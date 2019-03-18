@@ -2,6 +2,7 @@ package com.nlapin.youthsongs;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +26,6 @@ public abstract class BaseRouter {
                         .beginTransaction();
 
         transaction.replace(R.id.mainFrame, fragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -39,5 +39,16 @@ public abstract class BaseRouter {
         Intent intent = new Intent(activity, to.getClass());
         intent.putExtras(bundle);
         activity.startActivity(intent);
+    }
+
+    public void openExternalActivity(String link){
+        Intent intent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(link));
+        activity.startActivity(Intent.createChooser(intent, "Open with..."));
+    }
+
+    public void openEmailSender(String email){
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + email));
+        activity.startActivity(Intent.createChooser(intent, "Send email..."));
     }
 }

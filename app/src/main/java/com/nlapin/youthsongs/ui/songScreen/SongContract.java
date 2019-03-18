@@ -1,21 +1,16 @@
-package com.nlapin.youthsongs.ui.song;
-
-import android.view.MenuItem;
+package com.nlapin.youthsongs.ui.songScreen;
 
 import com.nlapin.youthsongs.BaseContract;
+import com.nlapin.youthsongs.models.Song;
 
 public interface SongContract extends BaseContract {
 
     interface View extends BaseView {
-        void showFavorite();
+        void setSong(Song song);
 
-        void hideFavorite();
+        void setSongTextSize();
 
-        void setToolbar(String songInfo);
-
-        void setSongText(String songText);
-
-        void setSongTextSize(int songTextSize);
+        void setIsFavorite(boolean isFavorite);
 
     }
 

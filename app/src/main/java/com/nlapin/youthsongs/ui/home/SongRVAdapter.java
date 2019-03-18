@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.nlapin.youthsongs.CustomItemClickListener;
 import com.nlapin.youthsongs.R;
+import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.models.Song;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class SongRVAdapter
         extends RecyclerView.Adapter<SongRVAdapter.ViewHolder> {
 
     private List<Song> songList;
+    private List<Song> copySongList;
     private CustomItemClickListener clickListener;
 
 
@@ -30,6 +32,7 @@ public class SongRVAdapter
                          CustomItemClickListener clickListener) {
 
         this.songList = new ArrayList<>(songList);
+        this.copySongList = new ArrayList<>(songList);
         this.clickListener = clickListener;
     }
 
@@ -58,10 +61,35 @@ public class SongRVAdapter
         String songName = songList.get(position).getName();
 
         viewHolder.itemView.setOnClickListener(v ->
-                clickListener.onItemClick(v, position));
+                clickListener.onItemClick(v, (int) songNumber));
 
         viewHolder.songNumberTV.setText(String.valueOf(songNumber));
         viewHolder.songNameTV.setText(songName);
+    }
+
+    public void filter(String filterText) {
+        filterText = filterText.toLowerCase();
+        songList.clear();
+        if (filterText.isEmpty()) {
+            songList.addAll(copySongList);
+            return;
+        }
+        for (Song song : copySongList) {
+            if (song.getName() == null)
+                continue;
+
+            //Search by name
+            if (song.getName().toLowerCase().contains(filterText))
+                songList.add(song);
+
+            //Search by number
+            if (String.valueOf(song.getId()).contains(filterText))
+                songList.add(song);
+
+            //Search by text
+            if (song.getSongText().toLowerCase().contains(filterText) && !songList.contains(song))
+                songList.add(song);
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -74,5 +102,6 @@ public class SongRVAdapter
             ButterKnife.bind(this, itemView);
         }
     }
+
 
 }

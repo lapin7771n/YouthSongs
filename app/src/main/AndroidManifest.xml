@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nlapin.youthsongs">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".YouthSongsApp"
         android:allowBackup="false"
@@ -13,8 +15,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="allowBackup">
+        <activity android:name=".ui.about.AboutActivity"></activity>
         <activity
-            android:name=".ui.song.SongActivity"
+            android:name=".ui.songScreen.SongActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
             android:name=".ui.main.MainActivity"
@@ -25,6 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="81c5b380bc680e2ab3fff9e68943edd798c43a35" />
     </application>
 
 </manifest>
