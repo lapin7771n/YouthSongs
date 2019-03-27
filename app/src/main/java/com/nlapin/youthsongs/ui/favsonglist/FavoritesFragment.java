@@ -2,9 +2,10 @@ package com.nlapin.youthsongs.ui.favsonglist;
 
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,7 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.nlapin.youthsongs.PresenterManager;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.data.FavoriteSongsRepository;
@@ -42,10 +42,14 @@ public class FavoritesFragment
         extends Fragment
         implements FavoritesContract.View {
 
-    @BindView(R.id.emptyBoxAnim) LottieAnimationView emptyBoxAnim;
-    @BindView(R.id.emptyLabel) TextView emptyLabel;
-    @BindView(R.id.favoriteSongsRV) RecyclerView favoriteSongsRV;
-    @BindView(R.id.progressBar) ProgressBar loadingPB;
+    @BindView(R.id.emptyBoxAnim)
+    LottieAnimationView emptyBoxAnim;
+    @BindView(R.id.emptyLabel)
+    TextView emptyLabel;
+    @BindView(R.id.favoriteSongsRV)
+    RecyclerView favoriteSongsRV;
+    @BindView(R.id.progressBar)
+    ProgressBar loadingPB;
 
     private FavoritesPresenter presenter;
     private MainActivityRouter router;
@@ -65,11 +69,7 @@ public class FavoritesFragment
         ButterKnife.bind(this, view);
         showProgressBar();
 
-        if (savedInstanceState == null) {
-            presenter = new FavoritesPresenter(getFavoriteSongsRepository());
-        } else {
-            presenter = PresenterManager.getInstance().restorePresenter(savedInstanceState);
-        }
+        presenter = new FavoritesPresenter(getFavoriteSongsRepository());
 
         presenter.attachView(this);
         favoriteSongsRV.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -92,7 +92,21 @@ public class FavoritesFragment
     public void showFavoriteSongs(List<Song> favoriteSongs) {
         favoriteSongsRV.setVisibility(View.VISIBLE);
         adapter = new SongRVAdapter(favoriteSongs, (v, favoriteSongID) -> {
-            router.openSongScreen(favoriteSongID);
+
+            // TODO: 3/22/2019 move this to level inside
+            View songNumber = v.findViewById(R.id.songNumberTV);
+            View songName = v.findViewById(R.id.songNameTV);
+
+            Pair[] pairs = new Pair[2];
+            pairs[0] = new Pair<>(songName, getString(R.string.songNameTransitions));
+            pairs[1] = new Pair<>(songNumber, getString(R.string.songNumberTransition));
+
+            ActivityOptions activityOptions = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pairs);
+            }
+
+            router.openSongScreen(favoriteSongID, activityOptions);
         });
     }
 
@@ -127,12 +141,6 @@ public class FavoritesFragment
     @Override
     public void hideProgressBar() {
         loadingPB.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        PresenterManager.getInstance().savePresenter(presenter, outState);
     }
 
     private FavoriteSongsRepository getFavoriteSongsRepository() {

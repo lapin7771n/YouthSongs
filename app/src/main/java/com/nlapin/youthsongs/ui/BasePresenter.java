@@ -1,4 +1,4 @@
-package com.nlapin.youthsongs;
+package com.nlapin.youthsongs.ui;
 
 /**
  * @author nikita on 26,January,2019

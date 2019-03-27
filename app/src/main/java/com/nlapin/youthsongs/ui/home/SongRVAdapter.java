@@ -1,14 +1,12 @@
 package com.nlapin.youthsongs.ui.home;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.nlapin.youthsongs.CustomItemClickListener;
+import com.nlapin.youthsongs.ui.CustomItemClickListener;
 import com.nlapin.youthsongs.R;
-import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.models.Song;
 
 import java.util.ArrayList;
@@ -51,8 +49,7 @@ public class SongRVAdapter
                         viewGroup,
                         false);
 
-        ViewHolder viewHolder = new ViewHolder(itemView);
-        return viewHolder;
+        return new ViewHolder(itemView);
     }
 
     @Override
@@ -92,7 +89,7 @@ public class SongRVAdapter
         }
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.songNameTV) TextView songNameTV;
         @BindView(R.id.songNumberTV) TextView songNumberTV;

@@ -1,26 +1,28 @@
 package com.nlapin.youthsongs.data;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.models.Song;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class SongsRepositoryImpl
         implements SongsRepository {
 
+    public static final String TAG = SongsRepositoryImpl.class.getName();
     private DataBaseHelper dataBaseHelper;
 
-    private static final String TABLE_SONGS = "Songs";
+    public static final String TABLE_SONGS = "Songs";
 
-    private static final String KEY_ID = "Number";
-    private static final String KEY_NAME = "Name";
-    private static final String KEY_TEXT = "Text";
-    private static final String KEY_CHORUS = "Chorus";
+    public static final String KEY_ID = "Number";
+    public static final String KEY_NAME = "Name";
+    public static final String KEY_TEXT = "Text";
+    public static final String KEY_CHORUS = "Chorus";
 
 
     public SongsRepositoryImpl(DataBaseHelper dataBaseHelper) {
@@ -91,4 +93,25 @@ public class SongsRepositoryImpl
         return song;
     }
 
+    @Override
+    public void addSong(Song song) {
+        SQLiteDatabase writableDatabase = dataBaseHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_ID, song.getId());
+        contentValues.put(KEY_NAME, song.getName());
+        contentValues.put(KEY_TEXT, song.getText());
+        contentValues.put(KEY_CHORUS, song.getChorus());
+
+        writableDatabase.insert(TABLE_SONGS, null, contentValues);
+
+        Log.d(TAG, "Song added to table - " + TABLE_SONGS);
+    }
+
+    @Override
+    public void addAll(Collection<Song> songs) {
+        for (Song song : songs) {
+            addSong(song);
+        }
+    }
 }

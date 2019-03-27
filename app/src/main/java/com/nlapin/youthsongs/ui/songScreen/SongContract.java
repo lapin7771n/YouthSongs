@@ -1,6 +1,6 @@
 package com.nlapin.youthsongs.ui.songScreen;
 
-import com.nlapin.youthsongs.BaseContract;
+import com.nlapin.youthsongs.ui.BaseContract;
 import com.nlapin.youthsongs.models.Song;
 
 public interface SongContract extends BaseContract {

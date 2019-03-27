@@ -1,4 +1,4 @@
-package com.nlapin.youthsongs;
+package com.nlapin.youthsongs.ui;
 
 import java.util.Collection;
 

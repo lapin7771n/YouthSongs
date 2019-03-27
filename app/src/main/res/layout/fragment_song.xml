@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.songScreen.SongFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -17,21 +17,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical">
+
             <TextView
-                android:fontFamily="@font/montserrat_bold"
                 android:id="@+id/songNumToolBarTV"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_marginEnd="5dp"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/montserrat_bold"
                 android:gravity="center_vertical"
                 android:hint="@string/songNumber"
+                android:maxLines="1"
                 android:textStyle="bold"
-                android:maxLines="1" />
+                android:transitionName="@string/songNumberTransition" />
 
             <TextView
-                android:fontFamily="@font/montserrat_bold"
+                android:transitionName="@string/songNameTransitions"
                 android:id="@+id/songNameToolBarTV"
                 android:layout_width="match_parent"
                 android:layout_height="49dp"
@@ -39,6 +41,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_toStartOf="@+id/featuredBtn"
                 android:layout_toEndOf="@+id/songNumToolBarTV"
+                android:fontFamily="@font/montserrat_bold"
                 android:gravity="center_vertical"
                 android:hint="@string/songName"
                 android:maxLines="1" />
@@ -79,8 +82,8 @@
         android:layout_marginTop="60dp">
 
         <TextView
-            style="@style/wideStyle"
             android:id="@+id/songTextTV"
+            style="@style/wideStyle"
             android:layout_margin="10dp"
             android:paddingBottom="40dp"
             android:text="@string/song_text"

@@ -1,9 +1,12 @@
-package com.nlapin.youthsongs;
+package com.nlapin.youthsongs.ui;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
+import com.nlapin.youthsongs.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -35,19 +38,30 @@ public abstract class BaseRouter {
         activity.startActivity(intent);
     }
 
+    public void openActivityWithTransition(Activity to, ActivityOptions activityOptions) {
+        Intent intent = new Intent(activity, to.getClass());
+        activity.startActivity(intent, activityOptions.toBundle());
+    }
+
     public void openActivityWithExtra(Activity to, Bundle bundle) {
         Intent intent = new Intent(activity, to.getClass());
         intent.putExtras(bundle);
         activity.startActivity(intent);
     }
 
-    public void openExternalActivity(String link){
+    public void openActivityWithExtra(Activity to, Bundle bundle, ActivityOptions activityOptions) {
+        Intent intent = new Intent(activity, to.getClass());
+        intent.putExtras(bundle);
+        activity.startActivity(intent, activityOptions.toBundle());
+    }
+
+    public void openExternalActivity(String link) {
         Intent intent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse(link));
         activity.startActivity(Intent.createChooser(intent, "Open with..."));
     }
 
-    public void openEmailSender(String email){
+    public void openEmailSender(String email) {
         Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + email));
         activity.startActivity(Intent.createChooser(intent, "Send email..."));
     }

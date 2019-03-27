@@ -5,5 +5,5 @@
     android:thickness="4dp"
     android:useLevel="false"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#FFCC68"/>
+    <solid android:color="@android:color/white"/>
 </shape>

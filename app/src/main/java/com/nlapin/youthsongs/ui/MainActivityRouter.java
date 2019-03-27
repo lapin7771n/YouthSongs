@@ -1,8 +1,8 @@
 package com.nlapin.youthsongs.ui;
 
+import android.app.ActivityOptions;
 import android.os.Bundle;
 
-import com.nlapin.youthsongs.BaseRouter;
 import com.nlapin.youthsongs.ui.about.AboutActivity;
 import com.nlapin.youthsongs.ui.songScreen.SongActivity;
 
@@ -22,13 +22,20 @@ public class MainActivityRouter extends BaseRouter {
         openFragment(fragment);
     }
 
-    public void openSongScreen(int songId) {
+    public void openSongScreen(int songId, ActivityOptions activityOptions) {
         Bundle bundle = new Bundle();
         bundle.putInt(SongActivity.Constants.SONG_ID, songId);
-        openActivityWithExtra(new SongActivity(), bundle);
+
+        //If android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP
+        //activity options will be not null
+        if (activityOptions != null) {
+            openActivityWithExtra(new SongActivity(), bundle, activityOptions);
+        } else {
+            openActivityWithExtra(new SongActivity(), bundle);
+        }
     }
 
-    public void openAboutAppScreen(){
-        openActivity(new AboutActivity());
+    public void openAboutAppScreen(ActivityOptions activityOptions) {
+        openActivityWithTransition(new AboutActivity(), activityOptions);
     }
 }

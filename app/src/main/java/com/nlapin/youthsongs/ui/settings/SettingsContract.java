@@ -1,6 +1,6 @@
 package com.nlapin.youthsongs.ui.settings;
 
-import com.nlapin.youthsongs.BaseContract;
+import com.nlapin.youthsongs.ui.BaseContract;
 
 public interface SettingsContract extends BaseContract {
 

@@ -1,6 +1,6 @@
 package com.nlapin.youthsongs.ui.favsonglist;
 
-import com.nlapin.youthsongs.BaseContract;
+import com.nlapin.youthsongs.ui.BaseContract;
 import com.nlapin.youthsongs.models.Song;
 
 import java.util.List;

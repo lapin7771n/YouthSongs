@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.28.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -28,14 +28,19 @@ android {
         applicationId "com.nlapin.youthsongs"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 1
-        versionName "0.1-beta"
+        versionCode 2
+        versionName "0.2"
         flavorDimensions "default"
+        multiDexEnabled true
     }
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug{
+            minifyEnabled false
         }
     }
 
@@ -61,7 +66,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
 
-    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0-beta01'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
     implementation 'com.google.android.material:material:1.1.0-alpha02'
 
@@ -69,8 +74,12 @@ dependencies {
 
     implementation 'com.google.guava:guava:27.0.1-jre'
 
+    //Firebase
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.google.firebase:firebase-core:16.0.6'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
+    implementation 'com.google.firebase:firebase-firestore:18.1.0'
 
+    //animations, transitions in app
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0'
 }

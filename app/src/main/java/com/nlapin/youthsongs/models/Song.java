@@ -37,6 +37,14 @@ public class Song implements Comparable<Song> {
         return songText;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public String getChorus() {
+        return chorus;
+    }
+
     // TODO: 10.03.19 implement this method
     public String getSongTextWithoutChords(){
         throw new UnsupportedOperationException();
@@ -45,5 +53,13 @@ public class Song implements Comparable<Song> {
     @Override
     public int compareTo(Song o) {
         return Long.compare(this.getId(), o.getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Song{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

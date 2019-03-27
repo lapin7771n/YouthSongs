@@ -10,16 +10,18 @@ import androidx.fragment.app.FragmentPagerAdapter;
  */
 public class AboutScreenPagerAdapter extends FragmentPagerAdapter {
 
-    private static final int NUM_ITEMS = 2;
+    private static final int NUM_ITEMS = 3;
 
     private final NikitaAboutFragment nikitaAboutFragment;
     private final MarkAboutFragment markAboutFragment;
+    private final AppAboutFragment appAboutFragment;
 
 
-    public AboutScreenPagerAdapter(@NonNull FragmentManager fragmentManager) {
+    AboutScreenPagerAdapter(@NonNull FragmentManager fragmentManager) {
         super(fragmentManager);
         nikitaAboutFragment = new NikitaAboutFragment();
         markAboutFragment = new MarkAboutFragment();
+        appAboutFragment = new AppAboutFragment();
     }
 
     @NonNull
@@ -27,8 +29,10 @@ public class AboutScreenPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return nikitaAboutFragment;
+                return appAboutFragment;
             case 1:
+                return nikitaAboutFragment;
+            case 2:
                 return markAboutFragment;
             default:
                 return null;

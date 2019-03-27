@@ -45,12 +45,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/markAvatarIV" />
 
-    <ImageView
-        style="@style/wideStyle"
-        android:layout_height="33dp"
-        android:src="@drawable/about_bg_label"
-        app:layout_constraintBottom_toBottomOf="@+id/textView3"
-        app:layout_constraintStart_toStartOf="parent" />
+    <!--<ImageView-->
+        <!--style="@style/wideStyle"-->
+        <!--android:layout_height="33dp"-->
+        <!--android:src="@drawable/about_bg_label"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/textView3"-->
+        <!--app:layout_constraintStart_toStartOf="parent" />-->
 
     <ImageView
         android:id="@+id/linkedInBtn"

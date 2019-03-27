@@ -1,6 +1,6 @@
 package com.nlapin.youthsongs.ui.about;
 
-import com.nlapin.youthsongs.BaseRouter;
+import com.nlapin.youthsongs.ui.BaseRouter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,7 +36,7 @@ public class AboutScreenRouter extends BaseRouter {
 
     void openInstagram(DeveloperID developerID) {
         if (developerID.equals(DeveloperID.Nikita)) {
-            openExternalActivity("https://www.instagram.com/nikitikitavi_/");
+            openExternalActivity("https://www.instagram.com/nikilapi/");
         } else if (developerID.equals(DeveloperID.Mark)) {
             openExternalActivity("https://www.instagram.com/mluck_ph/");
         }
@@ -64,6 +64,10 @@ public class AboutScreenRouter extends BaseRouter {
 
     void openBehance(){
         openExternalActivity("https://www.behance.net/markroll455eab");
+    }
+
+    void openTelegramChannel(){
+        openExternalActivity("https://t.me/ysongs");
     }
 
     public enum DeveloperID {

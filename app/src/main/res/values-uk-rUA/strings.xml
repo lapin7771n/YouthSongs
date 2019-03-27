@@ -10,4 +10,9 @@
     <string name="smallLabel">Маленький</string>
     <string name="mediumLabel">Середній</string>
     <string name="largeLabel">Великий</string>
+    <string name="nikita_name">Нiкiта Лапiн</string>
+    <string name="me_in_social_net">Я у соціальних мережах</string>
+    <string name="aboutAppDesc">Додаток з молодіжними піснями. Створено для молоді церкви м.Сєвєродонецьк. Версія: %version%.</string>
+    <string name="java_engineer">Java-програміст</string>
+    <string name="subscribe_to_our_telegram_channel">Підпишіться на наш телеграм канал</string>
 </resources>

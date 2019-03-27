@@ -2,9 +2,10 @@ package com.nlapin.youthsongs.ui.home;
 
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,8 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import com.nlapin.youthsongs.PresenterManager;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.data.SongsRepository;
@@ -40,8 +41,10 @@ public class HomeFragment
         extends Fragment
         implements HomeContract.View {
 
-    @BindView(R.id.songRV) RecyclerView songRV;
-    @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.songRV)
+    RecyclerView songRV;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
     private HomePresenter presenter;
     private MainActivityRouter router;
@@ -54,7 +57,6 @@ public class HomeFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
     }
 
     @Override
@@ -66,11 +68,7 @@ public class HomeFragment
 
         router = new MainActivityRouter(((MainActivity) getActivity()));
 
-        if (savedInstanceState == null) {
-            presenter = new HomePresenter(getSongsRepository());
-        } else {
-            presenter = PresenterManager.getInstance().restorePresenter(savedInstanceState);
-        }
+        presenter = new HomePresenter(getSongsRepository());
 
         presenter.attachView(this);
 
@@ -93,7 +91,19 @@ public class HomeFragment
 
             Song clickedSong = presenter.onItemClick(clickedSongID);
             if (clickedSong.getName() != null) {
-                router.openSongScreen(clickedSongID);
+                TextView songNumber = v.findViewById(R.id.songNumberTV);
+                TextView songName = v.findViewById(R.id.songNameTV);
+
+                Pair[] pairs = new Pair[2];
+                pairs[0] = new Pair<View, String>(songName, getString(R.string.songNameTransitions));
+                pairs[1] = new Pair<View, String>(songNumber, getString(R.string.songNumberTransition));
+
+                ActivityOptions activityOptions = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pairs);
+                }
+
+                router.openSongScreen(clickedSongID, activityOptions);
             }
         });
     }
@@ -168,7 +178,7 @@ public class HomeFragment
         private String newText;
 
 
-        public FilterAsync(String newText) {
+        FilterAsync(String newText) {
             this.newText = newText;
         }
 

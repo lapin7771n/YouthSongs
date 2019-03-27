@@ -1,10 +1,13 @@
 package com.nlapin.youthsongs.ui.settings;
 
 
+import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,7 +16,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nlapin.youthsongs.PresenterManager;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.ui.MainActivityRouter;
 import com.nlapin.youthsongs.ui.main.MainActivity;
@@ -39,29 +41,32 @@ public class SettingsFragment
     private SharedPreferences settings;
     private MainActivityRouter router;
 
-    @BindView(R.id.textSizeRG) RadioGroup textSizeRG;
+    @BindView(R.id.textSizeRG)
+    RadioGroup textSizeRG;
 
-    @BindView(R.id.textSizeSmall) RadioButton textSizeSmallRB;
-    @BindView(R.id.textSizeMedium) RadioButton textSizeMediumRB;
-    @BindView(R.id.textSizeLarge) RadioButton textSizeLargeRB;
+    @BindView(R.id.textSizeSmall)
+    RadioButton textSizeSmallRB;
+    @BindView(R.id.textSizeMedium)
+    RadioButton textSizeMediumRB;
+    @BindView(R.id.textSizeLarge)
+    RadioButton textSizeLargeRB;
 
-    @BindView(R.id.textSizeDemo) TextView textSizeDemo;
-    @BindView(R.id.aboutBtn) Button aboutBtn;
+    @BindView(R.id.textSizeDemo)
+    TextView textSizeDemo;
+    @BindView(R.id.aboutBtn)
+    Button aboutBtn;
 
     public SettingsFragment() {
     }
 
+    @SuppressLint("NewApi")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.bind(this, view);
 
-        if (savedInstanceState == null) {
-            presenter = new SettingsPresenter(this);
-        } else {
-            presenter = PresenterManager.getInstance().restorePresenter(savedInstanceState);
-        }
+        presenter = new SettingsPresenter(this);
 
         router = getMainActivityRouter();
 
@@ -96,11 +101,22 @@ public class SettingsFragment
 
 
         aboutBtn.setOnClickListener(v -> {
-            router.openAboutAppScreen();
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                    getActivity(),
+                    aboutBtn,
+                    getString(R.string.aboutAppTransition));
+
+            router.openAboutAppScreen(options);
         });
+        aboutBtn.setBackgroundColor(getResources().getColor(R.color.colorAccent)); //hack
 
         presenter.setUpRadioBtn();
-        ((MainActivity) getActivity()).getSearchItem().setVisible(false);
+
+        MenuItem searchItem = ((MainActivity) getActivity()).getSearchItem();
+        if (searchItem != null) {
+            searchItem.setVisible(false);
+        }
+
         return view;
     }
 

@@ -1,8 +1,6 @@
 package com.nlapin.youthsongs.ui.home;
 
-import android.util.Log;
-
-import com.nlapin.youthsongs.BasePresenter;
+import com.nlapin.youthsongs.ui.BasePresenter;
 import com.nlapin.youthsongs.data.SongsRepository;
 import com.nlapin.youthsongs.models.Song;
 

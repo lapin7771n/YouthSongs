@@ -1,6 +1,6 @@
 package com.nlapin.youthsongs.ui.favsonglist;
 
-import com.nlapin.youthsongs.BasePresenter;
+import com.nlapin.youthsongs.ui.BasePresenter;
 import com.nlapin.youthsongs.data.FavoriteSongsRepository;
 import com.nlapin.youthsongs.models.Song;
 
