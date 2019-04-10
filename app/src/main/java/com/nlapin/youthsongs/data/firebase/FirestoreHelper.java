@@ -1,16 +1,18 @@
 package com.nlapin.youthsongs.data.firebase;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.nlapin.youthsongs.data.SongsRepository;
+import com.nlapin.youthsongs.data.SongDao;
 import com.nlapin.youthsongs.models.Song;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FirestoreHelper {
+
+    private static final String TAG = "FirestoreHelper";
 
     private static final String SONGS_COLLECTION = "songs";
 
@@ -33,7 +35,8 @@ public class FirestoreHelper {
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
-    public void migrateAllSongsFromFirestore(SongsRepository songsRepository) {
+    public void migrateAllSongsFromFirestore(SongDao songDao, UICallback uiCallback) {
+        Log.d(TAG, "Migrating song from Firestore");
         firebaseFirestore.collection(SONGS_COLLECTION)
                 .orderBy(NUMBER_OF_SONG_KEY)
                 .get()
@@ -41,28 +44,39 @@ public class FirestoreHelper {
                     if (task.isSuccessful() && task.getResult() != null) {
                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
                         List<Song> songs = mapToSongs(documents);
-                        songsRepository.addAll(songs);
+                        songDao.insertAll(songs.toArray(new Song[songs.size()]));
+
+                        if (uiCallback != null)
+                            uiCallback.renderUI(songs);
+                        Log.d(TAG, "All songs migrated! Count - " + songs.size());
+                    } else {
+                        Log.d(TAG, "Can't load data from firestore");
+                        Log.d(TAG, "Response - " + task);
                     }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "Error: " + e);
                 });
     }
 
-    private List<Song> mapToSongs(@NotNull List<DocumentSnapshot> documents) {
+    private List<Song> mapToSongs(List<DocumentSnapshot> documents) {
         ArrayList<Song> songs = new ArrayList<>();
 
         for (DocumentSnapshot document : documents) {
-            int songNumber = (int) document.get(NUMBER_OF_SONG_KEY);
+            long songNumber = (long) document.get(NUMBER_OF_SONG_KEY);
             String songName = (String) document.get(NAME_OF_SONG_KEY);
             String songText = (String) document.get(TEXT_OF_SONG_KEY);
             String songChorus = (String) document.get(CHORUS_OF_SONG_KEY);
 
-            Song song = new Song(songNumber, songName, songText, songChorus);
+            Song song = new Song((int) songNumber, songName, songText, songChorus);
             songs.add(song);
         }
 
         return songs;
     }
 
-    public void updateIfNeeded(int latestSongNumber, SongsRepository songsRepository) {
+    public void updateIfNeeded(int latestSongNumber, SongDao songDao, UICallback uiCallback) {
+        Log.d(TAG, "Updating songs from Firestore");
         firebaseFirestore.collection(SONGS_COLLECTION)
                 .orderBy(NUMBER_OF_SONG_KEY)
                 .whereGreaterThan(NUMBER_OF_SONG_KEY, latestSongNumber)
@@ -71,7 +85,9 @@ public class FirestoreHelper {
                     if (task.isSuccessful() && task.getResult() != null) {
                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
                         List<Song> songs = mapToSongs(documents);
-                        songsRepository.addAll(songs);
+                        songDao.insertAll(songs.toArray(new Song[songs.size()]));
+                        uiCallback.renderUI(songs);
+                        Log.d(TAG, "Song Updated! Count - " + songs.size());
                     }
                 });
     }

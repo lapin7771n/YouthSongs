@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainActivity">
+    tools:context=".ui.MainActivity">
 
     <FrameLayout
         android:id="@+id/mainFrame"
@@ -19,8 +19,8 @@
         android:id="@+id/bottomNavBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:elevation="20dp"
+        android:background="@android:color/white"
+        android:elevation="15dp"
         app:itemIconSize="30dp"
         app:itemIconTint="@drawable/nav_item_color_state"
         app:labelVisibilityMode="unlabeled"

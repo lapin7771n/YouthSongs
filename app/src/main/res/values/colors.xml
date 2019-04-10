@@ -4,8 +4,8 @@
     <color name="colorChecked">#bc3852</color>
 
     <color name="primaryColor">#37474f</color>
-    <color name="primaryLightColor">#62727b</color>
-    <color name="colorPrimaryDark">#102027</color>
+    <color name="primaryLightColor">#75B7FF</color>
+    <color name="colorPrimaryDark">#007AFF</color>
     <color name="colorAccent">#ffeb3b</color>
     <color name="secondaryLightColor">#ffff72</color>
     <color name="secondaryDarkColor">#c8b900</color>

@@ -15,13 +15,11 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="allowBackup">
-        <activity android:name=".ui.about.AboutActivity"></activity>
+        <activity android:name=".ui.AboutActivity" />
         <activity
-            android:name=".ui.songScreen.SongActivity"
-            android:parentActivityName=".ui.main.MainActivity" />
-        <activity
-            android:name=".ui.main.MainActivity"
-            android:theme="@style/AppThemeWithToolbar">
+            android:name=".ui.SongActivity"
+            android:parentActivityName=".ui.MainActivity" />
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

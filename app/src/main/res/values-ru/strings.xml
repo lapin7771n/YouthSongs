@@ -13,6 +13,7 @@
     <string name="nikita_name">Никита Лапин</string>
     <string name="java_engineer">Java-программист</string>
     <string name="me_in_social_net">Я в социальных сетях</string>
-    <string name="aboutAppDesc">Приложение с молодёжными песнями. Создано для молодёжи церкви г. Северодонецк. Версия: %version%.</string>
+    <string name="aboutAppDesc">Приложение с молодёжными песнями. Создано для молодёжи церкви г. Северодонецк. Версия: version.</string>
     <string name="subscribe_to_our_telegram_channel">Подпишитесь на наш телеграмм канал</string>
+    <string name="show_chords">Показать аккорды</string>
 </resources>

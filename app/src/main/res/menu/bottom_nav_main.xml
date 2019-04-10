@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/homeTab"
+    <item
+        android:id="@+id/homeTab"
         android:icon="@drawable/ic_home"
         android:title="" />
 
-    <item android:id="@+id/favoriteTab"
-        android:icon="@drawable/ic_favorite"
+    <item
+        android:id="@+id/favoriteTab"
+        android:icon="@drawable/ic_album"
         android:title="" />
 
-    <item android:icon="@drawable/ic_settings"
+    <item
         android:id="@+id/settingsTab"
-        android:title=""/>
+        android:icon="@drawable/ic_account"
+        android:title="" />
 </menu>

@@ -14,12 +14,12 @@
     <string name="mediumLabel">Medium</string>
     <string name="largeLabel">Large</string>
     <string name="java_engineer">Java engineer</string>
-    <string name="aboutAppDesc">Application with youth songs. Created for the youth of the church of Severodonetsk. Version: %version%.</string>
+    <string name="aboutAppDesc">Application with youth songs. Created for the youth of the church of Severodonetsk. Version: version.</string>
     <string name="nikita_name">Nikita Lapin</string>
     <string name="me_in_social_net">Where you can find me</string>
     <string name="subscribe_to_our_telegram_channel">Subscribe to our telegram channel</string>
     <string name="show_chords">Show chords</string>
-    <string name="songNumberTransition">songNumberTransition</string>
-    <string name="songNameTransitions">songNameTransitions</string>
-    <string name="aboutAppTransition">aboutAppTransition</string>
+    <string name="songNumberTransition" translatable="false">songNumberTransition</string>
+    <string name="songNameTransitions" translatable="false">songNameTransitions</string>
+    <string name="aboutAppTransition" translatable="false">aboutAppTransition</string>
 </resources>

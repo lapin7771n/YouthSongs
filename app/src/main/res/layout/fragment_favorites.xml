@@ -7,7 +7,7 @@
     android:background="@color/primaryColor"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".ui.favsonglist.FavoritesFragment">
+    tools:context=".ui.FavoritesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favoriteSongsRV"

@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
-    tools:context=".ui.settings.SettingsFragment">
+    tools:context=".ui.SettingsFragment">
 
     <TextView
         android:id="@+id/textSizeLabel"
