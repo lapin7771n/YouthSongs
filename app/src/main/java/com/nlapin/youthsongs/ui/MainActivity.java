@@ -6,6 +6,7 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nlapin.youthsongs.R;
+import com.nlapin.youthsongs.ui.homescreen.HomeFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;

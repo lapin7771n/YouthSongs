@@ -1,5 +1,6 @@
 package com.nlapin.youthsongs.di;
 
+import com.nlapin.youthsongs.data.AppDatabase;
 import com.nlapin.youthsongs.data.SongDao;
 
 import dagger.Module;
@@ -17,7 +18,7 @@ public class SongDaoModule {
      * @return object for working with local SQL songs table
      */
     @Provides
-    SongDao provideSongDao() {
-        return DaggerAppDiComponent.builder().build().getAppDatabase().songDao();
+    static SongDao provideSongDao(AppDatabase appDatabase) {
+        return appDatabase.songDao();
     }
 }
