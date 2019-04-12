@@ -3,8 +3,8 @@ package com.nlapin.youthsongs.di;
 import android.app.Application;
 import android.content.Context;
 
-import com.nlapin.youthsongs.data.AppDatabase;
-import com.nlapin.youthsongs.data.firebase.FirestoreHelper;
+import com.nlapin.youthsongs.data.SongRepository;
+import com.nlapin.youthsongs.data.local.AppDatabase;
 
 import javax.inject.Singleton;
 
@@ -32,5 +32,11 @@ public class ApplicationModule {
     AppDatabase provideAppDatabase(Context context) {
         return Room.databaseBuilder(context, AppDatabase.class, "ys-local-database")
                 .build();
+    }
+
+    @Provides
+    @Singleton
+    SongRepository provideSongRepository(){
+        return new SongRepository();
     }
 }

@@ -3,7 +3,7 @@ package com.nlapin.youthsongs.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AuthorSelectionUI {
+public class AuthorsSelectionUI {
 
     private long id;
 
@@ -11,7 +11,7 @@ public class AuthorSelectionUI {
     private final int songsCount;
     private final List<Song> songs = new ArrayList<>();
 
-    public AuthorSelectionUI(String selectionName, List<Song> songs) {
+    public AuthorsSelectionUI(String selectionName, List<Song> songs) {
         this.selectionName = selectionName;
         this.songsCount = songs.size();
         this.songs.addAll(songs);

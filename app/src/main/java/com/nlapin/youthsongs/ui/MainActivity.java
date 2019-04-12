@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.FrameLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.ui.homescreen.HomeFragment;
 
@@ -31,5 +32,7 @@ public class MainActivity
                 .beginTransaction()
                 .replace(R.id.mainFrame, new HomeFragment())
                 .commit();
+
+        FirebaseAnalytics.getInstance(this);
     }
 }

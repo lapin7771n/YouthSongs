@@ -1,4 +1,4 @@
-package com.nlapin.youthsongs.data;
+package com.nlapin.youthsongs.data.local;
 
 import com.nlapin.youthsongs.models.FavoriteSong;
 

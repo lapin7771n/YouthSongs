@@ -1,7 +1,7 @@
 package com.nlapin.youthsongs.di;
 
-import com.nlapin.youthsongs.data.AppDatabase;
-import com.nlapin.youthsongs.data.SongDao;
+import com.nlapin.youthsongs.data.local.AppDatabase;
+import com.nlapin.youthsongs.data.local.SongDao;
 
 import dagger.Module;
 import dagger.Provides;

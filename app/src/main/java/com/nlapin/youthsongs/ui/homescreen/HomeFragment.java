@@ -1,30 +1,24 @@
 package com.nlapin.youthsongs.ui.homescreen;
 
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 import com.ethanhua.skeleton.Skeleton;
 import com.nlapin.youthsongs.R;
-import com.nlapin.youthsongs.data.AppDatabase;
-import com.nlapin.youthsongs.data.firebase.FirestoreHelper;
-import com.nlapin.youthsongs.data.firebase.UICallback;
-import com.nlapin.youthsongs.di.ApplicationModule;
-import com.nlapin.youthsongs.di.DaggerMainComponent;
-import com.nlapin.youthsongs.di.MainComponent;
-import com.nlapin.youthsongs.models.Song;
 import com.nlapin.youthsongs.ui.adapters.SongRVAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -41,16 +35,16 @@ public class HomeFragment
 
     @BindView(R.id.songRV)
     RecyclerView songRV;
+    @BindView(R.id.authorsChoisesFL)
+    FrameLayout authorsChoisesFL;
+    @BindView(R.id.toolBar)
+    Toolbar toolBar;
 
     /**
      * Adapter for all songs in MainScreen
      */
     private SongRVAdapter adapter;
 
-    /**
-     * For injecting SongDao
-     */
-    private AppDatabase appDatabase;
     private RecyclerViewSkeletonScreen skeletonScreen;
 
     public HomeFragment() {
@@ -62,44 +56,23 @@ public class HomeFragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
-
         setUpRecyclerView();
 
-        MainComponent component = DaggerMainComponent.builder()
-                .applicationModule(new ApplicationModule(getActivity().getApplication()))
-                .build();
+        getFragmentManager().beginTransaction()
+                .replace(authorsChoisesFL.getId(), new AuthorsSelectionsFragment())
+                .commit();
 
-        List<Song> localSongs = component.getAppDatabase().songDao().getAll().getValue();
-        Log.d(TAG, "local songs - " + (localSongs != null));
-        if (localSongs != null) {
-            Log.d(TAG, "local songs - " + (localSongs.isEmpty()));
-        }
-        if (localSongs != null && !localSongs.isEmpty()) {
-            Log.d(TAG, "Songs from local storage" + localSongs);
-            adapter.setSongList(localSongs);
+        HomeViewModel model = ViewModelProviders.of(this).get(HomeViewModel.class);
+
+        model.getSongs().observe(this, songs -> {
+            if (songs == null || songs.isEmpty())
+                return;
+
+            adapter.setSongList(songs);
             adapter.notifyDataSetChanged();
             skeletonScreen.hide();
-        } else {
-            FirestoreHelper firestoreHelper = component.getFirestoreHelper();
-            AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-                    .setTitle("Stand by.")
-                    .setMessage("We are migrating localSongsLD song from our servers. Please wait...")
-                    .create();
-
-            alertDialog.show();
-
-            firestoreHelper.migrateAllSongsFromFirestore(
-                    component.getAppDatabase().songDao(),
-                    new UICallback() {
-                        @Override
-                        public void renderUI(List<Song> songs) {
-                            adapter.setSongList(songs);
-                            adapter.notifyDataSetChanged();
-                            alertDialog.hide();
-                            skeletonScreen.hide();
-                        }
-                    });
-        }
+            Log.d(TAG, "UI updated! |Song list|");
+        });
 
         return view;
     }
@@ -116,5 +89,10 @@ public class HomeFragment
                 .load(R.layout.song_item)
                 .duration(Integer.MAX_VALUE)
                 .show();
+
+        songRV.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+
+        });
     }
+
 }

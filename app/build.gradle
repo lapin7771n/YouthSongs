@@ -100,6 +100,9 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.1.1"
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
 
+    //ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.0.0"
+
     //Room (SQL ORM)
     def room_version = "2.1.0-alpha04"
     implementation "androidx.room:room-rxjava2:$room_version"
