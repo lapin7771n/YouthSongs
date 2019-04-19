@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 
 public class AuthorsSelectionsRVAdapter
         extends RecyclerView.Adapter<AuthorsSelectionsRVAdapter.AuthorsSelectionViewHolder> {
+    private static final String TAG = "AuthorsSelectionsRVAdap";
 
     private List<AuthorsSelectionUI> authorsSelections;
     private CustomItemClickListener clickListener;
@@ -72,10 +73,15 @@ public class AuthorsSelectionsRVAdapter
                 ? backgroundDrawables.get(0)
                 : backgroundDrawables.get(1));
         authorsSelectionViewHolder.selectionNameTV.setText(selectionName);
-        authorsSelectionViewHolder.countOfSongs.setText(String.valueOf(songsCount));
+        authorsSelectionViewHolder.countOfSongs.setText(String.valueOf(songsCount) + " songs");
 
         authorsSelectionViewHolder.itemView.setOnClickListener(v ->
                 clickListener.onItemClick(v, (int) id));
+
+        authorsSelectionViewHolder.itemView.addOnLayoutChangeListener(
+                (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                    authorsSelectionViewHolder.selectionNameTV.setTextSize(bottom / 9);
+                });
     }
 
 

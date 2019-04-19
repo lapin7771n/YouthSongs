@@ -2,22 +2,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/authorsChoiseCL"
     android:layout_width="300dp"
-    android:layout_height="200dp"
-    android:elevation="5dp"
+    android:layout_height="match_parent"
     android:layout_margin="10dp"
     android:background="@drawable/authors_choise_red_bg"
-    android:padding="10dp">
+    android:elevation="5dp"
+    android:foreground="?selectableItemBackground"
+    android:padding="10dp"
+    app:layoutDescription="@xml/motion">
 
     <TextView
         android:id="@+id/selectionNameTV"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="15dp"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:text="Testing long name of the selection"
         android:textColor="@android:color/white"
         android:textSize="35sp"
         android:textStyle="bold"
+        app:autoSizeMaxTextSize="35sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

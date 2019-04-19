@@ -21,7 +21,7 @@
     </fragment>
     <activity
         android:id="@+id/songActivity"
-        android:name="com.nlapin.youthsongs.ui.SongActivity"
+        android:name="com.nlapin.youthsongs.ui.songscreen.SongActivity"
         android:label="activity_song"
         tools:layout="@layout/activity_song" />
     <fragment

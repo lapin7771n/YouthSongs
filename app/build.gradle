@@ -119,4 +119,8 @@ dependencies {
     //View loading preview
     implementation 'com.ethanhua:skeleton:1.1.2'
     implementation 'io.supercharge:shimmerlayout:2.1.0'
+
+    //ScalingLayout
+    implementation 'com.github.iammert:ScalingLayout:1.2.1'
+
 }

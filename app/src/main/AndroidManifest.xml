@@ -17,7 +17,7 @@
         tools:replace="allowBackup">
         <activity android:name=".ui.AboutActivity" />
         <activity
-            android:name=".ui.SongActivity"
+            android:name=".ui.songscreen.SongActivity"
             android:parentActivityName=".ui.MainActivity" />
         <activity android:name=".ui.MainActivity">
             <intent-filter>

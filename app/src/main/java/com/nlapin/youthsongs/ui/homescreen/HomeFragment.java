@@ -6,17 +6,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 import com.ethanhua.skeleton.Skeleton;
 import com.nlapin.youthsongs.R;
+import com.nlapin.youthsongs.models.AuthorsSelectionUI;
+import com.nlapin.youthsongs.ui.adapters.AuthorsSelectionsRVAdapter;
 import com.nlapin.youthsongs.ui.adapters.SongRVAdapter;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,10 +36,10 @@ public class HomeFragment
 
     @BindView(R.id.songRV)
     RecyclerView songRV;
-    @BindView(R.id.authorsChoisesFL)
-    FrameLayout authorsChoisesFL;
-    @BindView(R.id.toolBar)
-    Toolbar toolBar;
+    @BindView(R.id.header)
+    TextView header;
+    @BindView(R.id.authorsSelectionsRV)
+    RecyclerView authorsSelectionsRV;
 
     /**
      * Adapter for all songs in MainScreen
@@ -57,10 +58,7 @@ public class HomeFragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
         setUpRecyclerView();
-
-        getFragmentManager().beginTransaction()
-                .replace(authorsChoisesFL.getId(), new AuthorsSelectionsFragment())
-                .commit();
+        setupAuthorsSelectionRV();
 
         HomeViewModel model = ViewModelProviders.of(this).get(HomeViewModel.class);
 
@@ -73,13 +71,14 @@ public class HomeFragment
             skeletonScreen.hide();
             Log.d(TAG, "UI updated! |Song list|");
         });
-
         return view;
     }
 
+    /**
+     * Setting up All songs UI
+     */
     private void setUpRecyclerView() {
         adapter = new SongRVAdapter(new ArrayList<>(), (v, position) -> {
-            throw new UnsupportedOperationException();
         });
 
         songRV.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -90,9 +89,31 @@ public class HomeFragment
                 .duration(Integer.MAX_VALUE)
                 .show();
 
-        songRV.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+    }
 
-        });
+    /**
+     * Setting up authors selection UI
+     */
+    private void setupAuthorsSelectionRV() {
+        final ArrayList<AuthorsSelectionUI> authorsSelections = new ArrayList<>();
+        authorsSelections.add(new AuthorsSelectionUI("Test", new ArrayList<>()));
+        authorsSelections.add(new AuthorsSelectionUI("Medium Text Test", new ArrayList<>()));
+        authorsSelections.add(new AuthorsSelectionUI("Very very long name test", new ArrayList<>()));
+        AuthorsSelectionsRVAdapter authorsSelectionsRVAdapter = new AuthorsSelectionsRVAdapter(
+                authorsSelections,
+                (v, position) -> {
+
+                },
+                getContext());
+
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(
+                getContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false);
+
+        authorsSelectionsRV.setLayoutManager(layoutManager);
+        authorsSelectionsRV.setAdapter(authorsSelectionsRVAdapter);
+        authorsSelectionsRV.setHasFixedSize(false);
     }
 
 }
