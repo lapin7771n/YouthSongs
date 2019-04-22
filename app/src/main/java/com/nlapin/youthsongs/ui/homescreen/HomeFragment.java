@@ -8,20 +8,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 import com.ethanhua.skeleton.Skeleton;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.models.AuthorsSelectionUI;
 import com.nlapin.youthsongs.ui.adapters.AuthorsSelectionsRVAdapter;
 import com.nlapin.youthsongs.ui.adapters.SongRVAdapter;
+import com.nlapin.youthsongs.ui.songscreen.SongActivity;
 
 import java.util.ArrayList;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -78,8 +80,8 @@ public class HomeFragment
      * Setting up All songs UI
      */
     private void setUpRecyclerView() {
-        adapter = new SongRVAdapter(new ArrayList<>(), (v, position) -> {
-        });
+        adapter = new SongRVAdapter(new ArrayList<>(), (v, position) ->
+                startActivity(SongActivity.start(getContext(), position)));
 
         songRV.setLayoutManager(new LinearLayoutManager(getContext()));
 

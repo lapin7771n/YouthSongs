@@ -1,5 +1,8 @@
 package com.nlapin.youthsongs.data;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.data.local.SongDao;
 import com.nlapin.youthsongs.data.remote.SongCloudRepository;
@@ -8,9 +11,6 @@ import com.nlapin.youthsongs.models.Song;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 public class SongRepository implements BaseRepository<Song> {
 
@@ -43,16 +43,18 @@ public class SongRepository implements BaseRepository<Song> {
     public LiveData<Song> geyById(int id) {
         final MutableLiveData<Song> song = new MutableLiveData<>();
 
-        final Song localSong = songDao.getById(id);
-        song.setValue(localSong);
+        new Thread(() -> {
+            final Song localSong = songDao.getById(id);
+            song.postValue(localSong);
 
-        if (localSong == null) {
-            songCloudRepository.provideSongById(id, remoteSong -> {
-                if (remoteSong != null) {
-                    song.setValue(remoteSong);
-                }
-            });
-        }
+            if (localSong == null) {
+                songCloudRepository.provideSongById(id, remoteSong -> {
+                    if (remoteSong != null) {
+                        song.postValue(remoteSong);
+                    }
+                });
+            }
+        }).start();
 
         return song;
     }
