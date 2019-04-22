@@ -14,7 +14,7 @@
 
     </Transition>
 
-    <ConstraintSet android:id="@+id/start"></ConstraintSet>
+    <ConstraintSet android:id="@+id/start" />
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
@@ -23,11 +23,15 @@
         <Constraint
             android:id="@+id/authorsSelectionsRV"
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="80dp" />
 
         <Constraint
             android:id="@+id/authorsChoiseCL"
             android:alpha="0" />
+
+        <Constraint
+            android:id="@+id/selectionNameTV"
+            android:visibility="gone"/>
     </ConstraintSet>
 
 

@@ -26,8 +26,12 @@ public class AuthorsSelectionsRVAdapter
     private static final String TAG = "AuthorsSelectionsRVAdap";
 
     private List<AuthorsSelectionUI> authorsSelections;
-    private CustomItemClickListener clickListener;
+    private final CustomItemClickListener clickListener;
     private ArrayList<Drawable> backgroundDrawables = new ArrayList<>();
+    private int textSize;
+    private int state;
+    public static final int COLLAPSED = 0;
+    public static final int EXPANDED = 1;
 
 
     public AuthorsSelectionsRVAdapter(List<AuthorsSelectionUI> authorsSelections,
@@ -78,9 +82,28 @@ public class AuthorsSelectionsRVAdapter
         authorsSelectionViewHolder.itemView.setOnClickListener(v ->
                 clickListener.onItemClick(v, (int) id));
 
+//        authorsSelectionViewHolder.selectionNameTV.setTextSize(textSize);
+
+//        switch (state) {
+//            case COLLAPSED:
+//                authorsSelectionViewHolder.countOfSongs.setVisibility(View.VISIBLE);
+//                break;
+//            case EXPANDED:
+//                authorsSelectionViewHolder.countOfSongs.setVisibility(View.GONE);
+//                break;
+//        }
+
         authorsSelectionViewHolder.itemView.addOnLayoutChangeListener(
                 (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                    authorsSelectionViewHolder.selectionNameTV.setTextSize(bottom / 9);
+//                    textSize = bottom / 10;
+//                    authorsSelectionViewHolder.selectionNameTV.setTextSize(textSize);
+//                    if (bottom > oldBottom) {
+//                        state = EXPANDED;
+//                        authorsSelectionViewHolder.countOfSongs.setVisibility(View.VISIBLE);
+//                    } else {
+//                        state = COLLAPSED;
+//                        authorsSelectionViewHolder.countOfSongs.setVisibility(View.GONE);
+//                    }
                 });
     }
 
