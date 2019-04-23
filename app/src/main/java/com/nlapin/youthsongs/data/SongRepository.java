@@ -1,5 +1,7 @@
 package com.nlapin.youthsongs.data;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -13,6 +15,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class SongRepository implements BaseRepository<Song> {
+    private static final String TAG = "SongRepository";
 
     @Inject
     SongDao songDao;
@@ -51,6 +54,7 @@ public class SongRepository implements BaseRepository<Song> {
                 songCloudRepository.provideSongById(id, remoteSong -> {
                     if (remoteSong != null) {
                         song.postValue(remoteSong);
+                        Log.i(TAG, "Song loaded from the server! " + remoteSong.toString());
                     }
                 });
             }
@@ -66,7 +70,10 @@ public class SongRepository implements BaseRepository<Song> {
 
     @Override
     public void update(Song song) {
-
+        new Thread(() -> {
+            songCloudRepository.updateSong(song);
+            songDao.insertAll(song);
+        });
     }
 
     private void chacheToLocalDatabase(List<Song> songs) {

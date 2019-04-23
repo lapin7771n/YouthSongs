@@ -7,6 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.models.AuthorsSelectionUI;
 import com.nlapin.youthsongs.ui.CustomItemClickListener;
@@ -15,9 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -82,28 +83,28 @@ public class AuthorsSelectionsRVAdapter
         authorsSelectionViewHolder.itemView.setOnClickListener(v ->
                 clickListener.onItemClick(v, (int) id));
 
-//        authorsSelectionViewHolder.selectionNameTV.setTextSize(textSize);
+        authorsSelectionViewHolder.selectionNameTV.setTextSize(textSize);
 
-//        switch (state) {
-//            case COLLAPSED:
-//                authorsSelectionViewHolder.countOfSongs.setVisibility(View.VISIBLE);
-//                break;
-//            case EXPANDED:
-//                authorsSelectionViewHolder.countOfSongs.setVisibility(View.GONE);
-//                break;
-//        }
+        switch (state) {
+            case COLLAPSED:
+                authorsSelectionViewHolder.countOfSongs.setVisibility(View.VISIBLE);
+                break;
+            case EXPANDED:
+                authorsSelectionViewHolder.countOfSongs.setVisibility(View.GONE);
+                break;
+        }
 
         authorsSelectionViewHolder.itemView.addOnLayoutChangeListener(
                 (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-//                    textSize = bottom / 10;
-//                    authorsSelectionViewHolder.selectionNameTV.setTextSize(textSize);
-//                    if (bottom > oldBottom) {
-//                        state = EXPANDED;
-//                        authorsSelectionViewHolder.countOfSongs.setVisibility(View.VISIBLE);
-//                    } else {
-//                        state = COLLAPSED;
-//                        authorsSelectionViewHolder.countOfSongs.setVisibility(View.GONE);
-//                    }
+                    textSize = bottom / 10;
+                    authorsSelectionViewHolder.selectionNameTV.setTextSize(textSize);
+                    if (bottom > oldBottom) {
+                        state = EXPANDED;
+                        authorsSelectionViewHolder.countOfSongs.setVisibility(View.VISIBLE);
+                    } else {
+                        state = COLLAPSED;
+                        authorsSelectionViewHolder.countOfSongs.setVisibility(View.GONE);
+                    }
                 });
     }
 

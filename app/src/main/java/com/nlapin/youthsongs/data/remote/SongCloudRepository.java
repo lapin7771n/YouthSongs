@@ -8,10 +8,17 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.models.Song;
+import com.nlapin.youthsongs.models.UnsplashPhoto;
+import com.nlapin.youthsongs.network.NetworkService;
 import com.nlapin.youthsongs.utils.SongUtils;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SongCloudRepository {
 
@@ -30,13 +37,12 @@ public class SongCloudRepository {
     public static final String NUMBER_OF_SONG_KEY = "number";
     public static final String TEXT_OF_SONG_KEY = "text";
     public static final String CHORUS_OF_SONG_KEY = "chorus";
+    public static final String COVER_URI = "cover_uri";
 
     private FirebaseFirestore firebaseFirestore;
-    private Context context;
 
     public SongCloudRepository(Context context) {
         firebaseFirestore = FirebaseFirestore.getInstance();
-        this.context = context;
     }
 
     public void provideAllSongs(AllSongsCallback callback) {
@@ -67,12 +73,43 @@ public class SongCloudRepository {
                     if (result != null && !result.isEmpty()) {
                         List<DocumentSnapshot> documents = result.getDocuments();
                         List<Song> songs = SongUtils.mapToSongs(documents);
-                        callback.onCallback(songs.get(0));
+                        Song song = songs.get(0);
+
+                        provideSongCoverAndSend(callback, song);
                     } else {
                         callback.onCallback(null);
                     }
                 })
                 .addOnFailureListener(e -> callback.onCallback(null));
+    }
+
+    private void provideSongCoverAndSend(ProvideSongCallback callback, Song song) {
+        if (song.getCoverUrl() == null) {
+            FirebaseStorageHelper firestorageHelper = YouthSongsApp.getComponent()
+                    .getFirestorageHelper();
+
+            firestorageHelper.downloadSongCover(song.getId(), uri -> {
+                if (uri == null || uri.toString().isEmpty()) {
+                    new NetworkService().getSongCover(new Callback<UnsplashPhoto>() {
+                        @Override
+                        public void onResponse(Call<UnsplashPhoto> call, Response<UnsplashPhoto> response) {
+                            UnsplashPhoto unsplashPhoto = response.body();
+                            song.setCoverUrl(unsplashPhoto.getUrls().getRaw());
+                        }
+
+                        @Override
+                        public void onFailure(Call<UnsplashPhoto> call, Throwable t) {
+
+                        }
+                    });
+                } else {
+                    song.setCoverUrl(uri.toString());
+                    callback.onCallback(song);
+                }
+            });
+        } else {
+            callback.onCallback(song);
+        }
     }
 
     public void deleteSong(Song song) {
@@ -90,19 +127,21 @@ public class SongCloudRepository {
     }
 
     public void updateSong(Song song) {
-        DocumentReference documentReference = firebaseFirestore.collection(SONGS_COLLECTION)
+        firebaseFirestore.collection(SONGS_COLLECTION)
                 .whereEqualTo(NUMBER_OF_SONG_KEY, song.getId())
                 .whereEqualTo(NAME_OF_SONG_KEY, song.getName())
                 .get()
-                .getResult()
-                .getDocuments()
-                .get(0)
-                .getReference();
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    DocumentReference documentReference = queryDocumentSnapshots.getDocuments()
+                            .get(0)
+                            .getReference();
 
-        documentReference.update(NUMBER_OF_SONG_KEY, song.getId());
-        documentReference.update(NAME_OF_SONG_KEY, song.getName());
-        documentReference.update(TEXT_OF_SONG_KEY, song.getText());
-        documentReference.update(CHORUS_OF_SONG_KEY, song.getChorus());
+                    documentReference.update(NUMBER_OF_SONG_KEY, song.getId());
+                    documentReference.update(NAME_OF_SONG_KEY, song.getName());
+                    documentReference.update(TEXT_OF_SONG_KEY, song.getText());
+                    documentReference.update(CHORUS_OF_SONG_KEY, song.getChorus());
+                    documentReference.update(COVER_URI, song.getCoverUrl());
+                });
     }
 
     public interface AllSongsCallback {

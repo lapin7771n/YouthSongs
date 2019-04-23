@@ -91,10 +91,11 @@ dependencies {
     implementation 'com.google.guava:guava:27.0.1-jre'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-messaging:17.5.0'
+    implementation 'com.google.firebase:firebase-messaging:17.6.0'
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
-    implementation 'com.google.firebase:firebase-firestore:18.1.0'
+    implementation 'com.google.firebase:firebase-firestore:18.2.0'
+    implementation 'com.google.firebase:firebase-storage:16.1.0'
 
     //LiveData
     implementation "android.arch.lifecycle:extensions:1.1.1"
@@ -113,14 +114,14 @@ dependencies {
     implementation 'com.google.dagger:dagger:2.22'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.22'
 
-    //Navigation
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
-
     //View loading preview
     implementation 'com.ethanhua:skeleton:1.1.2'
     implementation 'io.supercharge:shimmerlayout:2.1.0'
 
-    //ScalingLayout
-    implementation 'com.github.iammert:ScalingLayout:1.2.1'
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.6.1'
 
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 }

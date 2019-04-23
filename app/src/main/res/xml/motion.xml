@@ -18,6 +18,7 @@
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
+            android:layout_height="0dp"
             android:id="@+id/header"
             android:alpha="0" />
         <Constraint

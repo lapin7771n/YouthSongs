@@ -31,6 +31,7 @@ public class ApplicationModule {
     @Singleton
     AppDatabase provideAppDatabase(Context context) {
         return Room.databaseBuilder(context, AppDatabase.class, "ys-local-database")
+                .fallbackToDestructiveMigration()
                 .build();
     }
 

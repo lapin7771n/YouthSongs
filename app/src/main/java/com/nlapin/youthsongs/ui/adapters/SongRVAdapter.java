@@ -2,12 +2,18 @@ package com.nlapin.youthsongs.ui.adapters;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.models.Song;
 import com.nlapin.youthsongs.ui.CustomItemClickListener;
@@ -15,18 +21,20 @@ import com.nlapin.youthsongs.ui.CustomItemClickListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SongRVAdapter
         extends RecyclerView.Adapter<SongRVAdapter.SongViewHolder> {
 
+    private static final String TAG = "SongRVAdapter";
+
     private List<Song> songList;
     private List<Song> copySongList;
     private CustomItemClickListener clickListener;
+    private Random random;
 
     public SongRVAdapter(Collection<Song> songList,
                          CustomItemClickListener clickListener) {
@@ -34,6 +42,7 @@ public class SongRVAdapter
         this.songList = new ArrayList<>(songList);
         this.copySongList = new ArrayList<>(songList);
         this.clickListener = clickListener;
+        random = new Random();
     }
 
     public void setSongList(List<Song> songList) {
@@ -60,8 +69,9 @@ public class SongRVAdapter
 
     @Override
     public void onBindViewHolder(@NonNull SongViewHolder songViewHolder, int position) {
-        long songNumber = songList.get(position).getId();
-        String songName = songList.get(position).getName();
+        Song song = songList.get(position);
+        long songNumber = song.getId();
+        String songName = song.getName();
 
         songViewHolder.itemView.setOnClickListener(v ->
                 clickListener.onItemClick(v, (int) songNumber));
@@ -69,8 +79,18 @@ public class SongRVAdapter
         songViewHolder.songNameTV.setText(songName);
         songViewHolder.songNameTV.setBackground(new ColorDrawable(Color.TRANSPARENT));
         songViewHolder.songCover.setBackground(new ColorDrawable(Color.TRANSPARENT));
-        songViewHolder.songCover.setImageResource(R.mipmap.ic_launcher);
         songViewHolder.songGanreTV.setBackground(new ColorDrawable(Color.TRANSPARENT));
+
+        if (song.getCoverUrl() == null || song.getCoverUrl().isEmpty()) {
+            int color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
+            songViewHolder.songCover.setBackgroundColor(color);
+        } else {
+            Uri uri = Uri.parse(song.getCoverUrl());
+            Log.d(TAG, "Setting image - " + uri);
+            Glide.with(songViewHolder.itemView)
+                    .load(uri)
+                    .into(songViewHolder.songCover);
+        }
     }
 
     public void filter(String filterText) {

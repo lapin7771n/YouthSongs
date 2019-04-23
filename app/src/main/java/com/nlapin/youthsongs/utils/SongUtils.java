@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.nlapin.youthsongs.data.remote.SongCloudRepository.CHORUS_OF_SONG_KEY;
+import static com.nlapin.youthsongs.data.remote.SongCloudRepository.COVER_URI;
 import static com.nlapin.youthsongs.data.remote.SongCloudRepository.NAME_OF_SONG_KEY;
 import static com.nlapin.youthsongs.data.remote.SongCloudRepository.NUMBER_OF_SONG_KEY;
 import static com.nlapin.youthsongs.data.remote.SongCloudRepository.TEXT_OF_SONG_KEY;
@@ -43,8 +44,10 @@ public class SongUtils {
             String songName = (String) document.get(NAME_OF_SONG_KEY);
             String songText = (String) document.get(TEXT_OF_SONG_KEY);
             String songChorus = (String) document.get(CHORUS_OF_SONG_KEY);
+            String coverUrl = (String) document.get(COVER_URI);
 
             Song song = new Song((int) songNumber, songName, songText, songChorus);
+            song.setCoverUrl(coverUrl);
             songs.add(song);
         }
 
