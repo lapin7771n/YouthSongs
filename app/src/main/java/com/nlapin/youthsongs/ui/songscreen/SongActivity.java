@@ -2,15 +2,11 @@ package com.nlapin.youthsongs.ui.songscreen;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -19,6 +15,9 @@ import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.models.Song;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -72,16 +71,19 @@ public class SongActivity
     }
 
     private void parseSongToView(Song song) {
-        String coverUrl = song.getCoverUrl();
-        if (coverUrl == null || coverUrl.isEmpty()) {
-            appBarCover.setImageResource(R.color.colorPrimaryDark);
-        } else {
-            Uri uri = Uri.parse(coverUrl);
-            Glide.with(this)
-                    .load(uri)
-                    .into(appBarCover);
-        }
+//        String coverUrl = song.getCoverUrl();
+//        if (coverUrl == null || coverUrl.isEmpty()) {
+//            appBarCover.setImageResource(R.color.colorPrimaryDark);
+//        } else {
+//            Uri uri = Uri.parse(coverUrl);
+        Glide.with(this)
+                .load("https://images.unsplash.com/photo-1555704832-69016c4bf0c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80")
+                .into(appBarCover);
+//        }
         collapsingToolbar.setTitle(song.getName());
+        collapsingToolbar.setExpandedTitleColor(Color.WHITE);
+        collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolBarTitle);
+        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedToolBarTitle);
         toolbar.setSubtitle("Number " + song.getId());
         songTextTV.setText(song.getText());
     }

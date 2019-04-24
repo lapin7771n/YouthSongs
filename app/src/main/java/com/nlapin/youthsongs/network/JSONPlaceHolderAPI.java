@@ -8,6 +8,6 @@ import retrofit2.http.Query;
 
 public interface JSONPlaceHolderAPI {
     @GET("/photos/random/")
-    public Call<UnsplashPhoto> getRandomPost(@Query("client_id") String clientId,
-                                             @Query("query") String query);
+    public Call<UnsplashPhoto> getRandomPhoto(@Query("client_id") String clientId,
+                                              @Query("query") String query);
 }

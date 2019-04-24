@@ -68,4 +68,16 @@
         <item name="android:textSize">21sp</item>
     </style>
 
+    <style name="ExpandedToolBarTitle" parent="Base.TextAppearance.AppCompat.Medium">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="CollapsedToolBarTitle" parent="Base.TextAppearance.AppCompat.Small">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
 </resources>
