@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.nlapin.youthsongs.data.remote.SongCloudRepository.CHORUS_OF_SONG_KEY;
-import static com.nlapin.youthsongs.data.remote.SongCloudRepository.COVER_URI;
+import static com.nlapin.youthsongs.data.remote.SongCloudRepository.COVER_URI_LARGE;
+import static com.nlapin.youthsongs.data.remote.SongCloudRepository.COVER_URI_SMALL;
 import static com.nlapin.youthsongs.data.remote.SongCloudRepository.NAME_OF_SONG_KEY;
 import static com.nlapin.youthsongs.data.remote.SongCloudRepository.NUMBER_OF_SONG_KEY;
 import static com.nlapin.youthsongs.data.remote.SongCloudRepository.TEXT_OF_SONG_KEY;
 
 public class SongUtils {
+
+    private static final String TAG = "SongUtils";
 
     /**
      * Give you structured HTML code of song
@@ -22,11 +25,14 @@ public class SongUtils {
     public static String getSongTextFormated(Song song) {
         final String CHORUS_MARKER = "[Chorus]";
         final String CHORUS_REPEAT_MARKER = "[rChorus]";
-        String songText = song.getText();
-        songText = songText.replace(CHORUS_MARKER, "<b>" + song.getChorus() + "</b>");
-        songText = songText.replace(CHORUS_REPEAT_MARKER, "<b>" + song.getChorus() + "</b>");
-        songText = songText.replace("\n", "<br>");
-        return songText;
+        StringBuilder songText = new StringBuilder(song.getText());
+        songText = new StringBuilder(songText.toString().replace(CHORUS_MARKER, "<b>" + song.getChorus() + "</b>"));
+        songText = new StringBuilder(songText.toString().replace(CHORUS_REPEAT_MARKER, "<b>" + song.getChorus() + "</b>"));
+        String formattedText = songText.toString()
+                .replaceAll("([A-H](#|b)?)(\\(?(M|maj|major|m|min|minor|dim|sus|dom|aug)?(\\+|-|add)?\\d*\\)?)(\\/([A-G](#|b)?))?",
+                        "<span style=\"background_color:#3F51B5;\">$1</span>");
+        formattedText = formattedText.replace("\n", "<br>");
+        return formattedText;
     }
 
     /**
@@ -44,10 +50,13 @@ public class SongUtils {
             String songName = (String) document.get(NAME_OF_SONG_KEY);
             String songText = (String) document.get(TEXT_OF_SONG_KEY);
             String songChorus = (String) document.get(CHORUS_OF_SONG_KEY);
-            String coverUrl = (String) document.get(COVER_URI);
+            String coverUrlSmall = (String) document.get(COVER_URI_SMALL);
+            String coverUrlLarge = (String) document.get(COVER_URI_LARGE);
 
             Song song = new Song((int) songNumber, songName, songText, songChorus);
-            song.setCoverUrl(coverUrl);
+
+            song.setCoverUrlSmall(coverUrlSmall);
+            song.setCoverUrlLarge(coverUrlLarge);
             songs.add(song);
         }
 

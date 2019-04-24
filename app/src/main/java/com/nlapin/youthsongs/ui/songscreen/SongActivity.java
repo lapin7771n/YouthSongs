@@ -8,23 +8,28 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.text.HtmlCompat;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.models.Song;
+import com.nlapin.youthsongs.ui.GlideApp;
+import com.nlapin.youthsongs.utils.SongUtils;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class SongActivity
         extends AppCompatActivity {
 
     public static final String SONG_NUMBER_KEY = "songNumber";
+    public static final String DEFAULT_IMAGE = "https://images.unsplash.com/photo-1523540500678-a7637c980022?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80";
 
     @BindView(R.id.toolBar)
     Toolbar toolbar;
@@ -36,6 +41,8 @@ public class SongActivity
     ImageView appBarCover;
     @BindView(R.id.collapsingToolbar)
     CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.actionBarSubtitle)
+    TextView actionBarSubtitle;
 
     private SongViewModel songViewModel;
 
@@ -71,20 +78,27 @@ public class SongActivity
     }
 
     private void parseSongToView(Song song) {
-//        String coverUrl = song.getCoverUrl();
-//        if (coverUrl == null || coverUrl.isEmpty()) {
-//            appBarCover.setImageResource(R.color.colorPrimaryDark);
-//        } else {
-//            Uri uri = Uri.parse(coverUrl);
-        Glide.with(this)
-                .load("https://images.unsplash.com/photo-1555704832-69016c4bf0c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80")
-                .into(appBarCover);
-//        }
+        String cover = song.getCoverUrlSmall();
+        if (cover != null) {
+            GlideApp.with(this)
+                    .load(cover)
+                    .centerCrop()
+                    .transform(new BlurTransformation(25, 3))
+                    .into(appBarCover);
+        } else {
+            GlideApp.with(this)
+                    .load(DEFAULT_IMAGE)
+                    .centerCrop()
+                    .transform(new BlurTransformation())
+                    .into(appBarCover);
+        }
+
         collapsingToolbar.setTitle(song.getName());
         collapsingToolbar.setExpandedTitleColor(Color.WHITE);
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolBarTitle);
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedToolBarTitle);
-        toolbar.setSubtitle("Number " + song.getId());
-        songTextTV.setText(song.getText());
+        actionBarSubtitle.setText("Number " + song.getId());
+        songTextTV.setText(HtmlCompat.fromHtml(SongUtils.getSongTextFormated(song),
+                HtmlCompat.FROM_HTML_OPTION_USE_CSS_COLORS));
     }
 }

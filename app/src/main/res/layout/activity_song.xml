@@ -17,18 +17,42 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="200dp"
             android:fitsSystemWindows="true"
             app:contentScrim="?colorPrimary"
+            app:expandedTitleMarginBottom="70dp"
             app:expandedTitleTextAppearance="@color/black"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <ImageView
-                android:id="@+id/appBarCover"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
-                android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop"
+                android:layout_height="200dp"
+                app:layout_collapseMode="parallax">
+
+                <ImageView
+                    android:id="@+id/appBarCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/image_gradient" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/actionBarSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="64dp"
+                android:layout_marginBottom="32dp"
+                android:text="Text"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
                 app:layout_collapseMode="parallax" />
 
             <androidx.appcompat.widget.Toolbar

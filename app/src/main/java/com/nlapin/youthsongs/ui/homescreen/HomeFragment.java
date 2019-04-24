@@ -67,6 +67,7 @@ public class HomeFragment
         model.getSongs().observe(this, songs -> {
             if (songs == null || songs.isEmpty())
                 return;
+            skeletonScreen.show();
 
             adapter.setSongList(songs);
             adapter.notifyDataSetChanged();

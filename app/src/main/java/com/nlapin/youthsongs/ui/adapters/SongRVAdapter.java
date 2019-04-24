@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nlapin.youthsongs.R;
@@ -19,8 +22,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -79,17 +80,14 @@ public class SongRVAdapter
         songViewHolder.songCover.setBackground(new ColorDrawable(Color.TRANSPARENT));
         songViewHolder.songGanreTV.setBackground(new ColorDrawable(Color.TRANSPARENT));
 
-//        if (song.getCoverUrl() == null || song.getCoverUrl().isEmpty()) {
-//            int color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
-//            songViewHolder.songCover.setBackgroundColor(color);
-//        } else {
-//            Uri uri = Uri.parse(song.getCoverUrl());
-//        Log.d(TAG, "Setting image - " + uri);
-        Glide.with(songViewHolder.itemView)
-                .load("https://images.unsplash.com/photo-1555704832-69016c4bf0c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80")
-                .apply(RequestOptions.circleCropTransform())
-                .into(songViewHolder.songCover);
-//        }
+        String coverUrlSmall = song.getCoverUrlSmall();
+
+        if (coverUrlSmall != null) {
+            Glide.with(songViewHolder.itemView)
+                    .load(coverUrlSmall)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(songViewHolder.songCover);
+        }
     }
 
     public void filter(String filterText) {

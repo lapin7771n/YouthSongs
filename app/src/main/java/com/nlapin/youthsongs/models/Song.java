@@ -13,13 +13,22 @@ public class Song implements Comparable<Song> {
     private final String name;
     private final String text;
     private final String chorus;
-    private String coverUrl;
+    private String coverUrlLarge;
+    private String coverUrlSmall;
 
     public Song(int id, String name, String text, String chorus) {
         this.id = id;
         this.name = name;
         this.text = text;
         this.chorus = chorus;
+    }
+
+    public String getCoverUrlSmall() {
+        return coverUrlSmall;
+    }
+
+    public void setCoverUrlSmall(String coverUrlSmall) {
+        this.coverUrlSmall = coverUrlSmall;
     }
 
     public int getId() {
@@ -38,12 +47,12 @@ public class Song implements Comparable<Song> {
         return chorus;
     }
 
-    public String getCoverUrl() {
-        return coverUrl;
+    public String getCoverUrlLarge() {
+        return coverUrlLarge;
     }
 
-    public void setCoverUrl(String coverUrl) {
-        this.coverUrl = coverUrl;
+    public void setCoverUrlLarge(String coverUrlLarge) {
+        this.coverUrlLarge = coverUrlLarge;
     }
 
     @Override
@@ -58,7 +67,7 @@ public class Song implements Comparable<Song> {
                 ", name='" + name + '\'' +
                 ", text='" + text + '\'' +
                 ", chorus='" + chorus + '\'' +
-                ", coverUrl='" + coverUrl + '\'' +
+                ", coverUrlLarge='" + coverUrlLarge + '\'' +
                 '}';
     }
 
@@ -71,11 +80,11 @@ public class Song implements Comparable<Song> {
                 name.equals(song.name) &&
                 text.equals(song.text) &&
                 Objects.equals(chorus, song.chorus) &&
-                Objects.equals(coverUrl, song.coverUrl);
+                Objects.equals(coverUrlLarge, song.coverUrlLarge);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, text, chorus, coverUrl);
+        return Objects.hash(id, name, text, chorus, coverUrlLarge);
     }
 }

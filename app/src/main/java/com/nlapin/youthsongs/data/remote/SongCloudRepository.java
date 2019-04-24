@@ -9,8 +9,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.nlapin.youthsongs.YouthSongsApp;
+import com.nlapin.youthsongs.models.PixelsResponseModel;
 import com.nlapin.youthsongs.models.Song;
-import com.nlapin.youthsongs.models.UnsplashPhoto;
 import com.nlapin.youthsongs.network.NetworkService;
 import com.nlapin.youthsongs.utils.SongUtils;
 
@@ -37,7 +37,8 @@ public class SongCloudRepository {
     public static final String NUMBER_OF_SONG_KEY = "number";
     public static final String TEXT_OF_SONG_KEY = "text";
     public static final String CHORUS_OF_SONG_KEY = "chorus";
-    public static final String COVER_URI = "cover_uri";
+    public static final String COVER_URI_LARGE = "cover_uri_large";
+    public static final String COVER_URI_SMALL = "cover_uri_small";
 
     private FirebaseFirestore firebaseFirestore;
 
@@ -84,26 +85,30 @@ public class SongCloudRepository {
     }
 
     private void provideSongCoverAndSend(ProvideSongCallback callback, Song song) {
-        if (song.getCoverUrl() == null) {
+        if (song.getCoverUrlLarge() == null) {
             FirebaseStorageHelper firestorageHelper = YouthSongsApp.getComponent()
                     .getFirestorageHelper();
 
             firestorageHelper.downloadSongCover(song.getId(), uri -> {
                 if (uri == null || uri.toString().isEmpty()) {
-                    new NetworkService().getSongCover(new Callback<UnsplashPhoto>() {
+                    new NetworkService().getSongCover(new Callback<PixelsResponseModel>() {
                         @Override
-                        public void onResponse(Call<UnsplashPhoto> call, Response<UnsplashPhoto> response) {
-                            UnsplashPhoto unsplashPhoto = response.body();
-                            song.setCoverUrl(unsplashPhoto.getUrls().getRaw());
+                        public void onResponse(Call<PixelsResponseModel> call, Response<PixelsResponseModel> response) {
+                            PixelsResponseModel pixelsResponseModel = response.body();
+                            if (pixelsResponseModel != null) {
+                                song.setCoverUrlLarge(pixelsResponseModel.getPhotos().getSrc().getOriginal());
+                            } else {
+                                Log.e(TAG, "Receiving song cover was failed! - " + response.body());
+                            }
                         }
 
                         @Override
-                        public void onFailure(Call<UnsplashPhoto> call, Throwable t) {
+                        public void onFailure(Call<PixelsResponseModel> call, Throwable t) {
 
                         }
                     });
                 } else {
-                    song.setCoverUrl(uri.toString());
+                    song.setCoverUrlLarge(uri.toString());
                     callback.onCallback(song);
                 }
             });
@@ -140,7 +145,8 @@ public class SongCloudRepository {
                     documentReference.update(NAME_OF_SONG_KEY, song.getName());
                     documentReference.update(TEXT_OF_SONG_KEY, song.getText());
                     documentReference.update(CHORUS_OF_SONG_KEY, song.getChorus());
-                    documentReference.update(COVER_URI, song.getCoverUrl());
+                    documentReference.update(COVER_URI_LARGE, song.getCoverUrlLarge());
+                    documentReference.update(COVER_URI_SMALL, song.getCoverUrlSmall());
                 });
     }
 
