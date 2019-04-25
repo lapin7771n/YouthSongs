@@ -1,7 +1,5 @@
 package com.nlapin.youthsongs.ui;
 
-import com.nlapin.youthsongs.ui.BaseRouter;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
@@ -42,7 +40,7 @@ public class AboutScreenRouter extends BaseRouter {
         }
     }
 
-    void openEmail(DeveloperID developerID) {
+    public void openEmail(DeveloperID developerID) {
         if (developerID.equals(DeveloperID.Nikita)) {
             openEmailSender("nlapin.java@gmail.com");
         } else if (developerID.equals(DeveloperID.Mark)) {
@@ -50,10 +48,18 @@ public class AboutScreenRouter extends BaseRouter {
         }
     }
 
+    public void openEmail(DeveloperID developerID, String text) {
+        if (developerID.equals(DeveloperID.Nikita)) {
+            openEmailSender("nlapin.java@gmail.com", text);
+        } else if (developerID.equals(DeveloperID.Mark)) {
+            openEmailSender("photofreelan@gmail.com", text);
+        }
+    }
+
     void openTwitter(DeveloperID developerID) {
-        if (developerID.equals(DeveloperID.Nikita)){
+        if (developerID.equals(DeveloperID.Nikita)) {
             openExternalActivity("https://twitter.com/nik_lapin_");
-        } else if (developerID.equals(DeveloperID.Mark)){
+        } else if (developerID.equals(DeveloperID.Mark)) {
             openExternalActivity("https://twitter.com/altytsa_M");
         }
     }
@@ -62,11 +68,11 @@ public class AboutScreenRouter extends BaseRouter {
         openExternalActivity("https://github.com/lapin7771n");
     }
 
-    void openBehance(){
+    void openBehance() {
         openExternalActivity("https://www.behance.net/markroll455eab");
     }
 
-    void openTelegramChannel(){
+    void openTelegramChannel() {
         openExternalActivity("https://t.me/ysongs");
     }
 

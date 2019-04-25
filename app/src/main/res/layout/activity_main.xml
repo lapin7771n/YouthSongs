@@ -19,10 +19,9 @@
         android:id="@+id/bottomNavBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:elevation="15dp"
-        app:itemIconSize="30dp"
-        app:itemIconTint="@drawable/nav_item_color_state"
+        app:itemBackground="?android:attr/windowBackground"
+        app:itemIconTint="@color/nav_item_color_state"
+        app:itemTextColor="@color/nav_item_color_state"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_main" />

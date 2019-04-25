@@ -1,6 +1,7 @@
 package com.nlapin.youthsongs.di;
 
 import com.nlapin.youthsongs.data.local.AppDatabase;
+import com.nlapin.youthsongs.data.local.FavoriteSongDao;
 import com.nlapin.youthsongs.data.local.SongDao;
 
 import dagger.Module;
@@ -20,5 +21,10 @@ public class SongDaoModule {
     @Provides
     static SongDao provideSongDao(AppDatabase appDatabase) {
         return appDatabase.songDao();
+    }
+
+    @Provides
+    static FavoriteSongDao providerSongDao(AppDatabase appDatabase) {
+        return appDatabase.favoriteSongDao();
     }
 }

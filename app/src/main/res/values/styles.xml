@@ -8,6 +8,14 @@
         <item name="android:windowActivityTransitions" tools:targetApi="lollipop">true</item>
     </style>
 
+    <style name="AppTheme.NoActionAndStatusBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
+        <item name="actionMenuTextColor">@android:color/black</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
     <style name="wrapStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -77,7 +85,7 @@
     <style name="CollapsedToolBarTitle" parent="Base.TextAppearance.AppCompat.Small">
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
 </resources>

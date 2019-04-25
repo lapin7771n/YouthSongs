@@ -30,8 +30,4 @@ public class MainActivityRouter extends BaseRouter {
             openActivityWithExtra(new SongActivity(), bundle);
         }
     }
-
-    public void openAboutAppScreen(ActivityOptions activityOptions) {
-        openActivityWithTransition(new AboutActivity(), activityOptions);
-    }
 }

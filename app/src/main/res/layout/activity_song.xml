@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ui.songscreen.SongActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         style="@style/wideStyle"
         android:background="@android:color/white"
-        android:fitsSystemWindows="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -18,10 +18,9 @@
             android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?colorPrimary"
+            app:contentScrim="@android:color/transparent"
             app:expandedTitleMarginBottom="70dp"
-            app:expandedTitleTextAppearance="@color/black"
+            app:expandedTitleTextAppearance="@android:color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <FrameLayout
@@ -40,6 +39,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/image_gradient" />
+
+
             </FrameLayout>
 
             <TextView
@@ -59,7 +60,10 @@
                 android:id="@+id/toolBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="20dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
                 app:title="@string/app_name" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -81,7 +85,8 @@
             <TextView
                 android:id="@+id/songTextTV"
                 style="@style/songTextStyle"
-                android:paddingTop="20dp" />
+                android:paddingTop="20dp"
+                android:textColor="@android:color/black" />
 
         </ScrollView>
 

@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +22,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.models.Song;
+import com.nlapin.youthsongs.ui.AboutScreenRouter;
 import com.nlapin.youthsongs.ui.GlideApp;
 import com.nlapin.youthsongs.utils.SongUtils;
 
@@ -47,6 +52,7 @@ public class SongActivity
     private SongViewModel songViewModel;
 
     private static final int SONG_NOT_FOUND = -1;
+    private int songId;
 
     public static Intent start(Context from, int id) {
         Intent intent = new Intent(from, SongActivity.class);
@@ -63,9 +69,9 @@ public class SongActivity
 
         setUpActionBar();
         songViewModel = ViewModelProviders.of(this).get(SongViewModel.class);
-        int id = getIntent().getIntExtra(SONG_NUMBER_KEY, SONG_NOT_FOUND);
+        songId = getIntent().getIntExtra(SONG_NUMBER_KEY, SONG_NOT_FOUND);
 
-        songViewModel.getSongById(id).observe(this, this::parseSongToView);
+        songViewModel.getSongById(songId).observe(this, this::parseSongToView);
 
         FirebaseAnalytics.getInstance(this);
     }
@@ -75,7 +81,10 @@ public class SongActivity
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
+
 
     private void parseSongToView(Song song) {
         String cover = song.getCoverUrlSmall();
@@ -85,6 +94,7 @@ public class SongActivity
                     .centerCrop()
                     .transform(new BlurTransformation(25, 3))
                     .into(appBarCover);
+
         } else {
             GlideApp.with(this)
                     .load(DEFAULT_IMAGE)
@@ -100,5 +110,41 @@ public class SongActivity
         actionBarSubtitle.setText("Number " + song.getId());
         songTextTV.setText(HtmlCompat.fromHtml(SongUtils.getSongTextFormated(song),
                 HtmlCompat.FROM_HTML_OPTION_USE_CSS_COLORS));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.song_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.favoriteBtn:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    item.setIcon(R.drawable.ic_favorite_border);
+                    songViewModel.deleteFromFavorites(songId);
+
+                } else {
+                    item.setChecked(true);
+                    item.setIcon(R.drawable.ic_fav_checked);
+                    songViewModel.saveToFavorites(songId);
+                }
+                break;
+
+            case R.id.mistakeInTheText:
+                new AboutScreenRouter(this).openEmail(AboutScreenRouter.DeveloperID.Nikita,
+                        String.format(this.getString(R.string.mistake_message_body), songId));
+                break;
+
+            case R.id.shareSong:
+                // TODO: 4/25/2019 Implement this feature
+                Toast.makeText(this, "Sorry, this feature is not supported yet",
+                        Toast.LENGTH_LONG).show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

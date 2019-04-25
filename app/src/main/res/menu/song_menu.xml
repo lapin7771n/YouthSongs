@@ -8,4 +8,14 @@
         android:icon="@drawable/ic_favorite_border"
         android:title="Add to favorite"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/mistakeInTheText"
+        android:title="@string/mistake_in_the_text"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/shareSong"
+        android:title="@string/share"
+        app:showAsAction="never" />
 </menu>

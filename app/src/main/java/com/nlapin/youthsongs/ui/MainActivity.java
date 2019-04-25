@@ -1,6 +1,5 @@
 package com.nlapin.youthsongs.ui;
 
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.FrameLayout;
@@ -14,7 +13,7 @@ import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.data.local.SongDao;
 import com.nlapin.youthsongs.data.remote.SongCloudRepository;
-import com.nlapin.youthsongs.models.Song;
+import com.nlapin.youthsongs.ui.favsongscreen.FavoritesFragment;
 import com.nlapin.youthsongs.ui.homescreen.HomeFragment;
 
 import javax.inject.Inject;
@@ -40,7 +39,7 @@ public class MainActivity
     @BindView(R.id.mainFrame)
     FrameLayout contentFrame;
 
-    private AlertDialog alertDialog;
+    private MainActivityRouter router;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,34 +49,33 @@ public class MainActivity
         ButterKnife.bind(this);
         FirebaseAnalytics.getInstance(this);
         YouthSongsApp.getComponent().inject(this);
+        router = new MainActivityRouter(this);
 
-//        ifFirstStartUp();
+        HomeFragment homeFragment = new HomeFragment();
+        FavoritesFragment favoritesFragment = new FavoritesFragment();
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.mainFrame, new HomeFragment())
-                .commit();
-    }
-
-    private void ifFirstStartUp() {
-        SharedPreferences sharedPreferences = getSharedPreferences(APPLICATION_SETTINGS_SHARED_PEF,
-                MODE_PRIVATE);
-        boolean isFirstStartUp = sharedPreferences.getBoolean(IS_FIRST_START_UP_KEY, true);
-        if (isFirstStartUp) {
-            buildAlertDialog();
-            alertDialog.show();
-            songCloudRepository.provideAllSongs(
-                    songs -> new Thread(() -> {
-                        Song[] songArray = songs.toArray(new Song[0]);
-                        songLocalRepository.insertAll(songArray);
-                    }).start());
-        }
+        router.switchFragment(homeFragment);
+        bottomNavBar.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.homeTab:
+                    router.switchFragment(homeFragment);
+                    break;
+                case R.id.favoriteTab:
+                    router.switchFragment(favoritesFragment);
+                    break;
+                case R.id.settingsTab:
+                    break;
+            }
+            return false;
+        });
     }
 
     private void buildAlertDialog() {
-        alertDialog = new AlertDialog.Builder(MainActivity.this)
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Please wait...")
                 .setMessage("We customize your application. This may take some time ...")
                 .create();
     }
+
+
 }

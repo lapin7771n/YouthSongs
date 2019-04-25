@@ -30,7 +30,7 @@ public class SongUtils {
         songText = new StringBuilder(songText.toString().replace(CHORUS_REPEAT_MARKER, "<b>" + song.getChorus() + "</b>"));
         String formattedText = songText.toString()
                 .replaceAll("([A-H](#|b)?)(\\(?(M|maj|major|m|min|minor|dim|sus|dom|aug)?(\\+|-|add)?\\d*\\)?)(\\/([A-G](#|b)?))?",
-                        "<span style=\"background_color:#3F51B5;\">$1</span>");
+                        "<b><font color=\"#B22222\">$1</font></b>");
         formattedText = formattedText.replace("\n", "<br>");
         return formattedText;
     }

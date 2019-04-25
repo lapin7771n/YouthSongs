@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.nlapin.youthsongs.R;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.nlapin.youthsongs.R;
 
 /**
  * @author nikita on 27,January,2019
@@ -63,6 +63,13 @@ public abstract class BaseRouter {
 
     public void openEmailSender(String email) {
         Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + email));
+        activity.startActivity(Intent.createChooser(intent, "Send email..."));
+    }
+
+    public void openEmailSender(String email, String text) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + email));
+        intent.putExtra(Intent.EXTRA_SUBJECT, activity.getString(R.string.mistake_in_the_text));
+        intent.putExtra(Intent.EXTRA_TEXT, text);
         activity.startActivity(Intent.createChooser(intent, "Send email..."));
     }
 }

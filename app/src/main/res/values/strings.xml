@@ -22,4 +22,7 @@
     <string name="songNumberTransition" translatable="false">songNumberTransition</string>
     <string name="songNameTransitions" translatable="false">songNameTransitions</string>
     <string name="aboutAppTransition" translatable="false">aboutAppTransition</string>
+    <string name="mistake_in_the_text">Mistake in the text</string>
+    <string name="share">Share</string>
+    <string name="mistake_message_body">Mistake in the song by number - %d. Details:</string>
 </resources>
