@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,11 +19,14 @@ import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 import com.ethanhua.skeleton.Skeleton;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.models.AuthorsSelectionUI;
+import com.nlapin.youthsongs.models.Song;
 import com.nlapin.youthsongs.ui.adapters.AuthorsSelectionsRVAdapter;
 import com.nlapin.youthsongs.ui.adapters.SongRVAdapter;
 import com.nlapin.youthsongs.ui.songscreen.SongActivity;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,7 +95,6 @@ public class HomeFragment
                 .load(R.layout.song_item)
                 .duration(Integer.MAX_VALUE)
                 .show();
-
     }
 
     /**

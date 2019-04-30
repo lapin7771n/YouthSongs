@@ -28,6 +28,8 @@ import com.nlapin.youthsongs.utils.SongUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.internal.observers.BlockingBaseObserver;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class SongActivity
@@ -115,6 +117,24 @@ public class SongActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.song_menu, menu);
+        Observable<Boolean> favorite = songViewModel.isFavorite(songId);
+        favorite.subscribe(new BlockingBaseObserver<Boolean>() {
+            @Override
+            public void onNext(Boolean isFavorite) {
+                if (isFavorite) {
+                    MenuItem item = menu.findItem(R.id.favoriteBtn);
+                    item.setChecked(true);
+                    item.setIcon(R.drawable.ic_fav_checked);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
+
+
         return true;
     }
 

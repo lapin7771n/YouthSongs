@@ -1,15 +1,15 @@
 package com.nlapin.youthsongs.data.local;
 
-import com.nlapin.youthsongs.models.Song;
-
-import java.util.List;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+
+import com.nlapin.youthsongs.models.Song;
+
+import java.util.List;
 
 /**
  * Interface for working with song table
@@ -50,4 +50,7 @@ public interface SongDao {
      */
     @Delete
     void delete(Song song);
+
+    @Query("SELECT * FROM song_table WHERE id IN (:ids)")
+    LiveData<List<Song>> getByIds(List<String> ids);
 }

@@ -5,12 +5,20 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.common.base.Functions;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.data.local.SongDao;
 import com.nlapin.youthsongs.data.remote.SongCloudRepository;
 import com.nlapin.youthsongs.models.Song;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.inject.Inject;
 
@@ -35,7 +43,7 @@ public class SongRepository implements BaseRepository<Song> {
         songCloudRepository.provideAllSongs(songs -> {
             if (songs != null) {
                 liveData.setValue(songs);
-                chacheToLocalDatabase(songs);
+                cacheToLocalDatabase(songs);
             }
         });
 
@@ -63,6 +71,12 @@ public class SongRepository implements BaseRepository<Song> {
         return song;
     }
 
+    public LiveData<List<Song>> getAllByIds(List<Integer> ids) {
+        Collections.sort(ids);
+        ArrayList<String> idsString = Lists.newArrayList(Iterables.transform(ids, Functions.toStringFunction()));
+        return songDao.getByIds(idsString);
+    }
+
     @Override
     public void delete(Song song) {
         throw new UnsupportedOperationException();
@@ -73,10 +87,10 @@ public class SongRepository implements BaseRepository<Song> {
         new Thread(() -> {
             songCloudRepository.updateSong(song);
             songDao.insertAll(song);
-        });
+        }).start();
     }
 
-    private void chacheToLocalDatabase(List<Song> songs) {
+    private void cacheToLocalDatabase(List<Song> songs) {
         new Thread(() -> songDao.insertAll(songs.toArray(new Song[0]))).start();
     }
 }

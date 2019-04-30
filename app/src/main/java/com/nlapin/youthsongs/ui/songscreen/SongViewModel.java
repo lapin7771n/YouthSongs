@@ -12,6 +12,10 @@ import com.nlapin.youthsongs.models.Song;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class SongViewModel extends ViewModel {
 
     @Inject
@@ -28,15 +32,21 @@ public class SongViewModel extends ViewModel {
         YouthSongsApp.getComponent().inject(this);
     }
 
-    public LiveData<Song> getSongById(int id) {
+    LiveData<Song> getSongById(int id) {
         return songRepository.geyById(id);
     }
 
-    public void saveToFavorites(int id) {
-        new Thread(() -> favoriteSongDao.insertAll(new FavoriteSong(id)));
+    void saveToFavorites(int id) {
+        new Thread(() -> favoriteSongDao.insertAll(new FavoriteSong(id))).start();
     }
 
-    public void deleteFromFavorites(int id) {
-        new Thread(() -> favoriteSongDao.delete(new FavoriteSong(id)));
+    void deleteFromFavorites(int id) {
+        new Thread(() -> favoriteSongDao.delete(new FavoriteSong(id))).start();
+    }
+
+    Observable<Boolean> isFavorite(int songId) {
+        return Observable.just(favoriteSongDao.getById(songId) != null)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread());
     }
 }

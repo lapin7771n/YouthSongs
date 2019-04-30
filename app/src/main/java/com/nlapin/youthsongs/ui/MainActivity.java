@@ -59,14 +59,18 @@ public class MainActivity
             switch (item.getItemId()) {
                 case R.id.homeTab:
                     router.switchFragment(homeFragment);
-                    break;
+                    return true;
+
                 case R.id.favoriteTab:
                     router.switchFragment(favoritesFragment);
-                    break;
+                    return true;
+
                 case R.id.settingsTab:
-                    break;
+                    return true;
+
+                default:
+                    return false;
             }
-            return false;
         });
     }
 

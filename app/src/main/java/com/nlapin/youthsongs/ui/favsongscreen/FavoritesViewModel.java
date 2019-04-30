@@ -1,9 +1,9 @@
 package com.nlapin.youthsongs.ui.favsongscreen;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.common.util.ArrayUtils;
 import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.data.SongRepository;
 import com.nlapin.youthsongs.data.local.FavoriteSongDao;
@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class FavoritesViewModel extends ViewModel {
 
@@ -31,16 +36,21 @@ public class FavoritesViewModel extends ViewModel {
         return favoriteSongDao.getAll();
     }
 
-    LiveData<List<Song>> getAllSong(List<FavoriteSong> favoriteSongs) {
-        MutableLiveData<List<Song>> songsLD = new MutableLiveData<>();
-        new Thread(() -> {
-            ArrayList<Song> songs = new ArrayList<>();
-            for (FavoriteSong favoriteSong : favoriteSongs) {
-                songRepository.geyById((int) favoriteSong.getSongId()).observeForever(songs::add);
-            }
-            songsLD.postValue(songs);
-        });
+    Observable<LiveData<List<Song>>> getAllSong(List<FavoriteSong> favoriteSongs) {
 
-        return songsLD;
+        return Observable
+                .create((ObservableEmitter<LiveData<List<Song>>> emitter) -> {
+                    ArrayList<Integer> ids = new ArrayList<>();
+
+                    for (FavoriteSong favoriteSong : favoriteSongs) {
+                        ids.add((int) favoriteSong.getSongId());
+                    }
+
+                    LiveData<List<Song>> songs = songRepository.getAllByIds(ids);
+
+                    emitter.onNext(songs);
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }
