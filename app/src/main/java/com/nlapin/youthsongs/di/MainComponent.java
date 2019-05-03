@@ -1,5 +1,6 @@
 package com.nlapin.youthsongs.di;
 
+import com.nlapin.youthsongs.data.FavoritesRepository;
 import com.nlapin.youthsongs.data.SongRepository;
 import com.nlapin.youthsongs.data.local.AppDatabase;
 import com.nlapin.youthsongs.data.remote.FirebaseStorageHelper;
@@ -40,4 +41,6 @@ public interface MainComponent {
     void inject(MainActivity songActivity);
 
     void inject(FavoritesViewModel favoritesViewModel);
+
+    void inject(FavoritesRepository favoritesRepository);
 }

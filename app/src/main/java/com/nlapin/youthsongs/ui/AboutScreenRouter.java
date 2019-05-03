@@ -1,15 +1,16 @@
 package com.nlapin.youthsongs.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * @author nikita on 17,February,2019
  */
 public class AboutScreenRouter extends BaseRouter {
 
-    AppCompatActivity activity;
+    FragmentActivity activity;
 
-    public AboutScreenRouter(AppCompatActivity activity) {
+    public AboutScreenRouter(FragmentActivity activity) {
         super(activity);
         this.activity = activity;
     }

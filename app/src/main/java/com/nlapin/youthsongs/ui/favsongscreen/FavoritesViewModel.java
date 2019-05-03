@@ -1,9 +1,10 @@
 package com.nlapin.youthsongs.ui.favsongscreen;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.gms.common.util.ArrayUtils;
 import com.nlapin.youthsongs.YouthSongsApp;
 import com.nlapin.youthsongs.data.SongRepository;
 import com.nlapin.youthsongs.data.local.FavoriteSongDao;
@@ -21,6 +22,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class FavoritesViewModel extends ViewModel {
+
+    private static final String TAG = "FavoritesViewModel";
 
     @Inject
     FavoriteSongDao favoriteSongDao;
@@ -47,7 +50,7 @@ public class FavoritesViewModel extends ViewModel {
                     }
 
                     LiveData<List<Song>> songs = songRepository.getAllByIds(ids);
-
+                    Log.d(TAG, "getAllSong: count - " + ids.size());
                     emitter.onNext(songs);
                 })
                 .subscribeOn(Schedulers.io())

@@ -22,15 +22,16 @@ public class SongUtils {
      *
      * @return Song text with HTML tags
      */
-    public static String getSongTextFormated(Song song) {
+    public static String getSongTextFormated(Song song, boolean withChords) {
         final String CHORUS_MARKER = "[Chorus]";
         final String CHORUS_REPEAT_MARKER = "[rChorus]";
         StringBuilder songText = new StringBuilder(song.getText());
         songText = new StringBuilder(songText.toString().replace(CHORUS_MARKER, "<b>" + song.getChorus() + "</b>"));
         songText = new StringBuilder(songText.toString().replace(CHORUS_REPEAT_MARKER, "<b>" + song.getChorus() + "</b>"));
+        String replacement = "<b><font color=\"#B22222\">$1</font></b>";
         String formattedText = songText.toString()
                 .replaceAll("([A-H](#|b)?)(\\(?(M|maj|major|m|min|minor|dim|sus|dom|aug)?(\\+|-|add)?\\d*\\)?)(\\/([A-G](#|b)?))?",
-                        "<b><font color=\"#B22222\">$1</font></b>");
+                        (withChords) ? replacement : "");
         formattedText = formattedText.replace("\n", "<br>");
         return formattedText;
     }

@@ -5,7 +5,7 @@
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@id/start"
-        app:duration="1000">
+        app:duration="500">
 
         <OnSwipe
             app:dragDirection="dragUp"
@@ -18,21 +18,11 @@
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
-            android:layout_height="0dp"
+            android:id="@+id/authorsSelectionsVP"
+            android:translationY="-500dp" />
+        <Constraint
             android:id="@+id/header"
-            android:alpha="0" />
-        <Constraint
-            android:id="@+id/authorsSelectionsRV"
-            android:layout_width="match_parent"
-            android:layout_height="80dp" />
-
-        <Constraint
-            android:id="@+id/authorsChoiseCL"
-            android:alpha="0" />
-
-        <Constraint
-            android:id="@+id/selectionNameTV"
-            android:visibility="gone"/>
+            android:translationY="-500dp" />
     </ConstraintSet>
 
 

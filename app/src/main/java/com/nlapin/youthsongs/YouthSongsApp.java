@@ -52,10 +52,7 @@ public class YouthSongsApp extends Application {
                 networkService.getSongCover(new Callback<PixelsResponseModel>() {
                     @Override
                     public void onResponse(Call<PixelsResponseModel> call, Response<PixelsResponseModel> response) {
-//                        Log.i(TAG, "Pixel API response - " + response.toString());
                         Log.i(TAG, "Response - " + response.raw());
-//                        Log.i(TAG, "Headers - " + response.headers());
-//                        Log.i(TAG, "Message - " + response.message());
                         PixelsResponseModel pixelsResponseModel = response.body();
                         if (pixelsResponseModel != null) {
                             String original = pixelsResponseModel.getPhotos().getSrc().getOriginal();

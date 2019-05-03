@@ -8,14 +8,14 @@
     app:layoutDescription="@xml/motion"
     tools:context=".ui.homescreen.HomeFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/authorsSelectionsRV"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/authorsSelectionsVP"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@id/allSongsLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        tools:listitem="@layout/authors_selection_item" />
+        app:layout_constraintTop_toBottomOf="@id/header" />
 
     <TextView
         android:id="@+id/header"
@@ -29,7 +29,7 @@
         android:textColor="@android:color/black"
         android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/authorsSelectionsRV"
+        app:layout_constraintBottom_toTopOf="@id/authorsSelectionsVP"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,34 +45,17 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/songRV"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/authorsSelectionsRV" />
+        app:layout_constraintTop_toBottomOf="@id/authorsSelectionsVP" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/songRV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/allSongsLabel"
         tools:listitem="@layout/song_item" />
-
-    <!--<com.google.android.material.appbar.AppBarLayout-->
-    <!--android:id="@+id/appBar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="56dp"-->
-    <!--android:layout_marginTop="16dp"-->
-    <!--android:background="@android:color/transparent"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent"-->
-    <!--app:liftOnScroll="true">-->
-
-    <!--<androidx.appcompat.widget.Toolbar-->
-    <!--android:id="@+id/toolBar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:background="@android:color/transparent"-->
-    <!--app:menu="@menu/main_screen_menu" />-->
-
-    <!--</com.google.android.material.appbar.AppBarLayout>-->
-
 </androidx.constraintlayout.motion.widget.MotionLayout>

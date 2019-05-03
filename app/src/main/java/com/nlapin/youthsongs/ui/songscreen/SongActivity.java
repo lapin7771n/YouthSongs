@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -16,11 +17,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.text.HtmlCompat;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.YouthSongsApp;
+import com.nlapin.youthsongs.models.FavoriteSong;
 import com.nlapin.youthsongs.models.Song;
 import com.nlapin.youthsongs.ui.AboutScreenRouter;
 import com.nlapin.youthsongs.ui.GlideApp;
@@ -28,12 +31,14 @@ import com.nlapin.youthsongs.utils.SongUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.internal.observers.BlockingBaseObserver;
+import io.reactivex.MaybeObserver;
+import io.reactivex.disposables.Disposable;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class SongActivity
         extends AppCompatActivity {
+
+    private static final String TAG = "SongActivity";
 
     public static final String SONG_NUMBER_KEY = "songNumber";
     public static final String DEFAULT_IMAGE = "https://images.unsplash.com/photo-1523540500678-a7637c980022?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80";
@@ -110,31 +115,46 @@ public class SongActivity
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolBarTitle);
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedToolBarTitle);
         actionBarSubtitle.setText("Number " + song.getId());
-        songTextTV.setText(HtmlCompat.fromHtml(SongUtils.getSongTextFormated(song),
+        int fontSize = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(getString(R.string.font_size_pref), "5"));
+
+        boolean withCords = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(getString(R.string.is_chords_show_pref), false);
+
+        songTextTV.setText(HtmlCompat.fromHtml(SongUtils.getSongTextFormated(song, withCords),
                 HtmlCompat.FROM_HTML_OPTION_USE_CSS_COLORS));
+        songTextTV.setTextSize(fontSize);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.song_menu, menu);
-        Observable<Boolean> favorite = songViewModel.isFavorite(songId);
-        favorite.subscribe(new BlockingBaseObserver<Boolean>() {
-            @Override
-            public void onNext(Boolean isFavorite) {
-                if (isFavorite) {
-                    MenuItem item = menu.findItem(R.id.favoriteBtn);
-                    item.setChecked(true);
-                    item.setIcon(R.drawable.ic_fav_checked);
-                }
-            }
+        songViewModel.isFavorite(songId)
+                .subscribe(new MaybeObserver<FavoriteSong>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            @Override
-            public void onError(Throwable e) {
+                    }
 
-            }
-        });
+                    @Override
+                    public void onSuccess(FavoriteSong favoriteSong) {
+                        if (favoriteSong != null) {
+                            MenuItem item = menu.findItem(R.id.favoriteBtn);
+                            item.setChecked(true);
+                            item.setIcon(R.drawable.ic_fav_checked);
+                        }
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "onError: ", e);
+                    }
 
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
         return true;
     }
 

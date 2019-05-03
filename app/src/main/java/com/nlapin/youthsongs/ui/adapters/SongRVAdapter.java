@@ -6,15 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.models.Song;
+import com.nlapin.youthsongs.ui.AboutScreenRouter;
 import com.nlapin.youthsongs.ui.CustomItemClickListener;
 
 import java.util.ArrayList;
@@ -34,14 +38,16 @@ public class SongRVAdapter
     private List<Song> copySongList;
     private CustomItemClickListener clickListener;
     private Random random;
+    private FragmentActivity activity;
 
     public SongRVAdapter(Collection<Song> songList,
-                         CustomItemClickListener clickListener) {
+                         CustomItemClickListener clickListener, FragmentActivity activity) {
 
         this.songList = new ArrayList<>(songList);
         this.copySongList = new ArrayList<>(songList);
         this.clickListener = clickListener;
         random = new Random();
+        this.activity = activity;
     }
 
     public void setSongList(List<Song> songList) {
@@ -81,6 +87,28 @@ public class SongRVAdapter
         songViewHolder.songGanreTV.setBackground(new ColorDrawable(Color.TRANSPARENT));
 
         String coverUrlSmall = song.getCoverUrlSmall();
+
+        songViewHolder.songMoreBtn.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(v.getContext(), songViewHolder.songMoreBtn);
+            popupMenu.inflate(R.menu.popup_menu);
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.mistakeInTheText:
+                        new AboutScreenRouter(activity).openEmail(AboutScreenRouter.DeveloperID.Nikita,
+                                String.format(activity.getString(R.string.mistake_message_body), songNumber));
+                        return true;
+
+                    case R.id.shareSong:
+                        // TODO: 4/25/2019 Implement this feature
+                        Toast.makeText(activity, "Sorry, this feature is not supported yet",
+                                Toast.LENGTH_LONG).show();
+                        return true;
+                }
+                return false;
+            });
+
+            popupMenu.show();
+        });
 
         if (coverUrlSmall != null) {
             Glide.with(songViewHolder.itemView)
@@ -132,6 +160,8 @@ public class SongRVAdapter
         ImageView songCover;
         @BindView(R.id.songGanreTV)
         TextView songGanreTV;
+        @BindView(R.id.songMoreBtn)
+        ImageView songMoreBtn;
 
         SongViewHolder(@NonNull View itemView) {
             super(itemView);

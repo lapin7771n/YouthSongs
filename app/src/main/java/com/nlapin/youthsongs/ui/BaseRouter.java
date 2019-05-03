@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.nlapin.youthsongs.R;
@@ -17,9 +18,9 @@ import com.nlapin.youthsongs.R;
  */
 public abstract class BaseRouter {
 
-    private AppCompatActivity activity;
+    private FragmentActivity activity;
 
-    public BaseRouter(AppCompatActivity activity) {
+    public BaseRouter(FragmentActivity activity) {
         this.activity = activity;
     }
 

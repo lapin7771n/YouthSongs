@@ -45,8 +45,10 @@ public class FavoritesFragment
     RecyclerView favoriteSongsRV;
     @BindView(R.id.progressBar)
     ProgressBar loadingPB;
+
     private SongRVAdapter rvAdapter;
     private DisposableObserver<LiveData<List<Song>>> favoriteSongsSubscriber;
+    private FavoritesViewModel viewModel;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -57,13 +59,31 @@ public class FavoritesFragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         ButterKnife.bind(this, view);
-
         loadingPB.setVisibility(View.VISIBLE);
-
         setUpRecyclerView();
+        viewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+        loadingPB.setVisibility(View.INVISIBLE);
+        return view;
+    }
 
-        FavoritesViewModel viewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+    private void setUpRecyclerView() {
+        rvAdapter = new SongRVAdapter(new ArrayList<>(), (v, position) -> {
+            startActivity(SongActivity.start(getContext(), position));
+        }, getActivity());
 
+        favoriteSongsRV.setLayoutManager(new LinearLayoutManager(getContext()));
+        favoriteSongsRV.setAdapter(rvAdapter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        favoriteSongsSubscriber.dispose();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         viewModel.getAllFavoriteSongs().observe(this, favoriteSongs -> {
             favoriteSongsSubscriber = viewModel.getAllSong(favoriteSongs)
                     .subscribeWith(new DisposableObserver<LiveData<List<Song>>>() {
@@ -98,24 +118,5 @@ public class FavoritesFragment
                         }
                     });
         });
-
-
-        loadingPB.setVisibility(View.INVISIBLE);
-        return view;
-    }
-
-    private void setUpRecyclerView() {
-        rvAdapter = new SongRVAdapter(new ArrayList<>(), (v, position) -> {
-            startActivity(SongActivity.start(getContext(), position));
-        });
-
-        favoriteSongsRV.setLayoutManager(new LinearLayoutManager(getContext()));
-        favoriteSongsRV.setAdapter(rvAdapter);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        favoriteSongsSubscriber.dispose();
     }
 }

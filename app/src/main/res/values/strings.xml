@@ -25,4 +25,10 @@
     <string name="mistake_in_the_text">Mistake in the text</string>
     <string name="share">Share</string>
     <string name="mistake_message_body">Mistake in the song by number - %d. Details:</string>
+    <string name="is_chords_show_pref">is_chords_show</string>
+    <string name="font_size_pref">font_size</string>
+    <string name="show_chords_label">Show chords</string>
+    <string name="font_size_label">Font size</string>
+    <string name="font_label">Font</string>
+    <string name="chords_label">Chords</string>
 </resources>

@@ -2,6 +2,7 @@ package com.nlapin.youthsongs.ui.homescreen;
 
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,23 +11,20 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 import com.ethanhua.skeleton.Skeleton;
 import com.nlapin.youthsongs.R;
-import com.nlapin.youthsongs.models.AuthorsSelectionUI;
-import com.nlapin.youthsongs.models.Song;
-import com.nlapin.youthsongs.ui.adapters.AuthorsSelectionsRVAdapter;
+import com.nlapin.youthsongs.ui.adapters.AuthorsSelectionPagerAdapter;
 import com.nlapin.youthsongs.ui.adapters.SongRVAdapter;
 import com.nlapin.youthsongs.ui.songscreen.SongActivity;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,8 +42,10 @@ public class HomeFragment
     RecyclerView songRV;
     @BindView(R.id.header)
     TextView header;
-    @BindView(R.id.authorsSelectionsRV)
-    RecyclerView authorsSelectionsRV;
+    @BindView(R.id.authorsSelectionsVP)
+    ViewPager authorsSelectionsVP;
+
+    private PagerAdapter pagerAdapter;
 
     /**
      * Adapter for all songs in MainScreen
@@ -63,7 +63,7 @@ public class HomeFragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
-        setUpRecyclerView();
+        setUpRecyclerView(container);
         setupAuthorsSelectionRV();
 
         HomeViewModel model = ViewModelProviders.of(this).get(HomeViewModel.class);
@@ -83,12 +83,16 @@ public class HomeFragment
 
     /**
      * Setting up All songs UI
+     *
+     * @param container
      */
-    private void setUpRecyclerView() {
+    private void setUpRecyclerView(ViewGroup container) {
         adapter = new SongRVAdapter(new ArrayList<>(), (v, position) ->
-                startActivity(SongActivity.start(getContext(), position)));
+                startActivity(SongActivity.start(getContext(), position)), getActivity());
 
-        songRV.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        songRV.setLayoutManager(layoutManager);
+
 
         skeletonScreen = Skeleton.bind(songRV)
                 .adapter(adapter)
@@ -101,25 +105,14 @@ public class HomeFragment
      * Setting up authors selection UI
      */
     private void setupAuthorsSelectionRV() {
-        final ArrayList<AuthorsSelectionUI> authorsSelections = new ArrayList<>();
-        authorsSelections.add(new AuthorsSelectionUI("Test", new ArrayList<>()));
-        authorsSelections.add(new AuthorsSelectionUI("Medium Text Test", new ArrayList<>()));
-        authorsSelections.add(new AuthorsSelectionUI("Very very long name test", new ArrayList<>()));
-        AuthorsSelectionsRVAdapter authorsSelectionsRVAdapter = new AuthorsSelectionsRVAdapter(
-                authorsSelections,
-                (v, position) -> {
+        pagerAdapter = new AuthorsSelectionPagerAdapter(getChildFragmentManager(), 3);
+        authorsSelectionsVP.setAdapter(pagerAdapter);
+        authorsSelectionsVP.setPageMargin(dpToPx(10));
+    }
 
-                },
-                getContext());
-
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(
-                getContext(),
-                LinearLayoutManager.HORIZONTAL,
-                false);
-
-        authorsSelectionsRV.setLayoutManager(layoutManager);
-        authorsSelectionsRV.setAdapter(authorsSelectionsRVAdapter);
-        authorsSelectionsRV.setHasFixedSize(false);
+    private int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
 }

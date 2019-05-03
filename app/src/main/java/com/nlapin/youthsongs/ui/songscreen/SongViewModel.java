@@ -1,5 +1,7 @@
 package com.nlapin.youthsongs.ui.songscreen;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -12,11 +14,16 @@ import com.nlapin.youthsongs.models.Song;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class SongViewModel extends ViewModel {
+
+    private static final String TAG = "SongViewModel";
 
     @Inject
     SongRepository songRepository;
@@ -41,12 +48,33 @@ public class SongViewModel extends ViewModel {
     }
 
     void deleteFromFavorites(int id) {
-        new Thread(() -> favoriteSongDao.delete(new FavoriteSong(id))).start();
+        Completable.fromAction(() -> {
+            int delete = favoriteSongDao.delete(id);
+            Log.d(TAG, "deleteFromFavorites: items - " + delete);
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.d(TAG, "onSubscribe: ");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "onError: ", e);
+                    }
+                });
     }
 
-    Observable<Boolean> isFavorite(int songId) {
-        return Observable.just(favoriteSongDao.getById(songId) != null)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread());
+    Maybe<FavoriteSong> isFavorite(int songId) {
+        return favoriteSongDao.getBySongId(songId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

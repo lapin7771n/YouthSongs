@@ -2,13 +2,14 @@ package com.nlapin.youthsongs.data.local;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.nlapin.youthsongs.models.FavoriteSong;
 
 import java.util.List;
+
+import io.reactivex.Maybe;
 
 @Dao
 public interface FavoriteSongDao {
@@ -25,6 +26,6 @@ public interface FavoriteSongDao {
     @Insert
     void insertAll(FavoriteSong... favoriteSongs);
 
-    @Delete
-    void delete(FavoriteSong favoriteSong);
+    @Query("DELETE FROM favorite_song_table WHERE songId = :songID")
+    int delete(int songID);
 }

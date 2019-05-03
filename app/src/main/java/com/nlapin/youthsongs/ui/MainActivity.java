@@ -15,6 +15,7 @@ import com.nlapin.youthsongs.data.local.SongDao;
 import com.nlapin.youthsongs.data.remote.SongCloudRepository;
 import com.nlapin.youthsongs.ui.favsongscreen.FavoritesFragment;
 import com.nlapin.youthsongs.ui.homescreen.HomeFragment;
+import com.nlapin.youthsongs.ui.settingsscreen.SettingsFragment;
 
 import javax.inject.Inject;
 
@@ -53,6 +54,7 @@ public class MainActivity
 
         HomeFragment homeFragment = new HomeFragment();
         FavoritesFragment favoritesFragment = new FavoritesFragment();
+        SettingsFragment settingsFragment = new SettingsFragment();
 
         router.switchFragment(homeFragment);
         bottomNavBar.setOnNavigationItemSelectedListener(item -> {
@@ -66,6 +68,7 @@ public class MainActivity
                     return true;
 
                 case R.id.settingsTab:
+                    router.switchFragment(settingsFragment);
                     return true;
 
                 default:
