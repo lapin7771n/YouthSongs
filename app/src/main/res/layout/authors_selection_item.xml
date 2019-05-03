@@ -2,25 +2,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/authorsChoiseCL"
     android:layout_width="250dp"
-    android:layout_height="match_parent"
+    android:layout_height="80dp"
     android:layout_margin="10dp"
     android:background="@drawable/authors_choise_red_bg"
     android:elevation="5dp"
     android:foreground="?selectableItemBackground"
-    android:padding="10dp"
+    android:padding="5dp"
     app:layoutDescription="@xml/motion">
 
     <TextView
         android:id="@+id/selectionNameTV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="15dp"
+        android:autoSizeTextType="uniform"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="Testing long name of the selection"
         android:textColor="@android:color/white"
-        android:textSize="35sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:autoSizeMaxTextSize="35sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,9 +34,10 @@
         android:layout_marginStart="5dp"
         android:text="180 songs"
         android:textColor="#B2FFFFFF"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/selectionNameTV" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

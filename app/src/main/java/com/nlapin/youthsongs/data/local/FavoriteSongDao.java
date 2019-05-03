@@ -9,6 +9,7 @@ import com.nlapin.youthsongs.models.FavoriteSong;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 
 @Dao
@@ -21,7 +22,7 @@ public interface FavoriteSongDao {
     FavoriteSong getById(int id);
 
     @Query("SELECT * FROM favorite_song_table WHERE songId =:songId")
-    FavoriteSong getBySongId(int songId);
+    Flowable<FavoriteSong> getBySongId(int songId);
 
     @Insert
     void insertAll(FavoriteSong... favoriteSongs);

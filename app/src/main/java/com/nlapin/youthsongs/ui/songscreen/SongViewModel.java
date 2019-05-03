@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.nlapin.youthsongs.YouthSongsApp;
+import com.nlapin.youthsongs.data.FavoritesRepository;
 import com.nlapin.youthsongs.data.SongRepository;
 import com.nlapin.youthsongs.data.local.FavoriteSongDao;
 import com.nlapin.youthsongs.data.remote.FirebaseStorageHelper;
@@ -16,7 +17,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
-import io.reactivex.Maybe;
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -33,6 +34,9 @@ public class SongViewModel extends ViewModel {
 
     @Inject
     FavoriteSongDao favoriteSongDao;
+
+    @Inject
+    FavoritesRepository favoritesRepository;
 
 
     public SongViewModel() {
@@ -72,9 +76,7 @@ public class SongViewModel extends ViewModel {
                 });
     }
 
-    Maybe<FavoriteSong> isFavorite(int songId) {
-        return favoriteSongDao.getBySongId(songId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    Flowable<FavoriteSong> isFavorite(int songId) {
+        return favoritesRepository.getById(songId);
     }
 }

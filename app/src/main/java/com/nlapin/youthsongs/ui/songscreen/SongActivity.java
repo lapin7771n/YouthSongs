@@ -31,8 +31,7 @@ import com.nlapin.youthsongs.utils.SongUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.MaybeObserver;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.internal.subscribers.BlockingBaseSubscriber;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class SongActivity
@@ -130,14 +129,9 @@ public class SongActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.song_menu, menu);
         songViewModel.isFavorite(songId)
-                .subscribe(new MaybeObserver<FavoriteSong>() {
+                .subscribe(new BlockingBaseSubscriber<FavoriteSong>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(FavoriteSong favoriteSong) {
+                    public void onNext(FavoriteSong favoriteSong) {
                         if (favoriteSong != null) {
                             MenuItem item = menu.findItem(R.id.favoriteBtn);
                             item.setChecked(true);
@@ -148,11 +142,6 @@ public class SongActivity
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "onError: ", e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-
                     }
                 });
         return true;

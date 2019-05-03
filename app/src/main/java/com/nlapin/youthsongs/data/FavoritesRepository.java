@@ -11,6 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -20,6 +21,7 @@ public class FavoritesRepository {
     @Inject
     FavoriteSongDao favoriteSongDao;
 
+    @Inject
     public FavoritesRepository() {
         YouthSongsApp.getComponent().inject(this);
     }
@@ -30,8 +32,8 @@ public class FavoritesRepository {
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<FavoriteSong> geyById(int id) {
-        return Observable.just(favoriteSongDao.getBySongId(id))
+    public Flowable<FavoriteSong> getById(int id) {
+        return favoriteSongDao.getBySongId(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

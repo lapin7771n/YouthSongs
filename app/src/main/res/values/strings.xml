@@ -31,4 +31,5 @@
     <string name="font_size_label">Font size</string>
     <string name="font_label">Font</string>
     <string name="chords_label">Chords</string>
+    <string name="all_songs">All songs</string>
 </resources>

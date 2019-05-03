@@ -67,9 +67,8 @@ public class FavoritesFragment
     }
 
     private void setUpRecyclerView() {
-        rvAdapter = new SongRVAdapter(new ArrayList<>(), (v, position) -> {
-            startActivity(SongActivity.start(getContext(), position));
-        }, getActivity());
+        rvAdapter = new SongRVAdapter(new ArrayList<>(), (v, position) ->
+                startActivity(SongActivity.start(getContext(), position)), getActivity());
 
         favoriteSongsRV.setLayoutManager(new LinearLayoutManager(getContext()));
         favoriteSongsRV.setAdapter(rvAdapter);
@@ -84,39 +83,38 @@ public class FavoritesFragment
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.getAllFavoriteSongs().observe(this, favoriteSongs -> {
-            favoriteSongsSubscriber = viewModel.getAllSong(favoriteSongs)
-                    .subscribeWith(new DisposableObserver<LiveData<List<Song>>>() {
-                        @Override
-                        public void onNext(LiveData<List<Song>> listLiveData) {
-                            listLiveData.observe(FavoritesFragment.this, songs -> {
-                                if (songs == null || songs.isEmpty()) {
-                                    emptyBoxAnim.setVisibility(View.VISIBLE);
-                                    emptyLabel.setVisibility(View.VISIBLE);
-                                    emptyBoxAnim.playAnimation();
-                                    return;
-                                }
-                                emptyLabel.setVisibility(View.INVISIBLE);
-                                emptyBoxAnim.setVisibility(View.INVISIBLE);
-                                Log.d(TAG, "SONGS ARRIVED");
+        viewModel.getAllFavoriteSongs().observe(this, favoriteSongs ->
+                favoriteSongsSubscriber = viewModel.getAllSong(favoriteSongs)
+                        .subscribeWith(new DisposableObserver<LiveData<List<Song>>>() {
+                            @Override
+                            public void onNext(LiveData<List<Song>> listLiveData) {
+                                listLiveData.observe(FavoritesFragment.this, songs -> {
+                                    if (songs == null || songs.isEmpty()) {
+                                        emptyBoxAnim.setVisibility(View.VISIBLE);
+                                        emptyLabel.setVisibility(View.VISIBLE);
+                                        emptyBoxAnim.playAnimation();
+                                        return;
+                                    }
+                                    emptyLabel.setVisibility(View.INVISIBLE);
+                                    emptyBoxAnim.setVisibility(View.INVISIBLE);
+                                    Log.d(TAG, "SONGS ARRIVED");
 
-                                rvAdapter.setSongList(songs);
-                                rvAdapter.notifyDataSetChanged();
-                            });
-                        }
+                                    rvAdapter.setSongList(songs);
+                                    rvAdapter.notifyDataSetChanged();
+                                });
+                            }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            Toast.makeText(getContext(),
-                                    "An error occurred - " + e.getLocalizedMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                            @Override
+                            public void onError(Throwable e) {
+                                Toast.makeText(getContext(),
+                                        "An error occurred - " + e.getLocalizedMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
 
-                        @Override
-                        public void onComplete() {
+                            @Override
+                            public void onComplete() {
 
-                        }
-                    });
-        });
+                            }
+                        }));
     }
 }

@@ -108,6 +108,7 @@ public class HomeFragment
         pagerAdapter = new AuthorsSelectionPagerAdapter(getChildFragmentManager(), 3);
         authorsSelectionsVP.setAdapter(pagerAdapter);
         authorsSelectionsVP.setPageMargin(dpToPx(10));
+        authorsSelectionsVP.setPadding(16, 0, 16, 0);
     }
 
     private int dpToPx(int dp) {
