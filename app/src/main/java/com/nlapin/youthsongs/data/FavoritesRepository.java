@@ -27,28 +27,28 @@ public class FavoritesRepository {
     }
 
     public Observable<LiveData<List<FavoriteSong>>> getAll() {
-        return Observable.just(favoriteSongDao.getAll())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
+        return Observable.just(favoriteSongDao.getAll());
     }
 
     public Flowable<FavoriteSong> getById(int id) {
-        return favoriteSongDao.getBySongId(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return favoriteSongDao.getBySongId(id);
     }
 
     public void delete(int songId) {
         Completable.fromAction(() -> favoriteSongDao.delete(songId))
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
     }
 
     public void update(FavoriteSong favoriteSong) {
         Completable.fromAction(() -> favoriteSongDao.insertAll(favoriteSong))
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+    }
+
+    public void insert(FavoriteSong... favoriteSongs) {
+        Completable.fromAction(() -> favoriteSongDao.insertAll(favoriteSongs))
+                .subscribeOn(Schedulers.io())
                 .subscribe();
     }
 }

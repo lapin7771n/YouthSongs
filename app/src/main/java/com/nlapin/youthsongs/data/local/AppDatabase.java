@@ -10,7 +10,7 @@ import com.nlapin.youthsongs.models.Song;
 /**
  * Room database abstract class
  */
-@Database(entities = {AuthorsSelectionPOJO.class, Song.class, FavoriteSong.class}, version = 1,
+@Database(entities = {AuthorsSelectionPOJO.class, Song.class, FavoriteSong.class}, version = 2,
         exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     /**

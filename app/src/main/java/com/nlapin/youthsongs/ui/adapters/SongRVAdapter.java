@@ -24,7 +24,6 @@ import com.nlapin.youthsongs.ui.CustomItemClickListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,7 +36,6 @@ public class SongRVAdapter
     private List<Song> songList;
     private List<Song> copySongList;
     private CustomItemClickListener clickListener;
-    private Random random;
     private FragmentActivity activity;
 
     public SongRVAdapter(Collection<Song> songList,
@@ -46,12 +44,12 @@ public class SongRVAdapter
         this.songList = new ArrayList<>(songList);
         this.copySongList = new ArrayList<>(songList);
         this.clickListener = clickListener;
-        random = new Random();
         this.activity = activity;
     }
 
     public void setSongList(List<Song> songList) {
-        this.songList = songList;
+        this.songList.clear();
+        this.songList.addAll(songList);
     }
 
     @Override
@@ -88,27 +86,27 @@ public class SongRVAdapter
 
         String coverUrlSmall = song.getCoverUrlSmall();
 
-        songViewHolder.songMoreBtn.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(v.getContext(), songViewHolder.songMoreBtn);
-            popupMenu.inflate(R.menu.popup_menu);
-            popupMenu.setOnMenuItemClickListener(item -> {
-                switch (item.getItemId()) {
-                    case R.id.mistakeInTheText:
-                        new AboutScreenRouter(activity).openEmail(AboutScreenRouter.DeveloperID.Nikita,
-                                String.format(activity.getString(R.string.mistake_message_body), songNumber));
-                        return true;
-
-                    case R.id.shareSong:
-                        // TODO: 4/25/2019 Implement this feature
-                        Toast.makeText(activity, "Sorry, this feature is not supported yet",
-                                Toast.LENGTH_LONG).show();
-                        return true;
-                }
-                return false;
-            });
-
-            popupMenu.show();
-        });
+//        songViewHolder.songMoreBtn.setOnClickListener(v -> {
+//            PopupMenu popupMenu = new PopupMenu(v.getContext(), songViewHolder.songMoreBtn);
+//            popupMenu.inflate(R.menu.popup_menu);
+//            popupMenu.setOnMenuItemClickListener(item -> {
+//                switch (item.getItemId()) {
+//                    case R.id.mistakeInTheText:
+//                        new AboutScreenRouter(activity).openEmail(AboutScreenRouter.DeveloperID.Nikita,
+//                                String.format(activity.getString(R.string.mistake_message_body), songNumber));
+//                        return true;
+//
+//                    case R.id.shareSong:
+//                        // TODO: 4/25/2019 Implement this feature
+//                        Toast.makeText(activity, "Sorry, this feature is not supported yet",
+//                                Toast.LENGTH_LONG).show();
+//                        return true;
+//                }
+//                return false;
+//            });
+//
+//            popupMenu.show();
+//        });
 
         if (coverUrlSmall != null) {
             Glide.with(songViewHolder.itemView)

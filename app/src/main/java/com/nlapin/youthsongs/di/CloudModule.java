@@ -11,7 +11,7 @@ import dagger.Provides;
 public class CloudModule {
 
     @Provides
-    static SongCloudRepository provideSongCloudRepository(Context context) {
-        return new SongCloudRepository(context);
+    static SongCloudRepository provideSongCloudRepository() {
+        return new SongCloudRepository();
     }
 }

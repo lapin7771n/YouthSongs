@@ -7,8 +7,7 @@
     android:background="@drawable/authors_choise_red_bg"
     android:elevation="5dp"
     android:foreground="?selectableItemBackground"
-    android:padding="5dp"
-    app:layoutDescription="@xml/motion">
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/selectionNameTV"
@@ -16,14 +15,13 @@
         android:layout_height="50dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="15dp"
-        android:autoSizeTextType="uniform"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="Testing long name of the selection"
         android:textColor="@android:color/white"
-        android:textSize="30sp"
         android:textStyle="bold"
         app:autoSizeMaxTextSize="35sp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

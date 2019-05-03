@@ -3,7 +3,6 @@ package com.nlapin.youthsongs.di;
 import com.nlapin.youthsongs.data.FavoritesRepository;
 import com.nlapin.youthsongs.data.SongRepository;
 import com.nlapin.youthsongs.data.local.AppDatabase;
-import com.nlapin.youthsongs.data.remote.FirebaseStorageHelper;
 import com.nlapin.youthsongs.data.remote.SongCloudRepository;
 import com.nlapin.youthsongs.network.NetworkService;
 import com.nlapin.youthsongs.ui.MainActivity;
@@ -21,8 +20,6 @@ import dagger.Component;
         SongScreenModule.class})
 public interface MainComponent {
     AppDatabase getAppDatabase();
-
-    FirebaseStorageHelper getFirestorageHelper();
 
     SongRepository getSongRepository();
 

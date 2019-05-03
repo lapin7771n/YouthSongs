@@ -7,27 +7,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.nlapin.youthsongs.R;
-import com.nlapin.youthsongs.models.Song;
 import com.nlapin.youthsongs.ui.adapters.SongRVAdapter;
 import com.nlapin.youthsongs.ui.songscreen.SongActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,7 +45,7 @@ public class FavoritesFragment
     ProgressBar loadingPB;
 
     private SongRVAdapter rvAdapter;
-    private DisposableObserver<LiveData<List<Song>>> favoriteSongsSubscriber;
+    private Disposable favoriteSongsSubscriber;
     private FavoritesViewModel viewModel;
 
     public FavoritesFragment() {
@@ -85,36 +83,21 @@ public class FavoritesFragment
         super.onResume();
         viewModel.getAllFavoriteSongs().observe(this, favoriteSongs ->
                 favoriteSongsSubscriber = viewModel.getAllSong(favoriteSongs)
-                        .subscribeWith(new DisposableObserver<LiveData<List<Song>>>() {
-                            @Override
-                            public void onNext(LiveData<List<Song>> listLiveData) {
-                                listLiveData.observe(FavoritesFragment.this, songs -> {
-                                    if (songs == null || songs.isEmpty()) {
-                                        emptyBoxAnim.setVisibility(View.VISIBLE);
-                                        emptyLabel.setVisibility(View.VISIBLE);
-                                        emptyBoxAnim.playAnimation();
-                                        return;
-                                    }
-                                    emptyLabel.setVisibility(View.INVISIBLE);
-                                    emptyBoxAnim.setVisibility(View.INVISIBLE);
-                                    Log.d(TAG, "SONGS ARRIVED");
-
-                                    rvAdapter.setSongList(songs);
-                                    rvAdapter.notifyDataSetChanged();
-                                });
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(songs -> {
+                            if (songs == null || songs.isEmpty()) {
+                                emptyBoxAnim.setVisibility(View.VISIBLE);
+                                emptyLabel.setVisibility(View.VISIBLE);
+                                emptyBoxAnim.playAnimation();
+                                return;
                             }
+                            emptyLabel.setVisibility(View.INVISIBLE);
+                            emptyBoxAnim.setVisibility(View.INVISIBLE);
+                            Log.d(TAG, "SONGS ARRIVED");
 
-                            @Override
-                            public void onError(Throwable e) {
-                                Toast.makeText(getContext(),
-                                        "An error occurred - " + e.getLocalizedMessage(),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onComplete() {
-
-                            }
-                        }));
+                            rvAdapter.setSongList(songs);
+                            rvAdapter.notifyDataSetChanged();
+                        }, throwable -> Log.e(TAG, "Error while loading favorite songs!", throwable)));
     }
 }

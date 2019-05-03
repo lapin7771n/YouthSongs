@@ -40,11 +40,11 @@ public class YouthSongsApp extends Application {
     private void provideImages() {
         SongCloudRepository songCloudRepository = mainComponent.getSongCloudRepository();
         NetworkService networkService = mainComponent.getNetworkService();
-        songCloudRepository.provideAllSongs(songs -> {
+        songCloudRepository.provideAllSongs().subscribe(songs -> {
             Log.i(TAG, "All song provided from server!");
             for (Song song : songs) {
 
-                if (song.getCoverUrlLarge() != null && song.getCoverUrlSmall() != null) {
+                if (song.getCoverUrlSmall() != null) {
                     Log.d(TAG, "Image provided!");
                     continue;
                 }
@@ -55,13 +55,9 @@ public class YouthSongsApp extends Application {
                         Log.i(TAG, "Response - " + response.raw());
                         PixelsResponseModel pixelsResponseModel = response.body();
                         if (pixelsResponseModel != null) {
-                            String original = pixelsResponseModel.getPhotos().getSrc().getOriginal();
                             String small = pixelsResponseModel.getPhotos().getSrc().getSmall();
-                            song.setCoverUrlLarge(original);
                             song.setCoverUrlSmall(small);
                             songCloudRepository.updateSong(song);
-                            Log.i(TAG, "Song by id - " + song.getId() + " - updated with covers: "
-                                    + original + "\n" + small);
                         } else {
                             Log.e(TAG, "Response body is NULL!");
                         }
@@ -73,7 +69,7 @@ public class YouthSongsApp extends Application {
                     }
                 });
             }
-        });
+        }).dispose();
     }
 
     protected MainComponent buildComponent() {

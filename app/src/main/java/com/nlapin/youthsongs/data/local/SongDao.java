@@ -11,6 +11,9 @@ import com.nlapin.youthsongs.models.Song;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Maybe;
+
 /**
  * Interface for working with song table
  * Implements by Room
@@ -24,7 +27,7 @@ public interface SongDao {
      * @return all songs in the song_table
      */
     @Query("SELECT * FROM song_table")
-    LiveData<List<Song>> getAll();
+    Flowable<List<Song>> getAll();
 
     /**
      * Getting song by id in songs table
@@ -33,7 +36,7 @@ public interface SongDao {
      * @return requested song
      */
     @Query("SELECT * FROM song_table WHERE id =:id")
-    Song getById(int id);
+    Maybe<Song> getById(int id);
 
     /**
      * Inserts song to song table
@@ -52,5 +55,5 @@ public interface SongDao {
     void delete(Song song);
 
     @Query("SELECT * FROM song_table WHERE id IN (:ids)")
-    LiveData<List<Song>> getByIds(List<String> ids);
+    Flowable<List<Song>> getByIds(List<String> ids);
 }

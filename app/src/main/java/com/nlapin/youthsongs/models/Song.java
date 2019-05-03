@@ -1,5 +1,6 @@
 package com.nlapin.youthsongs.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -13,7 +14,6 @@ public class Song implements Comparable<Song> {
     private final String name;
     private final String text;
     private final String chorus;
-    private String coverUrlLarge;
     private String coverUrlSmall;
 
     public Song(int id, String name, String text, String chorus) {
@@ -47,19 +47,12 @@ public class Song implements Comparable<Song> {
         return chorus;
     }
 
-    public String getCoverUrlLarge() {
-        return coverUrlLarge;
-    }
-
-    public void setCoverUrlLarge(String coverUrlLarge) {
-        this.coverUrlLarge = coverUrlLarge;
-    }
-
     @Override
     public int compareTo(Song o) {
         return Long.compare(this.getId(), o.getId());
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Song{" +
@@ -67,7 +60,7 @@ public class Song implements Comparable<Song> {
                 ", name='" + name + '\'' +
                 ", text='" + text + '\'' +
                 ", chorus='" + chorus + '\'' +
-                ", coverUrlLarge='" + coverUrlLarge + '\'' +
+                ", coverUrlSmall='" + coverUrlSmall + '\'' +
                 '}';
     }
 
@@ -80,11 +73,11 @@ public class Song implements Comparable<Song> {
                 name.equals(song.name) &&
                 text.equals(song.text) &&
                 Objects.equals(chorus, song.chorus) &&
-                Objects.equals(coverUrlLarge, song.coverUrlLarge);
+                Objects.equals(coverUrlSmall, song.coverUrlSmall);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, text, chorus, coverUrlLarge);
+        return Objects.hash(id, name, text, chorus, coverUrlSmall);
     }
 }

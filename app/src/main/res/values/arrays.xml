@@ -5,4 +5,16 @@
         <item>20</item>
         <item>25</item>
     </string-array>
+
+    <string-array name="settings_headers">
+        <item>Appearance</item>
+        <item>Songs database</item>
+        <item>About app</item>
+    </string-array>
+
+    <string-array name="settings_subtitles">
+        <item>Fonts, Chords</item>
+        <item>Last update was: %s</item>
+        <item />
+    </string-array>
 </resources>

@@ -31,6 +31,7 @@ import com.nlapin.youthsongs.utils.SongUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.subscribers.BlockingBaseSubscriber;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
@@ -59,6 +60,7 @@ public class SongActivity
 
     private static final int SONG_NOT_FOUND = -1;
     private int songId;
+    private Disposable songSubscriber;
 
     public static Intent start(Context from, int id) {
         Intent intent = new Intent(from, SongActivity.class);
@@ -77,7 +79,7 @@ public class SongActivity
         songViewModel = ViewModelProviders.of(this).get(SongViewModel.class);
         songId = getIntent().getIntExtra(SONG_NUMBER_KEY, SONG_NOT_FOUND);
 
-        songViewModel.getSongById(songId).observe(this, this::parseSongToView);
+        songSubscriber = songViewModel.getSongById(songId).subscribe(this::parseSongToView);
 
         FirebaseAnalytics.getInstance(this);
     }
@@ -91,6 +93,12 @@ public class SongActivity
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        songSubscriber.dispose();
+    }
 
     private void parseSongToView(Song song) {
         String cover = song.getCoverUrlSmall();
