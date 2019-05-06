@@ -16,6 +16,9 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="allowBackup">
         <activity
+            android:name=".ui.settingsscreen.AppearanceSettingsActivity"
+            android:label="@string/title_activity_appearance_settings"></activity>
+        <activity
             android:name=".ui.songscreen.SongActivity"
             android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionAndStatusBar" />

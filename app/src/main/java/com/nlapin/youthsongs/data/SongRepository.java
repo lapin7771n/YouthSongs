@@ -60,8 +60,8 @@ public final class SongRepository {
                         }, emitter::onError, emitter::onComplete), BackpressureStrategy.BUFFER);
     }
 
-    public final Maybe<Song> geyById(int id) {
-        return Maybe.create((MaybeOnSubscribe<Song>) emitter ->
+    public final Maybe<Song> getById(int id) {
+        return Maybe.create(emitter ->
                 songDao.getById(id).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe((song -> {
@@ -76,10 +76,7 @@ public final class SongRepository {
                             } else {
                                 emitter.onSuccess(song);
                             }
-                        }), emitter::onError, emitter::onComplete)
-                        .dispose())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                        }), emitter::onError, emitter::onComplete));
     }
 
     public final Flowable<List<Song>> getAllByIds(List<FavoriteSong> favoriteSongs) {
@@ -104,10 +101,14 @@ public final class SongRepository {
                 .subscribe();
     }
 
-    private void cacheToLocalDatabase(List<Song> songs) {
+    public void cacheToLocalDatabase(List<Song> songs) {
         Completable.fromAction(() -> songDao.insertAll(songs.toArray(new Song[0])))
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
                 .subscribe();
+    }
+
+    public SongCloudRepository getSongCloudRepository() {
+        return songCloudRepository;
     }
 }

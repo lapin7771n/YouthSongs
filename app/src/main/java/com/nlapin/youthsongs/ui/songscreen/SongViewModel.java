@@ -29,7 +29,7 @@ public final class SongViewModel extends ViewModel {
     }
 
     Maybe<Song> getSongById(int id) {
-        return songRepository.geyById(id);
+        return songRepository.getById(id);
     }
 
     void saveToFavorites(int id) {

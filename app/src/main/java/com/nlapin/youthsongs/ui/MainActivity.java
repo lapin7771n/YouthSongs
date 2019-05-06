@@ -83,6 +83,4 @@ public class MainActivity
                 .setMessage("We customize your application. This may take some time ...")
                 .create();
     }
-
-
 }

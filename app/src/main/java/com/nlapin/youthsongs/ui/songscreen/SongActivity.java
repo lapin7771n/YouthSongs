@@ -31,8 +31,10 @@ import com.nlapin.youthsongs.utils.SongUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.subscribers.BlockingBaseSubscriber;
+import io.reactivex.schedulers.Schedulers;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class SongActivity
@@ -79,7 +81,10 @@ public class SongActivity
         songViewModel = ViewModelProviders.of(this).get(SongViewModel.class);
         songId = getIntent().getIntExtra(SONG_NUMBER_KEY, SONG_NOT_FOUND);
 
-        songSubscriber = songViewModel.getSongById(songId).subscribe(this::parseSongToView);
+        songSubscriber = songViewModel.getSongById(songId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::parseSongToView);
 
         FirebaseAnalytics.getInstance(this);
     }
@@ -137,6 +142,8 @@ public class SongActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.song_menu, menu);
         songViewModel.isFavorite(songId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BlockingBaseSubscriber<FavoriteSong>() {
                     @Override
                     public void onNext(FavoriteSong favoriteSong) {

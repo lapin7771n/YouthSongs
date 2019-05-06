@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="48dp"
+    android:background="?android:attr/selectableItemBackground"
     android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
@@ -16,13 +18,15 @@
             android:layout_height="wrap_content"
             android:text="Appearance"
             android:textColor="@color/black"
+            android:textSize="17sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/settingSubtitle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Font, Chords" />
+            android:layout_height="wrap_content"
+            android:text="Font, Chords"
+            android:textSize="12sp" />
 
     </LinearLayout>
 

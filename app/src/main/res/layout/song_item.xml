@@ -24,7 +24,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textStyle="bold"
-        android:transitionName="@string/songNameTransitions"
         app:layout_constraintBottom_toTopOf="@+id/songGanreTV"
         app:layout_constraintEnd_toStartOf="@id/songMoreBtn"
         app:layout_constraintStart_toEndOf="@id/songCover"

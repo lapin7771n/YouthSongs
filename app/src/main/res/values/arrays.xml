@@ -7,7 +7,7 @@
     </string-array>
 
     <string-array name="settings_headers">
-        <item>Appearance</item>
+        <item>@string/title_activity_appearance_settings</item>
         <item>Songs database</item>
         <item>About app</item>
     </string-array>
@@ -16,5 +16,15 @@
         <item>Fonts, Chords</item>
         <item>Last update was: %s</item>
         <item />
+    </string-array>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
     </string-array>
 </resources>

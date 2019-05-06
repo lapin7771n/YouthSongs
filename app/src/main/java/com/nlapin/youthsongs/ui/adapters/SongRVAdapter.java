@@ -2,6 +2,7 @@ package com.nlapin.youthsongs.ui.adapters;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class SongRVAdapter
     public void setSongList(List<Song> songList) {
         this.songList.clear();
         this.songList.addAll(songList);
+        this.copySongList.addAll(songList);
     }
 
     @Override
@@ -86,27 +88,27 @@ public class SongRVAdapter
 
         String coverUrlSmall = song.getCoverUrlSmall();
 
-//        songViewHolder.songMoreBtn.setOnClickListener(v -> {
-//            PopupMenu popupMenu = new PopupMenu(v.getContext(), songViewHolder.songMoreBtn);
-//            popupMenu.inflate(R.menu.popup_menu);
-//            popupMenu.setOnMenuItemClickListener(item -> {
-//                switch (item.getItemId()) {
-//                    case R.id.mistakeInTheText:
-//                        new AboutScreenRouter(activity).openEmail(AboutScreenRouter.DeveloperID.Nikita,
-//                                String.format(activity.getString(R.string.mistake_message_body), songNumber));
-//                        return true;
-//
-//                    case R.id.shareSong:
-//                        // TODO: 4/25/2019 Implement this feature
-//                        Toast.makeText(activity, "Sorry, this feature is not supported yet",
-//                                Toast.LENGTH_LONG).show();
-//                        return true;
-//                }
-//                return false;
-//            });
-//
-//            popupMenu.show();
-//        });
+        songViewHolder.songMoreBtn.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(v.getContext(), songViewHolder.songMoreBtn);
+            popupMenu.inflate(R.menu.popup_menu);
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.mistakeInTheText:
+                        new AboutScreenRouter(activity).openEmail(AboutScreenRouter.DeveloperID.Nikita,
+                                String.format(activity.getString(R.string.mistake_message_body), songNumber));
+                        return true;
+
+                    case R.id.shareSong:
+                        // TODO: 4/25/2019 Implement this feature
+                        Toast.makeText(activity, "Sorry, this feature is not supported yet",
+                                Toast.LENGTH_LONG).show();
+                        return true;
+                }
+                return false;
+            });
+
+            popupMenu.show();
+        });
 
         if (coverUrlSmall != null) {
             Glide.with(songViewHolder.itemView)
@@ -117,23 +119,28 @@ public class SongRVAdapter
     }
 
     public void filter(String filterText) {
-        filterText = filterText.toLowerCase();
+        Log.d(TAG, "filter: ");
+        filterText = filterText.trim().toLowerCase();
         songList.clear();
         if (filterText.isEmpty()) {
             songList.addAll(copySongList);
             return;
         }
+
+        Log.d(TAG, "copySongList size() - " + copySongList.size());
         for (Song song : copySongList) {
-            if (song.getName() == null)
-                continue;
 
             //Search by name
-            if (song.getName().toLowerCase().contains(filterText))
+            if (song.getName().toLowerCase().contains(filterText)) {
                 songList.add(song);
+                Log.d(TAG, "Matched by name");
+            }
 
             //Search by number
-            if (String.valueOf(song.getId()).contains(filterText))
+            if (String.valueOf(song.getId()).contains(filterText)) {
                 songList.add(song);
+                Log.d(TAG, "Matched by number");
+            }
 
             //Search by text
             boolean isNumber = false;
@@ -144,9 +151,16 @@ public class SongRVAdapter
                 // checking if number
             }
             if (!isNumber && !songList.contains(song)
-                    && song.getText().toLowerCase().contains(filterText)
-                    && song.getChorus().toLowerCase().contains(filterText))
+                    && song.getChorus() != null
+                    && song.getChorus().toLowerCase().contains(filterText)) {
                 songList.add(song);
+                Log.d(TAG, "Matched by text");
+            }
+            if (!isNumber && !songList.contains(song)
+                    && song.getText().toLowerCase().contains(filterText)) {
+                songList.add(song);
+                Log.d(TAG, "Matched by text");
+            }
         }
     }
 
