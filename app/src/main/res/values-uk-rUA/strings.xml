@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="search">Пошук</string>
-    <string name="settingsLabel">Налаштування</string>
-    <string name="featuredLabel">Улюблене</string>
-    <string name="homeLabel">Додому</string>
-    <string name="songName">Назва пiснi</string>
-    <string name="song_text">Текст пiснi</string>
     <string name="emptyFavLabel">У вас немає улюблених пісень</string>
-    <string name="smallLabel">Маленький</string>
-    <string name="mediumLabel">Середній</string>
-    <string name="largeLabel">Великий</string>
-    <string name="nikita_name">Нiкiта Лапiн</string>
-    <string name="me_in_social_net">Я у соціальних мережах</string>
-    <string name="aboutAppDesc">Додаток з молодіжними піснями. Створено для молоді церкви м.Сєвєродонецьк. Версія: version.</string>
-    <string name="java_engineer">Java-програміст</string>
-    <string name="subscribe_to_our_telegram_channel">Підпишіться на наш телеграм канал</string>
-    <string name="show_chords">Показати акорди</string>
+    <string name="all_songs">Всі пісні</string>
+    <string name="favoriteSongsCount">%d пісень</string>
+    <string name="favoriteSongsLabel">Улюблені пісні</string>
+    <string name="font_size_label">Розмір шрифту</string>
+    <string name="last_update_label">Останнє оновлення:%s</string>
+    <string name="mistake_in_the_text">Помилка у тексті</string>
+    <string name="mistake_message_body">Помилка в пісні за номером - %d. Деталі:</string>
+    <string name="share">Поділитися</string>
+    <string name="show_chords_label">Показати акорди</string>
+    <string name="title_activity_appearance_settings">Зовнішній вигляд</string>
+    <string name="cansel">Скасувати</string>
+    <string name="errorMigratingSongs">Помилка під час міграції пісень -</string>
+    <string name="featureNotSupported">На жаль, ця функція ще не підтримується</string>
+    <string name="linkToSong">Посилання на пісню</string>
+    <string name="number">Номер</string>
+    <string name="propose">Пропозиції</string>
+    <string name="proposeSongAlertDialogLabel">Дякуємо за вашу допомогу</string>
+    <string name="proposeSongDescription">Надайте інформацію про пісню нижче</string>
+    <string name="proposeSongResponce">Дякуємо. Ми перевіряємо цю пісню і, можливо, додамо її найближчим часом</string>
+    <string name="songName">Назва пісні</string>
+    <string name="song_image_cover_desc">Обкладинка зображення пісні</string>
+    <string name="songsMigrated">Пісні успішно перенесені</string>
+    <string name="subtitle">підзаголовок</string>
 </resources>

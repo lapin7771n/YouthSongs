@@ -20,7 +20,6 @@ public class MainActivityRouter extends BaseRouter {
 
     public void openSongScreen(int songId, ActivityOptions activityOptions) {
         Bundle bundle = new Bundle();
-//        bundle.putInt(SongActivity.Constants.SONG_ID, songId);
 
         //If android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP
         //activity options will be not null

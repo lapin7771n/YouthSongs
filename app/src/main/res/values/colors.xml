@@ -1,23 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorUnchecked">#E54564</color>
-    <color name="colorChecked">#bc3852</color>
 
-    <color name="primaryColor">#37474f</color>
-    <color name="primaryLightColor">#75B7FF</color>
     <color name="colorPrimaryDark">#007AFF</color>
-    <color name="colorAccent">#ffeb3b</color>
-    <color name="secondaryLightColor">#ffff72</color>
-    <color name="secondaryDarkColor">#c8b900</color>
-    <color name="primaryTextColor">#eceff1</color>
-    <color name="secondaryTextColor">#000000</color>
 
     <color name="black">#000</color>
 
     <color name="ic_launcher_background">#101116</color>
 
-    <color name="chorusMarkColor">#7C7C7C</color>
-
-    <color name="colorAboutPrimary">#FFD231</color>
-    <color name="colorAboutPrimaryDark">#B49525</color>
 </resources>

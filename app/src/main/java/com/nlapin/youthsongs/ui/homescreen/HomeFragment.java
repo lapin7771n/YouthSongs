@@ -26,6 +26,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
+import com.ethanhua.skeleton.Skeleton;
+import com.jakewharton.rxbinding3.appcompat.RxSearchView;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.ui.MainActivity;
 import com.nlapin.youthsongs.ui.adapters.AuthorsSelectionPagerAdapter;
@@ -33,12 +36,13 @@ import com.nlapin.youthsongs.ui.adapters.SongRVAdapter;
 import com.nlapin.youthsongs.ui.songscreen.SongActivity;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -49,6 +53,9 @@ public class HomeFragment
         extends Fragment {
 
     private static final String TAG = "HomeFragment";
+    private static final int VIEW_PAGER_PAGE_MARGIN = 10;
+    private static final int VIEW_PAGER_LR_PADDING = 16;
+    private static final int VIEW_PAGER_TB_PADDING = 0;
 
     @BindView(R.id.songRV)
     RecyclerView songRV;
@@ -59,15 +66,14 @@ public class HomeFragment
     @BindView(R.id.toolBar)
     Toolbar toolBar;
 
-    private PagerAdapter pagerAdapter;
-
     /**
      * Adapter for all songs in MainScreen
      */
     private SongRVAdapter adapter;
-    private Disposable disposable;
+
+    private CompositeDisposable disposables;
     private SearchView searchView;
-    private SearchView.OnQueryTextListener onQueryTextListener;
+    private RecyclerViewSkeletonScreen skeletonScreen;
 
     public HomeFragment() {
         //Need an empty constructor because of implementing Fragment
@@ -76,39 +82,48 @@ public class HomeFragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
         setUpRecyclerView();
         setupAuthorsSelectionRV();
         setUpToolbar();
+        disposables = new CompositeDisposable();
 
         HomeViewModel model = ViewModelProviders.of(this).get(HomeViewModel.class);
 
-        disposable = model.getSongs()
+        disposables.add(model.getSongs()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(songs -> {
-                    ((SongRVAdapter) songRV.getAdapter()).setSongList(songs);
-                    songRV.getAdapter().notifyDataSetChanged();
-                    Log.d(TAG, "UI updated! |Song list| - ");
+                    setUpSkeleton();
+                    skeletonScreen.show();
+                    adapter.setSongList(songs);
+                    RecyclerView.Adapter songRVAdapter = songRV.getAdapter();
+
+                    if (songRVAdapter != null) {
+                        songRVAdapter.notifyDataSetChanged();
+                    }
+
+                    Log.d(TAG, "UI Song list updated!");
+                    skeletonScreen.hide();
                 }, throwable -> {
                     Toast.makeText(getContext(),
                             "An error occurred - " + throwable,
                             Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Error while loading songs:\n", throwable);
-                }, () -> Log.i(TAG, "Songs loaded!"));
+                }, () -> Log.i(TAG, "Songs loaded!")));
 
         setHasOptionsMenu(true);
+
+        Log.d(TAG, "HomeFragment started!");
         return view;
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        Log.d(TAG, "onCreateOptionsMenu: ");
         inflater.inflate(R.menu.toolbar_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.searchBtn);
-        SearchManager searchManager = (SearchManager) getActivity()
+        SearchManager searchManager = (SearchManager) Objects.requireNonNull(getActivity())
                 .getSystemService(Context.SEARCH_SERVICE);
 
         if (searchManager != null) {
@@ -116,49 +131,47 @@ public class HomeFragment
         }
 
         if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+            searchView.setSearchableInfo(searchManager != null
+                    ? searchManager.getSearchableInfo(getActivity().getComponentName())
+                    : null);
 
-            onQueryTextListener = new SearchView.OnQueryTextListener() {
-
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    Log.d(TAG, "onQueryTextSubmit: ");
-                    Completable.fromAction(() -> adapter.filter(query))
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> songRV.getAdapter().notifyDataSetChanged());
-                    return true;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    Log.d(TAG, "onQueryTextChange: ");
-                    Completable.fromAction(() -> adapter.filter(newText))
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> songRV.getAdapter().notifyDataSetChanged());
-                    return true;
-                }
-            };
-            searchView.setOnQueryTextListener(onQueryTextListener);
+            disposables.add(RxSearchView.queryTextChanges(searchView)
+                    .observeOn(Schedulers.io())
+                    .debounce(300, TimeUnit.MILLISECONDS)
+                    .map(CharSequence::toString)
+                    .doOnNext(result -> adapter.filter(result))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(result -> {
+                        RecyclerView.Adapter songRVAdapter = songRV.getAdapter();
+                        if (songRVAdapter != null) {
+                            songRVAdapter.notifyDataSetChanged();
+                        }
+                    }, throwable -> Log.e(TAG, "onCreateOptionsMenu: ", throwable)));
         }
-
         super.onCreateOptionsMenu(menu, inflater);
+
+        Log.d(TAG, "HomeFragment menu created.");
     }
 
+    /**
+     * Search songs toolbar setting up
+     */
     private void setUpToolbar() {
-        ((MainActivity) getActivity()).setSupportActionBar(toolBar);
+        ((MainActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolBar);
         ActionBar supportActionBar = ((MainActivity) getActivity()).getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setTitle(getString(R.string.all_songs));
         }
     }
 
+    /**
+     * Disposing from all Observables
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
-        disposable.dispose();
-        Log.d(TAG, "onDestroy: ");
+        disposables.dispose();
+        Log.d(TAG, "HomeFragment destroyed");
     }
 
     /**
@@ -171,21 +184,41 @@ public class HomeFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         songRV.setLayoutManager(layoutManager);
         songRV.setAdapter(adapter);
+
+        setUpSkeleton();
+    }
+
+    private void setUpSkeleton() {
+        skeletonScreen = Skeleton.bind(songRV)
+                .adapter(adapter)
+                .load(R.layout.song_item)
+                .show();
     }
 
     /**
      * Setting up authors selection UI
      */
     private void setupAuthorsSelectionRV() {
-        pagerAdapter = new AuthorsSelectionPagerAdapter(getChildFragmentManager(), 3);
+        PagerAdapter pagerAdapter = new AuthorsSelectionPagerAdapter(getChildFragmentManager(), 3);
         authorsSelectionsVP.setAdapter(pagerAdapter);
-        authorsSelectionsVP.setPageMargin(dpToPx(10));
-        authorsSelectionsVP.setPadding(16, 0, 16, 0);
+        authorsSelectionsVP.setPageMargin(dpToPx());
+        authorsSelectionsVP.setPadding(VIEW_PAGER_LR_PADDING,
+                VIEW_PAGER_TB_PADDING,
+                VIEW_PAGER_LR_PADDING,
+                VIEW_PAGER_TB_PADDING);
     }
 
-    private int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    /**
+     * Converting DP to screen pixels
+     *
+     * @return value in Pixels
+     */
+    private int dpToPx() {
+        DisplayMetrics displayMetrics = Objects.requireNonNull(getActivity())
+                .getResources()
+                .getDisplayMetrics();
+
+        return Math.round(VIEW_PAGER_PAGE_MARGIN * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
 }

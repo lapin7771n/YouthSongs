@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="search">Поиск</string>
-    <string name="settingsLabel">Настройки</string>
-    <string name="featuredLabel">Избранное</string>
-    <string name="homeLabel">Домой</string>
-    <string name="songName">Название песни</string>
-    <string name="song_text">Текст песни</string>
     <string name="emptyFavLabel">У вас нет избранных песен</string>
-    <string name="smallLabel">Маленький</string>
-    <string name="mediumLabel">Средний</string>
-    <string name="largeLabel">Большой</string>
-    <string name="nikita_name">Никита Лапин</string>
-    <string name="java_engineer">Java-программист</string>
-    <string name="me_in_social_net">Я в социальных сетях</string>
-    <string name="aboutAppDesc">Приложение с молодёжными песнями. Создано для молодёжи церкви г. Северодонецк. Версия: version.</string>
-    <string name="subscribe_to_our_telegram_channel">Подпишитесь на наш телеграмм канал</string>
-    <string name="show_chords">Показать аккорды</string>
+    <string name="all_songs">Все песни</string>
+    <string name="favoriteSongsCount">%d песен</string>
+    <string name="favoriteSongsLabel">Любимые песни</string>
+    <string name="font_size_label">Размер шрифта</string>
+    <string name="last_update_label">Последнее обновление было:%s</string>
+    <string name="mistake_in_the_text">Ошибка в тексте</string>
+    <string name="mistake_message_body">Ошибка в песне по номеру - %d. Подробности:</string>
+    <string name="share">Поделиться</string>
+    <string name="show_chords_label">Показать аккорды</string>
+    <string name="title_activity_appearance_settings">Внешний вид</string>
+    <string name="cansel">Отменить</string>
+    <string name="errorMigratingSongs">Ошибка при переносе песен -</string>
+    <string name="featureNotSupported">Извините, эта функция еще не поддерживается</string>
+    <string name="linkToSong">Ссылка на песню</string>
+    <string name="number">Номер</string>
+    <string name="propose">Предложения</string>
+    <string name="proposeSongAlertDialogLabel">Спасибо за вашу помощь</string>
+    <string name="proposeSongDescription">Предоставьте информацию о песне ниже</string>
+    <string name="proposeSongResponce">Благодарим за помощь. Мы проверяем эту песню и, возможно, добавим ее в ближайшее время</string>
+    <string name="songName">Название песни</string>
+    <string name="song_image_cover_desc">Обложка с изображением песни</string>
+    <string name="songsMigrated">Песни успешно перенесены</string>
+    <string name="subtitle">подзаголовок</string>
 </resources>

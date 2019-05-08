@@ -8,11 +8,26 @@
     android:orientation="vertical"
     tools:context=".ui.favsongscreen.FavoritesFragment">
 
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favoriteSongsRV"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolBar"
         tools:listitem="@layout/song_item" />
 
     <com.airbnb.lottie.LottieAnimationView
@@ -29,14 +44,6 @@
         app:lottie_fileName="empty_box.json"
         app:lottie_loop="false" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="@style/customProgressBar"
-        app:layout_constraintBottom_toBottomOf="@+id/favoriteSongsRV"
-        app:layout_constraintEnd_toEndOf="@+id/favoriteSongsRV"
-        app:layout_constraintStart_toStartOf="@+id/favoriteSongsRV"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/emptyLabel"
         style="@style/wrapStyle"
@@ -49,5 +56,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emptyBoxAnim" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

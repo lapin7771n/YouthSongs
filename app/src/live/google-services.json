@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "502187402748",
-    "firebase_url": "https://youthsongs-69220.firebaseio.com",
-    "project_id": "youthsongs-69220",
-    "storage_bucket": "youthsongs-69220.appspot.com"
+    "project_number": "827029243921",
+    "firebase_url": "https://youth-songs-development.firebaseio.com",
+    "project_id": "youth-songs-development",
+    "storage_bucket": "youth-songs-development.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:502187402748:android:102f3c0949fdb2c4",
+        "mobilesdk_app_id": "1:827029243921:android:ec5b34f6b8410ff6",
         "android_client_info": {
-          "package_name": "com.nlapin.youthsongs"
+          "package_name": "com.nlapin.youthsongs.dev"
         }
       },
       "oauth_client": [
         {
-          "client_id": "502187402748-sjid7ge4v8fia3e8llfhnthpgsoikme9.apps.googleusercontent.com",
+          "client_id": "827029243921-u60lj7msq1ntv9s0b0m0ilj41tlm873k.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD1vRvLRPANr6p8BmvCuBbz3BQcE6WD5u0"
+          "current_key": "AIzaSyDGWF67yZlk2uhZnr4n-BDVYaoE38BI0XA"
         }
       ],
       "services": {

@@ -15,9 +15,11 @@ import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 
+/**
+ * @author Nikita
+ * nlapin.java@gmail.com
+ */
 public class FavoritesViewModel extends ViewModel {
-
-    private static final String TAG = "FavoritesViewModel";
 
     @Inject
     FavoriteSongDao favoriteSongDao;
@@ -29,10 +31,17 @@ public class FavoritesViewModel extends ViewModel {
         YouthSongsApp.getComponent().inject(this);
     }
 
+    /**
+     * @return LiveData list of Favorite songs from local database
+     */
     LiveData<List<FavoriteSong>> getAllFavoriteSongs() {
         return favoriteSongDao.getAll();
     }
 
+    /**
+     * @param favoriteSongs list of objects that contains ids of favoriteSongs
+     * @return Observable data from local songs table that contains only favorite songs
+     */
     Flowable<List<Song>> getAllSong(List<FavoriteSong> favoriteSongs) {
         return songRepository.getAllByIds(favoriteSongs);
     }

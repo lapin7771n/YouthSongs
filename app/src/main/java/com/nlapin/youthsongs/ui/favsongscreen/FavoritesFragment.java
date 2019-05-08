@@ -1,30 +1,40 @@
 package com.nlapin.youthsongs.ui.favsongscreen;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.jakewharton.rxbinding3.appcompat.RxSearchView;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.ui.adapters.SongRVAdapter;
 import com.nlapin.youthsongs.ui.songscreen.SongActivity;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -34,6 +44,7 @@ public class FavoritesFragment
         extends Fragment {
 
     private static final String TAG = "FavoritesFragment";
+    private static final int FILTER_DELAY = 300;
 
     @BindView(R.id.emptyBoxAnim)
     LottieAnimationView emptyBoxAnim;
@@ -41,12 +52,13 @@ public class FavoritesFragment
     TextView emptyLabel;
     @BindView(R.id.favoriteSongsRV)
     RecyclerView favoriteSongsRV;
-    @BindView(R.id.progressBar)
-    ProgressBar loadingPB;
+    @BindView(R.id.toolBar)
+    Toolbar toolBar;
 
     private SongRVAdapter rvAdapter;
-    private Disposable favoriteSongsSubscriber;
     private FavoritesViewModel viewModel;
+    private CompositeDisposable disposables;
+    private SearchView searchView;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -57,13 +69,54 @@ public class FavoritesFragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         ButterKnife.bind(this, view);
-        loadingPB.setVisibility(View.VISIBLE);
         setUpRecyclerView();
         viewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
-        loadingPB.setVisibility(View.INVISIBLE);
+        disposables = new CompositeDisposable();
+
+        toolBar.setTitle(getString(R.string.favoriteSongsLabel));
+
+        ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolBar);
+
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.toolbar_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.searchBtn);
+        SearchManager searchManager = (SearchManager) Objects.requireNonNull(getActivity())
+                .getSystemService(Context.SEARCH_SERVICE);
+
+        if (searchManager != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager != null
+                    ? searchManager.getSearchableInfo(getActivity().getComponentName())
+                    : null);
+
+            disposables.add(RxSearchView.queryTextChanges(searchView)
+                    .observeOn(Schedulers.io())
+                    .debounce(FILTER_DELAY, TimeUnit.MILLISECONDS)
+                    .map(CharSequence::toString)
+                    .doOnNext(result -> rvAdapter.filter(result))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(result -> {
+                        RecyclerView.Adapter songRVAdapter = favoriteSongsRV.getAdapter();
+                        if (songRVAdapter != null) {
+                            songRVAdapter.notifyDataSetChanged();
+                        }
+                    }, throwable -> Log.e(TAG, "Error filtering data: ", throwable)));
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+
+        Log.d(TAG, "HomeFragment menu created.");
+    }
+
+    /**
+     * Initializing recyclerView
+     */
     private void setUpRecyclerView() {
         rvAdapter = new SongRVAdapter(new ArrayList<>(), (v, position) ->
                 startActivity(SongActivity.start(getContext(), position)), getActivity());
@@ -72,32 +125,47 @@ public class FavoritesFragment
         favoriteSongsRV.setAdapter(rvAdapter);
     }
 
+    /**
+     * Unsubscribe from all observers
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
-        favoriteSongsSubscriber.dispose();
+        disposables.dispose();
     }
 
+    /**
+     * Here we are setting up our RecyclerView and update it
+     */
     @Override
     public void onResume() {
         super.onResume();
         viewModel.getAllFavoriteSongs().observe(this, favoriteSongs ->
-                favoriteSongsSubscriber = viewModel.getAllSong(favoriteSongs)
+                disposables.add(viewModel.getAllSong(favoriteSongs)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(songs -> {
+
                             if (songs == null || songs.isEmpty()) {
                                 emptyBoxAnim.setVisibility(View.VISIBLE);
                                 emptyLabel.setVisibility(View.VISIBLE);
                                 emptyBoxAnim.playAnimation();
                                 return;
                             }
+
                             emptyLabel.setVisibility(View.INVISIBLE);
                             emptyBoxAnim.setVisibility(View.INVISIBLE);
-                            Log.d(TAG, "SONGS ARRIVED");
+
+                            Objects.requireNonNull(((AppCompatActivity)
+                                    Objects.requireNonNull(getActivity()))
+                                    .getSupportActionBar())
+                                    .setSubtitle(String.format(getString(R.string.favoriteSongsCount),
+                                            songs.size()));
 
                             rvAdapter.setSongList(songs);
                             rvAdapter.notifyDataSetChanged();
-                        }, throwable -> Log.e(TAG, "Error while loading favorite songs!", throwable)));
+
+                        }, throwable -> Log.e(TAG, "Error while loading favorite songs!",
+                                throwable))));
     }
 }

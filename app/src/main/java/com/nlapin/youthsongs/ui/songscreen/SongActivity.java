@@ -63,6 +63,7 @@ public class SongActivity
     private static final int SONG_NOT_FOUND = -1;
     private int songId;
     private Disposable songSubscriber;
+    private FirebaseAnalytics firebaseAnalytics;
 
     public static Intent start(Context from, int id) {
         Intent intent = new Intent(from, SongActivity.class);
@@ -86,7 +87,7 @@ public class SongActivity
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::parseSongToView);
 
-        FirebaseAnalytics.getInstance(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
 
     private void setUpActionBar() {
@@ -126,7 +127,7 @@ public class SongActivity
         collapsingToolbar.setExpandedTitleColor(Color.WHITE);
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolBarTitle);
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedToolBarTitle);
-        actionBarSubtitle.setText("Number " + song.getId());
+        actionBarSubtitle.setText(getString(R.string.number) + " " + song.getId());
         int fontSize = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(getString(R.string.font_size_pref), "5"));
 
@@ -136,6 +137,11 @@ public class SongActivity
         songTextTV.setText(HtmlCompat.fromHtml(SongUtils.getSongTextFormated(song, withCords),
                 HtmlCompat.FROM_HTML_OPTION_USE_CSS_COLORS));
         songTextTV.setTextSize(fontSize);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, songId);
+        bundle.getString(FirebaseAnalytics.Param.ITEM_NAME, song.getName());
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
 
     @Override
@@ -185,7 +191,7 @@ public class SongActivity
 
             case R.id.shareSong:
                 // TODO: 4/25/2019 Implement this feature
-                Toast.makeText(this, "Sorry, this feature is not supported yet",
+                Toast.makeText(this, getString(R.string.featureNotSupported),
                         Toast.LENGTH_LONG).show();
                 break;
         }

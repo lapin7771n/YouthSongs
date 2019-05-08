@@ -4,7 +4,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,10 +24,6 @@ import butterknife.ButterKnife;
 public class MainActivity
         extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
-    public static final String APPLICATION_SETTINGS_SHARED_PEF = "ApplicationSettings";
-    public static final String IS_FIRST_START_UP_KEY = "isFirstStartUp";
-
     @Inject
     SongCloudRepository songCloudRepository;
 
@@ -40,17 +35,17 @@ public class MainActivity
     @BindView(R.id.mainFrame)
     FrameLayout contentFrame;
 
-    private MainActivityRouter router;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ButterKnife.bind(this);
         FirebaseAnalytics.getInstance(this);
         YouthSongsApp.getComponent().inject(this);
-        router = new MainActivityRouter(this);
+        MainActivityRouter router = new MainActivityRouter(this);
 
         HomeFragment homeFragment = new HomeFragment();
         FavoritesFragment favoritesFragment = new FavoritesFragment();
@@ -75,12 +70,5 @@ public class MainActivity
                     return false;
             }
         });
-    }
-
-    private void buildAlertDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Please wait...")
-                .setMessage("We customize your application. This may take some time ...")
-                .create();
     }
 }

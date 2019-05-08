@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.models.AuthorsSelectionUI;
+import com.nlapin.youthsongs.ui.CustomItemClickListener;
 
 import java.util.ArrayList;
 
@@ -21,10 +21,8 @@ import butterknife.ButterKnife;
 
 public class AuthorsSelectionFragment extends Fragment {
 
-    static final String ARGUMENT_PAGE_NUMBER = "arg_page_number";
+    private static final String ARGUMENT_PAGE_NUMBER = "arg_page_number";
 
-    public static final int COLLAPSED = 0;
-    public static final int EXPANDED = 1;
     private int state;
 
     final static ArrayList<AuthorsSelectionUI> authorsSelections = new ArrayList<>();
@@ -65,6 +63,10 @@ public class AuthorsSelectionFragment extends Fragment {
         AuthorsSelectionUI authorsSelectionUI = authorsSelections.get(pageNumber);
         selectionNameTV.setText(authorsSelectionUI.getSelectionName());
         countOfSongs.setText(authorsSelectionUI.getSongsCount() + " songs");
+        view.setOnClickListener(v -> {
+
+        });
+
 
         return view;
     }

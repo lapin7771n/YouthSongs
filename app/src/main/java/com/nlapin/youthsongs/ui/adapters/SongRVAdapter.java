@@ -84,7 +84,7 @@ public class SongRVAdapter
         songViewHolder.songNameTV.setText(songName);
         songViewHolder.songNameTV.setBackground(new ColorDrawable(Color.TRANSPARENT));
         songViewHolder.songCover.setBackground(new ColorDrawable(Color.TRANSPARENT));
-        songViewHolder.songGanreTV.setBackground(new ColorDrawable(Color.TRANSPARENT));
+        songViewHolder.songGenreTV.setBackground(new ColorDrawable(Color.TRANSPARENT));
 
         String coverUrlSmall = song.getCoverUrlSmall();
 
@@ -118,13 +118,13 @@ public class SongRVAdapter
         }
     }
 
-    public void filter(String filterText) {
+    public List<Song> filter(String filterText) {
         Log.d(TAG, "filter: ");
         filterText = filterText.trim().toLowerCase();
         songList.clear();
         if (filterText.isEmpty()) {
             songList.addAll(copySongList);
-            return;
+            return null;
         }
 
         Log.d(TAG, "copySongList size() - " + copySongList.size());
@@ -162,6 +162,8 @@ public class SongRVAdapter
                 Log.d(TAG, "Matched by text");
             }
         }
+
+        return songList;
     }
 
     class SongViewHolder extends RecyclerView.ViewHolder {
@@ -171,7 +173,7 @@ public class SongRVAdapter
         @BindView(R.id.songCover)
         ImageView songCover;
         @BindView(R.id.songGanreTV)
-        TextView songGanreTV;
+        TextView songGenreTV;
         @BindView(R.id.songMoreBtn)
         ImageView songMoreBtn;
 

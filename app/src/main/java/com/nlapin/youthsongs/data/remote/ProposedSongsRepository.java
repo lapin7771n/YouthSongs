@@ -11,13 +11,21 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ProposedSongsRepository {
 
+    public static ProposedSongsRepository instance = null;
+
     private static final String TAG = "ProposedSongsRepository";
 
-    public static final String PROPOSED_SONGS_COLLECTION = "proposedSongs";
-    public static final String NAME_FIELD = "name";
-    public static final String LINK_FIELD = "link";
+    private static final String PROPOSED_SONGS_COLLECTION = "proposedSongs";
+    private static final String NAME_FIELD = "name";
+    private static final String LINK_FIELD = "link";
 
-    public ProposedSongsRepository() {
+    private ProposedSongsRepository() {
+    }
+
+    public static ProposedSongsRepository getInstance() {
+        if (instance == null)
+            instance = new ProposedSongsRepository();
+        return instance;
     }
 
 

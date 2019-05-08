@@ -15,14 +15,18 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="allowBackup">
+        <activity android:name=".ui.authorsselection.AuthorsSelectionActivity"></activity>
+        <activity android:name=".ui.aboutappscreen.AboutAppActivity" />
         <activity
             android:name=".ui.settingsscreen.AppearanceSettingsActivity"
-            android:label="@string/title_activity_appearance_settings"></activity>
+            android:label="@string/title_activity_appearance_settings" />
         <activity
             android:name=".ui.songscreen.SongActivity"
             android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionAndStatusBar" />
-        <activity android:name=".ui.MainActivity">
+        <activity
+            android:name=".ui.MainActivity"
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
