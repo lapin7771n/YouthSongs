@@ -23,11 +23,14 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.YouthSongsApp;
+import com.nlapin.youthsongs.data.remote.AuthorsSelectionRepository;
 import com.nlapin.youthsongs.models.FavoriteSong;
 import com.nlapin.youthsongs.models.Song;
 import com.nlapin.youthsongs.ui.AboutScreenRouter;
 import com.nlapin.youthsongs.ui.GlideApp;
 import com.nlapin.youthsongs.utils.SongUtils;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +63,9 @@ public class SongActivity
 
     private SongViewModel songViewModel;
 
+    @Inject
+    AuthorsSelectionRepository authorsSelectionRepository;
+
     private static final int SONG_NOT_FOUND = -1;
     private int songId;
     private Disposable songSubscriber;
@@ -88,6 +94,8 @@ public class SongActivity
                 .subscribe(this::parseSongToView);
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        authorsSelectionRepository.addViewOnSong(songId);
     }
 
     private void setUpActionBar() {
@@ -181,6 +189,7 @@ public class SongActivity
                     item.setChecked(true);
                     item.setIcon(R.drawable.ic_fav_checked);
                     songViewModel.saveToFavorites(songId);
+                    authorsSelectionRepository.addFavOnSong(songId);
                 }
                 break;
 

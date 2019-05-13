@@ -1,6 +1,5 @@
 package com.nlapin.youthsongs.di;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
@@ -8,7 +7,7 @@ import androidx.room.Room;
 
 import com.nlapin.youthsongs.data.SongRepository;
 import com.nlapin.youthsongs.data.local.AppDatabase;
-import com.nlapin.youthsongs.ui.MainActivityRouter;
+import com.nlapin.youthsongs.data.remote.AuthorsSelectionRepository;
 
 import javax.inject.Singleton;
 
@@ -42,5 +41,11 @@ public class ApplicationModule {
     @Singleton
     SongRepository provideSongRepository() {
         return new SongRepository();
+    }
+
+    @Provides
+    @Singleton
+    AuthorsSelectionRepository provideAuthorsSelectionRepository() {
+        return new AuthorsSelectionRepository();
     }
 }
