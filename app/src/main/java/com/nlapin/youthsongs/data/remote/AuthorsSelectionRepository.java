@@ -18,7 +18,7 @@ public class AuthorsSelectionRepository {
     private static final String VIEWS_FIELD = "views";
     private static final String FAV_COUNT_FIELD = "fav_count";
 
-    public static final int FIRST_VIEW = 1;
+    private static final int FIRST_VIEW = 1;
     private CollectionReference authorsSelectionCollection;
 
     public AuthorsSelectionRepository() {
@@ -26,54 +26,54 @@ public class AuthorsSelectionRepository {
     }
 
     public void addViewOnSong(int songNumber) {
-        Completable.fromAction(() -> {
-            authorsSelectionCollection
-                    .whereEqualTo(SONG_NUMBER_FIELD, songNumber)
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        final List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-                        if (documents.isEmpty()) {
-                            final HashMap<String, Integer> songViews = new HashMap<>();
-                            songViews.put(SONG_NUMBER_FIELD, songNumber);
-                            songViews.put(VIEWS_FIELD, FIRST_VIEW);
-                            authorsSelectionCollection.add(songViews);
-                        } else {
-                            final DocumentSnapshot documentSnapshot = documents.get(0);
-                            long songViews = (long) documentSnapshot.get(VIEWS_FIELD) + 1;
-                            setViewsToSong(documentSnapshot, songViews);
-                        }
-                    });
-        }).subscribeOn(Schedulers.io())
+        Completable.fromAction(() ->
+                authorsSelectionCollection
+                        .whereEqualTo(SONG_NUMBER_FIELD, songNumber)
+                        .get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            final List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                            if (documents.isEmpty()) {
+                                final HashMap<String, Integer> songViews = new HashMap<>();
+                                songViews.put(SONG_NUMBER_FIELD, songNumber);
+                                songViews.put(VIEWS_FIELD, FIRST_VIEW);
+                                authorsSelectionCollection.add(songViews);
+                            } else {
+                                final DocumentSnapshot documentSnapshot = documents.get(0);
+                                long songViews = (long) documentSnapshot.get(VIEWS_FIELD) + 1;
+                                setViewsToSong(documentSnapshot, songViews);
+                            }
+                        }))
+                .subscribeOn(Schedulers.io())
                 .subscribe();
     }
 
     public void addFavOnSong(int songNumber) {
-        Completable.fromAction(() -> {
-            authorsSelectionCollection
-                    .whereEqualTo(SONG_NUMBER_FIELD, songNumber)
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        final List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-                        if (documents.isEmpty()) {
-                            final HashMap<String, Integer> songFavorites = new HashMap<>();
-                            songFavorites.put(SONG_NUMBER_FIELD, songNumber);
-                            songFavorites.put(FAV_COUNT_FIELD, 1);
-                            authorsSelectionCollection.add(songFavorites);
-                        } else {
-                            final DocumentSnapshot documentSnapshot = documents.get(0);
-                            final Object currentFavorites = documentSnapshot.get(FAV_COUNT_FIELD);
-                            long favCount;
-
-                            if (currentFavorites == null) {
-                                favCount = 1;
+        Completable.fromAction(() ->
+                authorsSelectionCollection
+                        .whereEqualTo(SONG_NUMBER_FIELD, songNumber)
+                        .get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            final List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                            if (documents.isEmpty()) {
+                                final HashMap<String, Integer> songFavorites = new HashMap<>();
+                                songFavorites.put(SONG_NUMBER_FIELD, songNumber);
+                                songFavorites.put(FAV_COUNT_FIELD, 1);
+                                authorsSelectionCollection.add(songFavorites);
                             } else {
-                                favCount = (long) currentFavorites + 1;
-                            }
+                                final DocumentSnapshot documentSnapshot = documents.get(0);
+                                final Object currentFavorites = documentSnapshot.get(FAV_COUNT_FIELD);
+                                long favCount;
 
-                            setFavCountToSong(documentSnapshot, favCount);
-                        }
-                    });
-        }).subscribeOn(Schedulers.io())
+                                if (currentFavorites == null) {
+                                    favCount = 1;
+                                } else {
+                                    favCount = (long) currentFavorites + 1;
+                                }
+
+                                setFavCountToSong(documentSnapshot, favCount);
+                            }
+                        }))
+                .subscribeOn(Schedulers.io())
                 .subscribe();
     }
 
