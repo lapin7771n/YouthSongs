@@ -4,7 +4,6 @@ package com.nlapin.youthsongs.ui.homescreen;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -23,19 +23,14 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
-import com.airbnb.lottie.LottieAnimationView;
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.jakewharton.rxbinding3.appcompat.RxSearchView;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.ui.MainActivity;
-import com.nlapin.youthsongs.ui.adapters.AuthorsSelectionPagerAdapter;
 import com.nlapin.youthsongs.ui.adapters.SongRVAdapter;
 import com.nlapin.youthsongs.ui.songscreen.SongActivity;
 
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -45,39 +40,25 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class HomeFragment
-        extends Fragment {
-
-    private static final String TAG = "HomeFragment";
-    private static final int VIEW_PAGER_PAGE_MARGIN = 10;
-    private static final int VIEW_PAGER_LR_PADDING = 16;
-    private static final int VIEW_PAGER_TB_PADDING = 0;
+public class HomeFragment extends Fragment {
 
     @BindView(R.id.songRV)
-    RecyclerView songRV;
+    ShimmerRecyclerView songRV;
     @BindView(R.id.header)
     TextView header;
-    @BindView(R.id.authorsSelectionsVP)
-    ViewPager authorsSelectionsVP;
     @BindView(R.id.toolBar)
     Toolbar toolBar;
     @BindView(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
-    @BindView(R.id.loadingAnimation)
-    LottieAnimationView loadingAnimation;
+    private SearchView searchView;
+
+    private static final String TAG = "HomeFragment";
 
     /**
      * Adapter for all songs in MainScreen
      */
     private SongRVAdapter adapter;
-
     private CompositeDisposable disposables;
-    private SearchView searchView;
-//    private RecyclerViewSkeletonScreen skeletonScreen;
 
     public HomeFragment() {
         //Need an empty constructor because of implementing Fragment
@@ -88,38 +69,32 @@ public class HomeFragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         setUpRecyclerView();
-        setupAuthorsSelectionRV();
         setUpToolbar();
         disposables = new CompositeDisposable();
 
-        HomeViewModel model = ViewModelProviders.of(this).get(HomeViewModel.class);
+        HomeViewModel viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
-        disposables.add(model.getSongs()
+        disposables.add(viewModel.getSongs()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(songs -> {
-//                    setUpSkeleton();
-//                    skeletonScreen.show();
                     adapter.setSongList(songs);
-                    RecyclerView.Adapter songRVAdapter = songRV.getAdapter();
-
-                    if (songRVAdapter != null) {
-                        songRVAdapter.notifyDataSetChanged();
-                    }
-
-                    Log.d(TAG, "UI Song list updated!");
-//                    skeletonScreen.hide();
+                    songRV.hideShimmerAdapter();
                 }, throwable -> {
                     Toast.makeText(getContext(),
                             "An error occurred - " + throwable,
                             Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Error while loading songs:\n", throwable);
-                }, () -> Log.i(TAG, "Songs loaded!")));
+                }, () -> Log.i(TAG, "Songs loaded.")));
 
         setHasOptionsMenu(true);
-
-        return view;
     }
 
     @Override
@@ -139,20 +114,18 @@ public class HomeFragment
                     : null);
 
             disposables.add(RxSearchView.queryTextChanges(searchView)
-                    .observeOn(Schedulers.io())
-                    .debounce(300, TimeUnit.MILLISECONDS)
-                    .map(CharSequence::toString)
-                    .doOnNext(result -> adapter.filter(result))
+                    .debounce(500, TimeUnit.MILLISECONDS)
+                    .subscribeOn(AndroidSchedulers.mainThread())
                     .observeOn(AndroidSchedulers.mainThread())
+                    .doOnEach(charSequenceNotification -> songRV.showShimmerAdapter())
                     .subscribe(result -> {
-                        RecyclerView.Adapter songRVAdapter = songRV.getAdapter();
-                        if (songRVAdapter != null) {
-                            songRVAdapter.notifyDataSetChanged();
-                        }
-                    }, throwable -> Log.e(TAG, "onCreateOptionsMenu: ", throwable)));
+                                adapter.setSongList(adapter.filter(result.toString()));
+                                songRV.hideShimmerAdapter();
+                                adapter.notifyDataSetChanged();
+                            },
+                            throwable -> Log.e(TAG, "Error occurred due to SearchView: ", throwable)));
         }
         super.onCreateOptionsMenu(menu, inflater);
-
     }
 
     /**
@@ -164,10 +137,7 @@ public class HomeFragment
         if (supportActionBar != null) {
             supportActionBar.setTitle(getString(R.string.all_songs));
         }
-
-        toolBar.setOnClickListener(v -> {
-            nestedScrollView.smoothScrollTo(0, songRV.getTop());
-        });
+        toolBar.setOnClickListener(v -> nestedScrollView.smoothScrollTo(0, songRV.getTop()));
     }
 
     /**
@@ -177,70 +147,16 @@ public class HomeFragment
     public void onDestroy() {
         super.onDestroy();
         disposables.dispose();
-        Log.d(TAG, "HomeFragment destroyed");
     }
 
     /**
      * Setting up All songs UI
      */
     private void setUpRecyclerView() {
-        songRV.setVisibility(View.GONE);
-        loadingAnimation.setVisibility(View.VISIBLE);
-        loadingAnimation.playAnimation();
-
-        adapter = new SongRVAdapter(new ArrayList<>(), (v, position) ->
-                startActivity(SongActivity.start(getContext(), position)), getActivity());
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         songRV.setLayoutManager(layoutManager);
+        adapter = new SongRVAdapter((v, position) -> startActivity(SongActivity.start(getContext(), position)), getActivity());
         songRV.setAdapter(adapter);
-
-        loadingAnimation.animate()
-                .alpha(0f)
-                .setDuration(500)
-                .withEndAction(() -> {
-                    songRV.setAlpha(0f);
-                    songRV.setVisibility(View.VISIBLE);
-                    songRV.animate()
-                            .setDuration(500)
-                            .alpha(1f);
-                });
-
-//        setUpSkeleton();
+        songRV.showShimmerAdapter();
     }
-
-//    private void setUpSkeleton() {
-//        skeletonScreen = Skeleton.bind(songRV)
-//                .adapter(adapter)
-//                .load(R.layout.song_item)
-//                .show();
-//    }
-
-    /**
-     * Setting up authors selection UI
-     */
-    private void setupAuthorsSelectionRV() {
-        PagerAdapter pagerAdapter = new AuthorsSelectionPagerAdapter(getChildFragmentManager(), 3);
-        authorsSelectionsVP.setAdapter(pagerAdapter);
-        authorsSelectionsVP.setPageMargin(dpToPx());
-        authorsSelectionsVP.setPadding(
-                VIEW_PAGER_LR_PADDING,
-                VIEW_PAGER_TB_PADDING,
-                VIEW_PAGER_LR_PADDING,
-                VIEW_PAGER_TB_PADDING);
-    }
-
-    /**
-     * Converting DP to screen pixels
-     *
-     * @return value in Pixels
-     */
-    private int dpToPx() {
-        DisplayMetrics displayMetrics = Objects.requireNonNull(getActivity())
-                .getResources()
-                .getDisplayMetrics();
-
-        return Math.round(VIEW_PAGER_PAGE_MARGIN * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-    }
-
 }

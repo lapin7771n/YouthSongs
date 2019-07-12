@@ -45,8 +45,6 @@ public class SongActivity
 
     private static final String TAG = "SongActivity";
 
-    public static final String SONG_NUMBER_KEY = "songNumber";
-    public static final String DEFAULT_IMAGE = "https://images.unsplash.com/photo-1523540500678-a7637c980022?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80";
 
     @BindView(R.id.toolBar)
     Toolbar toolbar;
@@ -66,10 +64,13 @@ public class SongActivity
     @Inject
     AuthorsSelectionRepository authorsSelectionRepository;
 
-    private static final int SONG_NOT_FOUND = -1;
     private int songId;
     private Disposable songSubscriber;
     private FirebaseAnalytics firebaseAnalytics;
+
+    private static final int SONG_NOT_FOUND = -1;
+    private static final String SONG_NUMBER_KEY = "songNumber";
+    private static final String DEFAULT_IMAGE = "https://images.unsplash.com/photo-1523540500678-a7637c980022?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80";
 
     public static Intent start(Context from, int id) {
         Intent intent = new Intent(from, SongActivity.class);
@@ -137,7 +138,7 @@ public class SongActivity
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedToolBarTitle);
         actionBarSubtitle.setText(getString(R.string.number) + " " + song.getId());
         int fontSize = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this)
-                .getString(getString(R.string.font_size_pref), "5"));
+                .getString(getString(R.string.font_size_pref), "20"));
 
         boolean withCords = PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(getString(R.string.is_chords_show_pref), false);

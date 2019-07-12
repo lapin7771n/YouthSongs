@@ -2,7 +2,6 @@ package com.nlapin.youthsongs.ui.adapters;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import com.nlapin.youthsongs.ui.AboutScreenRouter;
 import com.nlapin.youthsongs.ui.CustomItemClickListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import butterknife.BindView;
@@ -34,24 +32,19 @@ public class SongRVAdapter
 
     private static final String TAG = "SongRVAdapter";
 
-    private List<Song> songList;
-    private List<Song> copySongList;
+    private List<Song> songList = new ArrayList<>();
+    private List<Song> copySongList = new ArrayList<>();
     private CustomItemClickListener clickListener;
     private FragmentActivity activity;
 
-    public SongRVAdapter(Collection<Song> songList,
-                         CustomItemClickListener clickListener, FragmentActivity activity) {
-
-        this.songList = new ArrayList<>(songList);
-        this.copySongList = new ArrayList<>(songList);
+    public SongRVAdapter(CustomItemClickListener clickListener, FragmentActivity activity) {
         this.clickListener = clickListener;
         this.activity = activity;
     }
 
     public void setSongList(List<Song> songList) {
-        this.songList.clear();
-        this.songList.addAll(songList);
-        this.copySongList.addAll(songList);
+        this.songList = new ArrayList<>(songList);
+        this.copySongList = new ArrayList<>(songList);
     }
 
     @Override
@@ -119,27 +112,22 @@ public class SongRVAdapter
     }
 
     public List<Song> filter(String filterText) {
-        Log.d(TAG, "filter: ");
-        filterText = filterText.trim().toLowerCase();
         songList.clear();
         if (filterText.isEmpty()) {
             songList.addAll(copySongList);
-            return null;
+            return songList;
         }
 
-        Log.d(TAG, "copySongList size() - " + copySongList.size());
         for (Song song : copySongList) {
 
             //Search by name
             if (song.getName().toLowerCase().contains(filterText)) {
                 songList.add(song);
-                Log.d(TAG, "Matched by name");
             }
 
             //Search by number
             if (String.valueOf(song.getId()).contains(filterText)) {
                 songList.add(song);
-                Log.d(TAG, "Matched by number");
             }
 
             //Search by text
@@ -154,12 +142,10 @@ public class SongRVAdapter
                     && song.getChorus() != null
                     && song.getChorus().toLowerCase().contains(filterText)) {
                 songList.add(song);
-                Log.d(TAG, "Matched by text");
             }
             if (!isNumber && !songList.contains(song)
                     && song.getText().toLowerCase().contains(filterText)) {
                 songList.add(song);
-                Log.d(TAG, "Matched by text");
             }
         }
 
