@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@id/toolBar"
         app:shimmer_demo_angle="20"
         app:shimmer_demo_child_count="10"
-        app:shimmer_demo_grid_child_count="2"
+        app:shimmer_demo_duration="500"
         app:shimmer_demo_layout="@layout/layout_demo"
         app:shimmer_demo_layout_manager_type="linear_vertical"
         tools:listitem="@layout/song_item" />

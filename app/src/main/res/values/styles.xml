@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">#535353</item>
-        <item name="colorPrimaryDark">#000</item>
+        <item name="colorPrimary">#FFF</item>
+        <item name="colorPrimaryDark">#FFF</item>
         <item name="colorAccent">@color/colorPrimaryDark</item>
 
         <item name="android:windowActivityTransitions" tools:targetApi="lollipop">true</item>
@@ -44,7 +44,7 @@
 
     <style name="songTextStyle" parent="wideStyle">
         <item name="android:padding">10dp</item>
-        <item name="android:text">Song text</item>
+        <item name="android:hint">Song text</item>
         <item name="android:textSize">20sp</item>
     </style>
 

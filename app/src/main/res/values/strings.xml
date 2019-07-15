@@ -23,8 +23,10 @@
     <string name="songsMigrated">Songs successfully migrated</string>
     <string name="songName">Song name</string>
     <string name="linkToSong">Link to song</string>
-    <string name="number">Number</string>
+    <string name="number">Number %d</string>
     <string name="featureNotSupported">Sorry, this feature is not supported yet</string>
     <string name="subtitle">subtitle</string>
     <string name="song_image_cover_desc">Song image cover</string>
+    <string name="app_opened" translatable="false">app_opened</string>
+    <string name="song_opened" translatable="false">song_opened</string>
 </resources>
