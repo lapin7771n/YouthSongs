@@ -111,11 +111,11 @@ public class SongRVAdapter
         }
     }
 
-    public List<Song> filter(String filterText) {
+    public void filter(String filterText) {
         songList.clear();
         if (filterText.isEmpty()) {
             songList.addAll(copySongList);
-            return songList;
+            return;
         }
 
         for (Song song : copySongList) {
@@ -136,7 +136,7 @@ public class SongRVAdapter
                 Integer.parseInt(filterText);
                 isNumber = true;
             } catch (NumberFormatException e) {
-                // checking if number
+                // checking if text is number
             }
             if (!isNumber && !songList.contains(song)
                     && song.getChorus() != null
@@ -149,7 +149,6 @@ public class SongRVAdapter
             }
         }
 
-        return songList;
     }
 
     class SongViewHolder extends RecyclerView.ViewHolder {

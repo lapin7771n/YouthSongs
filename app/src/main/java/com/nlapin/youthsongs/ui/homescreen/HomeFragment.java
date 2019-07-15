@@ -82,11 +82,11 @@ public class HomeFragment extends Fragment {
         HomeViewModel viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
         disposables.add(viewModel.getSongs()
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(songs -> {
-                    adapter.setSongList(songs);
                     songRV.hideShimmerAdapter();
+                    adapter.setSongList(songs);
                 }, throwable -> {
                     Toast.makeText(getContext(),
                             "An error occurred - " + throwable,
@@ -114,12 +114,10 @@ public class HomeFragment extends Fragment {
                     : null);
 
             disposables.add(RxSearchView.queryTextChanges(searchView)
-                    .debounce(500, TimeUnit.MILLISECONDS)
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .observeOn(AndroidSchedulers.mainThread())
                     .doOnEach(charSequenceNotification -> songRV.showShimmerAdapter())
+                    .debounce(500, TimeUnit.MILLISECONDS)
                     .subscribe(result -> {
-                                adapter.setSongList(adapter.filter(result.toString()));
+                                adapter.filter(result.toString());
                                 songRV.hideShimmerAdapter();
                                 adapter.notifyDataSetChanged();
                             },

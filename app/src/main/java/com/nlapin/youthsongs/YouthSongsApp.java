@@ -3,6 +3,9 @@ package com.nlapin.youthsongs;
 import android.app.Application;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.firebase.FirebaseApp;
 import com.nlapin.youthsongs.data.remote.SongCloudRepository;
 import com.nlapin.youthsongs.di.ApplicationModule;
@@ -12,6 +15,7 @@ import com.nlapin.youthsongs.models.PixelsResponseModel;
 import com.nlapin.youthsongs.models.Song;
 import com.nlapin.youthsongs.network.NetworkService;
 
+import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,11 +34,11 @@ public class YouthSongsApp extends Application {
         super.onCreate();
         FirebaseApp.initializeApp(this);
         // TODO: 3/22/2019 uncomment on production
-        //Fabric.with(this, new Crashlytics());
-
+//        Fabric.with(this, new Crashlytics());
         mainComponent = buildComponent();
-
         provideImages();
+
+        Answers.getInstance().logContentView(new ContentViewEvent().putContentName(getString(R.string.app_opened)));
     }
 
     private void provideImages() {
