@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -69,7 +68,7 @@ public abstract class BaseRouter {
 
     public void openEmailSender(String email, String text) {
         Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + email));
-        intent.putExtra(Intent.EXTRA_SUBJECT, activity.getString(R.string.mistake_in_the_text));
+        intent.putExtra(Intent.EXTRA_SUBJECT, activity.getString(R.string.mistakeInTheText));
         intent.putExtra(Intent.EXTRA_TEXT, text);
         activity.startActivity(Intent.createChooser(intent, "Send email..."));
     }

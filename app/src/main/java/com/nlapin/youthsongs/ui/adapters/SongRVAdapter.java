@@ -95,7 +95,7 @@ public class SongRVAdapter
                 switch (item.getItemId()) {
                     case R.id.mistakeInTheText:
                         new AboutScreenRouter(activity).openEmail(AboutScreenRouter.DeveloperID.Nikita,
-                                String.format(activity.getString(R.string.mistake_message_body), songNumber));
+                                String.format(activity.getString(R.string.mistakeMessageBody), songNumber));
                         return true;
 
                     case R.id.shareSong:
@@ -127,19 +127,16 @@ public class SongRVAdapter
             return null;
         }
 
-        Log.d(TAG, "copySongList size() - " + copySongList.size());
         for (Song song : copySongList) {
 
             //Search by name
             if (song.getName().toLowerCase().contains(filterText)) {
                 songList.add(song);
-                Log.d(TAG, "Matched by name");
             }
 
             //Search by number
             if (String.valueOf(song.getId()).contains(filterText)) {
                 songList.add(song);
-                Log.d(TAG, "Matched by number");
             }
 
             //Search by text
@@ -154,12 +151,10 @@ public class SongRVAdapter
                     && song.getChorus() != null
                     && song.getChorus().toLowerCase().contains(filterText)) {
                 songList.add(song);
-                Log.d(TAG, "Matched by text");
             }
             if (!isNumber && !songList.contains(song)
                     && song.getText().toLowerCase().contains(filterText)) {
                 songList.add(song);
-                Log.d(TAG, "Matched by text");
             }
         }
 

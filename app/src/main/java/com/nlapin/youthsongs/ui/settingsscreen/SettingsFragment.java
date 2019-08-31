@@ -145,13 +145,13 @@ public class SettingsFragment extends Fragment {
                                     PreferenceManager.getDefaultSharedPreferences(getContext())
                                             .edit()
                                             .putString(Objects.requireNonNull(getContext()).getString(
-                                                    R.string.last_update_pref),
+                                                    R.string.lastUpdatePref),
                                                     currentDateAndTime)
                                             .apply();
 
                                     TextView subtitle = v.findViewById(R.id.settingSubtitle);
                                     subtitle.setText(String.format(getString(
-                                            R.string.last_update_label),
+                                            R.string.lastUpdateLabel),
                                             currentDateAndTime));
                                 }));
                 break;

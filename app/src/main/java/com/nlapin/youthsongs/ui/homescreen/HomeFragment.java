@@ -15,19 +15,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
-import com.airbnb.lottie.LottieAnimationView;
 import com.jakewharton.rxbinding3.appcompat.RxSearchView;
 import com.nlapin.youthsongs.R;
 import com.nlapin.youthsongs.ui.MainActivity;
@@ -39,6 +26,19 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -67,8 +67,9 @@ public class HomeFragment
     Toolbar toolBar;
     @BindView(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
-    @BindView(R.id.loadingAnimation)
-    LottieAnimationView loadingAnimation;
+    @BindView(R.id.progressBarHome)
+    ContentLoadingProgressBar progressBarHome;
+
 
     /**
      * Adapter for all songs in MainScreen
@@ -77,7 +78,6 @@ public class HomeFragment
 
     private CompositeDisposable disposables;
     private SearchView searchView;
-//    private RecyclerViewSkeletonScreen skeletonScreen;
 
     public HomeFragment() {
         //Need an empty constructor because of implementing Fragment
@@ -88,6 +88,13 @@ public class HomeFragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        progressBarHome.show();
         setUpRecyclerView();
         setupAuthorsSelectionRV();
         setUpToolbar();
@@ -99,8 +106,6 @@ public class HomeFragment
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(songs -> {
-//                    setUpSkeleton();
-//                    skeletonScreen.show();
                     adapter.setSongList(songs);
                     RecyclerView.Adapter songRVAdapter = songRV.getAdapter();
 
@@ -109,17 +114,13 @@ public class HomeFragment
                     }
 
                     Log.d(TAG, "UI Song list updated!");
-//                    skeletonScreen.hide();
                 }, throwable -> {
-                    Toast.makeText(getContext(),
-                            "An error occurred - " + throwable,
+                    Toast.makeText(getContext(), getString(R.string.somethingWentWrong) + throwable,
                             Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Error while loading songs:\n", throwable);
                 }, () -> Log.i(TAG, "Songs loaded!")));
 
         setHasOptionsMenu(true);
-
-        return view;
     }
 
     @Override
@@ -138,18 +139,20 @@ public class HomeFragment
                     ? searchManager.getSearchableInfo(getActivity().getComponentName())
                     : null);
 
+            RecyclerView.Adapter songRVAdapter = songRV.getAdapter();
             disposables.add(RxSearchView.queryTextChanges(searchView)
-                    .observeOn(Schedulers.io())
                     .debounce(300, TimeUnit.MILLISECONDS)
                     .map(CharSequence::toString)
-                    .doOnNext(result -> adapter.filter(result))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(result -> {
-                        RecyclerView.Adapter songRVAdapter = songRV.getAdapter();
-                        if (songRVAdapter != null) {
-                            songRVAdapter.notifyDataSetChanged();
-                        }
-                    }, throwable -> Log.e(TAG, "onCreateOptionsMenu: ", throwable)));
+                    .doOnNext(filterText -> songRV.post(() -> {
+                        progressBarHome.show();
+                        songRVAdapter.notifyItemRangeRemoved(0, songRVAdapter.getItemCount() - 1);
+                        adapter.filter(filterText);
+                    }))
+                    .subscribe(result -> songRV.post(() -> {
+                        songRVAdapter.notifyItemRangeInserted(0, songRVAdapter.getItemCount() - 1);
+                        songRVAdapter.notifyDataSetChanged();
+                        progressBarHome.hide();
+                    }), throwable -> Log.e(TAG, "onCreateOptionsMenu: ", throwable)));
         }
         super.onCreateOptionsMenu(menu, inflater);
 
@@ -162,12 +165,10 @@ public class HomeFragment
         ((MainActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolBar);
         ActionBar supportActionBar = ((MainActivity) getActivity()).getSupportActionBar();
         if (supportActionBar != null) {
-            supportActionBar.setTitle(getString(R.string.all_songs));
+            supportActionBar.setTitle(getString(R.string.allSongs));
         }
 
-        toolBar.setOnClickListener(v -> {
-            nestedScrollView.smoothScrollTo(0, songRV.getTop());
-        });
+        toolBar.setOnClickListener(v -> nestedScrollView.smoothScrollTo(0, songRV.getTop()));
     }
 
     /**
@@ -177,7 +178,6 @@ public class HomeFragment
     public void onDestroy() {
         super.onDestroy();
         disposables.dispose();
-        Log.d(TAG, "HomeFragment destroyed");
     }
 
     /**
@@ -185,8 +185,6 @@ public class HomeFragment
      */
     private void setUpRecyclerView() {
         songRV.setVisibility(View.GONE);
-        loadingAnimation.setVisibility(View.VISIBLE);
-        loadingAnimation.playAnimation();
 
         adapter = new SongRVAdapter(new ArrayList<>(), (v, position) ->
                 startActivity(SongActivity.start(getContext(), position)), getActivity());
@@ -194,27 +192,9 @@ public class HomeFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         songRV.setLayoutManager(layoutManager);
         songRV.setAdapter(adapter);
-
-        loadingAnimation.animate()
-                .alpha(0f)
-                .setDuration(500)
-                .withEndAction(() -> {
-                    songRV.setAlpha(0f);
-                    songRV.setVisibility(View.VISIBLE);
-                    songRV.animate()
-                            .setDuration(500)
-                            .alpha(1f);
-                });
-
-//        setUpSkeleton();
+        songRV.setVisibility(View.VISIBLE);
+        progressBarHome.hide();
     }
-
-//    private void setUpSkeleton() {
-//        skeletonScreen = Skeleton.bind(songRV)
-//                .adapter(adapter)
-//                .load(R.layout.song_item)
-//                .show();
-//    }
 
     /**
      * Setting up authors selection UI

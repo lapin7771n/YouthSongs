@@ -14,7 +14,7 @@ import static com.nlapin.youthsongs.data.remote.SongCloudRepository.TEXT_OF_SONG
 
 public class SongUtils {
 
-    private static final String TAG = "SongUtils";
+    private SongUtils(){}
 
     /**
      * Give you structured HTML code of song

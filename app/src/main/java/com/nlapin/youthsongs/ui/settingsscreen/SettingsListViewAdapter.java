@@ -45,8 +45,8 @@ public class SettingsListViewAdapter extends ArrayAdapter<String> {
         header.setText(headers.get(position));
         if (position == SONGS_DATABASE_ITEM) {
             String lastUpdate = PreferenceManager.getDefaultSharedPreferences(context)
-                    .getString(context.getString(R.string.last_update_pref),
-                            context.getString(R.string.last_update_label));
+                    .getString(context.getString(R.string.lastUpdatePref),
+                            context.getString(R.string.lastUpdateLabel));
             subtitle.setText(String.format(subtitles.get(position), lastUpdate));
         } else {
             subtitle.setText(subtitles.get(position));

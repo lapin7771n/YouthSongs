@@ -105,6 +105,7 @@ public class SongActivity
         }
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
     }
 
 
@@ -136,11 +137,11 @@ public class SongActivity
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolBarTitle);
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedToolBarTitle);
         actionBarSubtitle.setText(getString(R.string.number) + " " + song.getId());
-        int fontSize = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this)
-                .getString(getString(R.string.font_size_pref), "5"));
+        float fontSize = PreferenceManager.getDefaultSharedPreferences(this)
+                .getFloat(getString(R.string.fontSizePref), songTextTV.getTextSize());
 
         boolean withCords = PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean(getString(R.string.is_chords_show_pref), false);
+                .getBoolean(getString(R.string.isChordsShowPref), false);
 
         songTextTV.setText(HtmlCompat.fromHtml(SongUtils.getSongTextFormated(song, withCords),
                 HtmlCompat.FROM_HTML_OPTION_USE_CSS_COLORS));
@@ -195,7 +196,7 @@ public class SongActivity
 
             case R.id.mistakeInTheText:
                 new AboutScreenRouter(this).openEmail(AboutScreenRouter.DeveloperID.Nikita,
-                        String.format(this.getString(R.string.mistake_message_body), songId));
+                        String.format(this.getString(R.string.mistakeMessageBody), songId));
                 break;
 
             case R.id.shareSong:
