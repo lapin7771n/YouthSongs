@@ -1,20 +1,20 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/title_activity_appearance_settings">
+    <PreferenceCategory app:title="@string/titleActivityAppearanceSettings">
 
         <ListPreference
             android:defaultValue="15"
             android:entries="@array/font_size_pref"
             android:entryValues="@array/font_size_pref"
-            android:key="@string/font_size_pref"
+            android:key="@string/fontSizePref"
             android:summary="%s"
-            android:title="@string/font_size_label" />
+            android:title="@string/fontSizePref" />
 
         <SwitchPreference
             android:defaultValue="false"
-            android:key="@string/is_chords_show_pref"
-            android:title="@string/show_chords_label" />
+            android:key="@string/isChordsShowPref"
+            android:title="@string/showChordsLabel" />
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="emptyFavLabel">У вас нет избранных песен</string>
-    <string name="all_songs">Все песни</string>
+    <string name="allSongs">Все песни</string>
     <string name="favoriteSongsCount">%d песен</string>
     <string name="favoriteSongsLabel">Любимые песни</string>
-    <string name="font_size_label">Размер шрифта</string>
-    <string name="last_update_label">Последнее обновление было:%s</string>
-    <string name="mistake_in_the_text">Ошибка в тексте</string>
-    <string name="mistake_message_body">Ошибка в песне по номеру - %d. Подробности:</string>
+    <string name="fontSizeLabel">Размер шрифта</string>
+    <string name="lastUpdateLabel">Последнее обновление было:%s</string>
+    <string name="mistakeInTheText">Ошибка в тексте</string>
+    <string name="mistakeMessageBody">Ошибка в песне по номеру - %d. Подробности:</string>
     <string name="share">Поделиться</string>
-    <string name="show_chords_label">Показать аккорды</string>
-    <string name="title_activity_appearance_settings">Внешний вид</string>
+    <string name="showChordsLabel">Показать аккорды</string>
+    <string name="titleActivityAppearanceSettings">Внешний вид</string>
     <string name="cansel">Отменить</string>
     <string name="errorMigratingSongs">Ошибка при переносе песен -</string>
     <string name="featureNotSupported">Извините, эта функция еще не поддерживается</string>
@@ -21,7 +21,9 @@
     <string name="proposeSongDescription">Предоставьте информацию о песне ниже</string>
     <string name="proposeSongResponce">Благодарим за помощь. Мы проверяем эту песню и, возможно, добавим ее в ближайшее время</string>
     <string name="songName">Название песни</string>
-    <string name="song_image_cover_desc">Обложка с изображением песни</string>
+    <string name="songImageCoverDesc">Обложка с изображением песни</string>
     <string name="songsMigrated">Песни успешно перенесены</string>
     <string name="subtitle">подзаголовок</string>
+    <string name="aboutApp">Наше приложение всегда развивается и растет. Мы стараемся регулярно добавлять новый контент, но иногда упускаем что-то из виду, поэтому у тебя есть возможность внести свой вклад в общее дело.</string>
+    <string name="somethingWentWrong">Что-то пошло не так</string>
 </resources>

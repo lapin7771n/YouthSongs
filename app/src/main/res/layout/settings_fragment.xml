@@ -56,7 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="Наше приложение всегда развивается и растет. Мы стараемся регулярно добавлять новый контент, но иногда упускаем что-то из виду, поэтому у тебя есть возможность внести свой вклад в общее дело."
+        android:text="@string/aboutApp"
         android:textColor="#707070"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

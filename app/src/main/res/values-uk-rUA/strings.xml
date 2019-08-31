@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="emptyFavLabel">У вас немає улюблених пісень</string>
-    <string name="all_songs">Всі пісні</string>
+    <string name="allSongs">Всі пісні</string>
     <string name="favoriteSongsCount">%d пісень</string>
     <string name="favoriteSongsLabel">Улюблені пісні</string>
-    <string name="font_size_label">Розмір шрифту</string>
-    <string name="last_update_label">Останнє оновлення:%s</string>
-    <string name="mistake_in_the_text">Помилка у тексті</string>
-    <string name="mistake_message_body">Помилка в пісні за номером - %d. Деталі:</string>
+    <string name="fontSizeLabel">Розмір шрифту</string>
+    <string name="lastUpdateLabel">Останнє оновлення:%s</string>
+    <string name="mistakeInTheText">Помилка у тексті</string>
+    <string name="mistakeMessageBody">Помилка в пісні за номером - %d. Деталі:</string>
     <string name="share">Поділитися</string>
-    <string name="show_chords_label">Показати акорди</string>
-    <string name="title_activity_appearance_settings">Зовнішній вигляд</string>
+    <string name="showChordsLabel">Показати акорди</string>
+    <string name="titleActivityAppearanceSettings">Зовнішній вигляд</string>
     <string name="cansel">Скасувати</string>
     <string name="errorMigratingSongs">Помилка під час міграції пісень -</string>
     <string name="featureNotSupported">На жаль, ця функція ще не підтримується</string>
@@ -21,7 +21,9 @@
     <string name="proposeSongDescription">Надайте інформацію про пісню нижче</string>
     <string name="proposeSongResponce">Дякуємо. Ми перевіряємо цю пісню і, можливо, додамо її найближчим часом</string>
     <string name="songName">Назва пісні</string>
-    <string name="song_image_cover_desc">Обкладинка зображення пісні</string>
+    <string name="songImageCoverDesc">Обкладинка зображення пісні</string>
     <string name="songsMigrated">Пісні успішно перенесені</string>
     <string name="subtitle">підзаголовок</string>
+    <string name="aboutApp">Наш додаток завжди розвивається і росте. Ми намагаємося регулярно додавати новий контент, але іноді втрачаємо щось з виду, тому у тебе є можливість внести свій внесок у загальну справу.</string>
+    <string name="somethingWentWrong">Щось пішло не так</string>
 </resources>

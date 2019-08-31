@@ -1,19 +1,19 @@
 <resources>
+    <string name="appName" translatable="false">YouthSongs</string>
+    <string name="isChordsShowPref" translatable="false">is_chords_show</string>
+    <string name="fontSizePref" translatable="false">font_size</string>
+    <string name="lastUpdatePref" translatable="false">last_update_time</string>
     <string name="emptyFavLabel">You have no favorite songs</string>
     <string name="share">Share</string>
-    <string name="mistake_message_body">Mistake in the song by number - %d. Details:</string>
-    <string name="show_chords_label">Show chords</string>
-    <string name="font_size_label">Font size</string>
-    <string name="all_songs">All songs</string>
-    <string name="title_activity_appearance_settings">Appearance</string>
-    <string name="last_update_label">Last update was: %s</string>
+    <string name="mistakeMessageBody">Mistake in the song by number - %d. Details:</string>
+    <string name="showChordsLabel">Show chords</string>
+    <string name="fontSizeLabel">Font size</string>
+    <string name="allSongs">All songs</string>
+    <string name="titleActivityAppearanceSettings">Appearance</string>
+    <string name="lastUpdateLabel">Last update was: %s</string>
     <string name="favoriteSongsLabel">Favorite songs</string>
     <string name="favoriteSongsCount">%d songs</string>
-    <string name="mistake_in_the_text">Mistake in the text</string>
-    <string name="app_name" translatable="false">YouthSongs</string>
-    <string name="is_chords_show_pref" translatable="false">is_chords_show</string>
-    <string name="font_size_pref" translatable="false">font_size</string>
-    <string name="last_update_pref" translatable="false">last_update_time</string>
+    <string name="mistakeInTheText">Mistake in the text</string>
     <string name="proposeSongResponce">Thanks. We are check this song and maybe add it soon</string>
     <string name="proposeSongAlertDialogLabel">Thanks for your help</string>
     <string name="proposeSongDescription">Provide information about song below</string>
@@ -26,5 +26,7 @@
     <string name="number">Number</string>
     <string name="featureNotSupported">Sorry, this feature is not supported yet</string>
     <string name="subtitle">subtitle</string>
-    <string name="song_image_cover_desc">Song image cover</string>
+    <string name="songImageCoverDesc">Song image cover</string>
+    <string name="aboutApp">Our application is always developing and growing. We try to regularly add new content, but sometimes we lose sight of something, so you have the opportunity to contribute to the common cause.</string>
+    <string name="somethingWentWrong">Something went wrong</string>
 </resources>
