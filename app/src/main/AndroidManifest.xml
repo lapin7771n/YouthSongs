@@ -9,7 +9,7 @@
         android:name=".YouthSongsApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/appName"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -19,7 +19,7 @@
         <activity android:name=".ui.aboutappscreen.AboutAppActivity" />
         <activity
             android:name=".ui.settingsscreen.AppearanceSettingsActivity"
-            android:label="@string/title_activity_appearance_settings" />
+            android:label="@string/titleActivityAppearanceSettings" />
         <activity
             android:name=".ui.songscreen.SongActivity"
             android:parentActivityName=".ui.MainActivity"
