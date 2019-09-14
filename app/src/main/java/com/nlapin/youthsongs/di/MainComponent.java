@@ -1,12 +1,10 @@
 package com.nlapin.youthsongs.di;
 
-import com.nlapin.youthsongs.data.FavoritesRepository;
 import com.nlapin.youthsongs.data.SongRepository;
 import com.nlapin.youthsongs.data.local.AppDatabase;
 import com.nlapin.youthsongs.data.remote.SongCloudRepository;
 import com.nlapin.youthsongs.network.NetworkService;
 import com.nlapin.youthsongs.ui.MainActivity;
-import com.nlapin.youthsongs.ui.favsongscreen.FavoritesViewModel;
 import com.nlapin.youthsongs.ui.homescreen.HomeViewModel;
 import com.nlapin.youthsongs.ui.songscreen.SongActivity;
 import com.nlapin.youthsongs.ui.songscreen.SongViewModel;
@@ -36,8 +34,4 @@ public interface MainComponent {
     void inject(SongActivity songActivity);
 
     void inject(MainActivity songActivity);
-
-    void inject(FavoritesViewModel favoritesViewModel);
-
-    void inject(FavoritesRepository favoritesRepository);
 }

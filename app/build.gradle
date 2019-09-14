@@ -1,20 +1,9 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-    }
-
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.28.0'
-    }
-}
 apply plugin: 'com.android.application'
-
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
-
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -23,8 +12,8 @@ android {
         applicationId "com.nlapin.youthsongs"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 2
-        versionName "0.2"
+        versionCode 3
+        versionName "0.3"
         flavorDimensions "default"
         multiDexEnabled true
 
@@ -39,19 +28,16 @@ android {
         }
 
         debug {
-            minifyEnabled false
 //            minifyEnabled true
 //            shrinkResources true
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
 
-    productFlavors {
-        dev {
-            applicationIdSuffix ".dev"
+        applicationVariants.all { variant ->
+            variant.outputs.all {
+                outputFileName = "YouthSongs_${defaultConfig.versionName}.apk"
+            }
         }
-
-        live {}
     }
 
     compileOptions {
@@ -76,16 +62,15 @@ android {
         androidTest { java.srcDirs = ['src/androidTest/java'] }
     }
     buildToolsVersion = var
-
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.preference:preference:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
 
     //ButterKnife
     implementation 'com.jakewharton:butterknife:10.1.0'
@@ -101,28 +86,29 @@ dependencies {
     implementation 'com.google.guava:guava:27.0.1-jre'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-messaging:18.0.0'
-    implementation 'com.google.firebase:firebase-core:16.0.9'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
-    implementation 'com.google.firebase:firebase-firestore:19.0.0'
-    implementation 'com.google.firebase:firebase-storage:17.0.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.google.firebase:firebase-firestore:21.1.1'
+    implementation 'com.google.firebase:firebase-storage:19.0.1'
 
     //LiveData
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.1.0'
 
     //ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.0.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.1.0"
 
     //Room (SQL ORM)
-    def room_version = "2.1.0-beta01"
+    def room_version = "2.1.0"
     implementation "androidx.room:room-rxjava2:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     //Dagger 2
-    implementation 'com.google.dagger:dagger:2.22'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.22'
+    implementation 'com.google.dagger:dagger:2.23.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.23.1'
+    kapt 'com.google.dagger:dagger-compiler:2.23.1'
 
     //View loading preview
     implementation 'com.ethanhua:skeleton:1.1.2'
@@ -139,7 +125,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
     //RxJava
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
 
     //RxAndroid
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
@@ -147,4 +133,12 @@ dependencies {
     //RxBinding
     implementation 'com.jakewharton.rxbinding3:rxbinding-core:3.0.0-alpha2'
     implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0-alpha2'
+
+    //Shimmer recycler view
+    implementation 'com.github.sharish:ShimmerRecyclerView:v1.3'
+    implementation 'com.crashlytics.sdk.android:answers:1.4.7'
+
+    //Custom logger
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
 }

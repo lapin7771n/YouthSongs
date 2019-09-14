@@ -8,7 +8,7 @@ import retrofit2.http.Query;
 
 public interface JSONPlaceHolderAPI {
     @GET("/v1/search/")
-    public Call<PixelsResponseModel> getRandomPhoto(@Query("query") String query,
-                                                    @Query("per_page") String per_page,
-                                                    @Query("page") String page);
+    Call<PixelsResponseModel> getRandomPhoto(@Query("query") String query,
+                                             @Query("per_page") String per_page,
+                                             @Query("page") String page);
 }

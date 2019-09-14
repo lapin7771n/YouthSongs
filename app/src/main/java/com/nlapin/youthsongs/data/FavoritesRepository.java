@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -23,14 +24,13 @@ public class FavoritesRepository {
 
     @Inject
     public FavoritesRepository() {
-        YouthSongsApp.getComponent().inject(this);
     }
 
-    public Observable<LiveData<List<FavoriteSong>>> getAll() {
-        return Observable.just(favoriteSongDao.getAll());
+    public LiveData<List<FavoriteSong>> getAll() {
+        return favoriteSongDao.getAll();
     }
 
-    public Flowable<FavoriteSong> getById(int id) {
+    public Single<FavoriteSong> getById(int id) {
         return favoriteSongDao.getBySongId(id);
     }
 

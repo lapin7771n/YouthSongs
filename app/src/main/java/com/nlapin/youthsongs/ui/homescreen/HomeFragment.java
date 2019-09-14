@@ -4,7 +4,6 @@ package com.nlapin.youthsongs.ui.homescreen;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +35,17 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
+import com.jakewharton.rxbinding3.appcompat.RxSearchView;
+import com.nlapin.youthsongs.R;
+import com.nlapin.youthsongs.ui.MainActivity;
+import com.nlapin.youthsongs.ui.adapters.SongRVAdapter;
+import com.nlapin.youthsongs.ui.songscreen.SongActivity;
+
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -45,24 +55,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class HomeFragment
-        extends Fragment {
+public class HomeFragment extends Fragment {
 
     private static final String TAG = "HomeFragment";
-    private static final int VIEW_PAGER_PAGE_MARGIN = 10;
-    private static final int VIEW_PAGER_LR_PADDING = 16;
-    private static final int VIEW_PAGER_TB_PADDING = 0;
-
     @BindView(R.id.songRV)
-    RecyclerView songRV;
+    ShimmerRecyclerView songRV;
     @BindView(R.id.header)
     TextView header;
-    @BindView(R.id.authorsSelectionsVP)
-    ViewPager authorsSelectionsVP;
     @BindView(R.id.toolBar)
     Toolbar toolBar;
     @BindView(R.id.nestedScrollView)
@@ -75,7 +74,6 @@ public class HomeFragment
      * Adapter for all songs in MainScreen
      */
     private SongRVAdapter adapter;
-
     private CompositeDisposable disposables;
     private SearchView searchView;
 
@@ -96,16 +94,16 @@ public class HomeFragment
         super.onViewCreated(view, savedInstanceState);
         progressBarHome.show();
         setUpRecyclerView();
-        setupAuthorsSelectionRV();
         setUpToolbar();
         disposables = new CompositeDisposable();
 
-        HomeViewModel model = ViewModelProviders.of(this).get(HomeViewModel.class);
+        HomeViewModel viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
-        disposables.add(model.getSongs()
-                .subscribeOn(Schedulers.io())
+        disposables.add(viewModel.getSongs()
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(songs -> {
+                    songRV.hideShimmerAdapter();
                     adapter.setSongList(songs);
                     RecyclerView.Adapter songRVAdapter = songRV.getAdapter();
 
@@ -118,7 +116,7 @@ public class HomeFragment
                     Toast.makeText(getContext(), getString(R.string.somethingWentWrong) + throwable,
                             Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Error while loading songs:\n", throwable);
-                }, () -> Log.i(TAG, "Songs loaded!")));
+                }, () -> Log.i(TAG, "Songs loaded.")));
 
         setHasOptionsMenu(true);
     }
@@ -139,23 +137,17 @@ public class HomeFragment
                     ? searchManager.getSearchableInfo(getActivity().getComponentName())
                     : null);
 
-            RecyclerView.Adapter songRVAdapter = songRV.getAdapter();
             disposables.add(RxSearchView.queryTextChanges(searchView)
-                    .debounce(300, TimeUnit.MILLISECONDS)
-                    .map(CharSequence::toString)
-                    .doOnNext(filterText -> songRV.post(() -> {
-                        progressBarHome.show();
-                        songRVAdapter.notifyItemRangeRemoved(0, songRVAdapter.getItemCount() - 1);
-                        adapter.filter(filterText);
-                    }))
-                    .subscribe(result -> songRV.post(() -> {
-                        songRVAdapter.notifyItemRangeInserted(0, songRVAdapter.getItemCount() - 1);
-                        songRVAdapter.notifyDataSetChanged();
-                        progressBarHome.hide();
-                    }), throwable -> Log.e(TAG, "onCreateOptionsMenu: ", throwable)));
+                    .doOnEach(charSequenceNotification -> songRV.showShimmerAdapter())
+                    .debounce(500, TimeUnit.MILLISECONDS)
+                    .subscribe(result -> {
+                                adapter.filter(result.toString());
+                                songRV.hideShimmerAdapter();
+                                adapter.notifyDataSetChanged();
+                            },
+                            throwable -> Log.e(TAG, "Error occurred due to SearchView: ", throwable)));
         }
         super.onCreateOptionsMenu(menu, inflater);
-
     }
 
     /**
@@ -185,42 +177,10 @@ public class HomeFragment
      */
     private void setUpRecyclerView() {
         songRV.setVisibility(View.GONE);
-
-        adapter = new SongRVAdapter(new ArrayList<>(), (v, position) ->
-                startActivity(SongActivity.start(getContext(), position)), getActivity());
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         songRV.setLayoutManager(layoutManager);
+        adapter = new SongRVAdapter((v, position) -> startActivity(SongActivity.start(getContext(), position)), getActivity());
         songRV.setAdapter(adapter);
-        songRV.setVisibility(View.VISIBLE);
-        progressBarHome.hide();
+        songRV.showShimmerAdapter();
     }
-
-    /**
-     * Setting up authors selection UI
-     */
-    private void setupAuthorsSelectionRV() {
-        PagerAdapter pagerAdapter = new AuthorsSelectionPagerAdapter(getChildFragmentManager(), 3);
-        authorsSelectionsVP.setAdapter(pagerAdapter);
-        authorsSelectionsVP.setPageMargin(dpToPx());
-        authorsSelectionsVP.setPadding(
-                VIEW_PAGER_LR_PADDING,
-                VIEW_PAGER_TB_PADDING,
-                VIEW_PAGER_LR_PADDING,
-                VIEW_PAGER_TB_PADDING);
-    }
-
-    /**
-     * Converting DP to screen pixels
-     *
-     * @return value in Pixels
-     */
-    private int dpToPx() {
-        DisplayMetrics displayMetrics = Objects.requireNonNull(getActivity())
-                .getResources()
-                .getDisplayMetrics();
-
-        return Math.round(VIEW_PAGER_PAGE_MARGIN * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-    }
-
 }

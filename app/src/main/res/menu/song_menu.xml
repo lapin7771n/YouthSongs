@@ -6,8 +6,8 @@
         android:id="@+id/favoriteBtn"
         android:checkable="true"
         android:icon="@drawable/ic_favorite_border"
-        android:title="Add to favorite"
-        app:showAsAction="always" />
+        android:title="@string/addToFavorite"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/mistakeInTheText"

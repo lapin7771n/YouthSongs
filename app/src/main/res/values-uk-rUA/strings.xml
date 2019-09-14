@@ -15,7 +15,7 @@
     <string name="errorMigratingSongs">Помилка під час міграції пісень -</string>
     <string name="featureNotSupported">На жаль, ця функція ще не підтримується</string>
     <string name="linkToSong">Посилання на пісню</string>
-    <string name="number">Номер</string>
+    <string name="number">Номер %d</string>
     <string name="propose">Пропозиції</string>
     <string name="proposeSongAlertDialogLabel">Дякуємо за вашу допомогу</string>
     <string name="proposeSongDescription">Надайте інформацію про пісню нижче</string>

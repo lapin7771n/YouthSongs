@@ -93,11 +93,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.cooltechworks.views.shimmer.ShimmerRecyclerView
                 android:id="@+id/songRV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/allSongsLabel"
+                app:shimmer_demo_angle="20"
+                app:shimmer_demo_child_count="20"
+                app:shimmer_demo_duration="500"
+                app:shimmer_demo_layout="@layout/layout_demo"
+                app:shimmer_demo_shimmer_color="#73ffffff"
                 tools:listitem="@layout/song_item" />
 
             <androidx.core.widget.ContentLoadingProgressBar

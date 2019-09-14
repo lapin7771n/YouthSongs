@@ -15,7 +15,7 @@
     <string name="errorMigratingSongs">Ошибка при переносе песен -</string>
     <string name="featureNotSupported">Извините, эта функция еще не поддерживается</string>
     <string name="linkToSong">Ссылка на песню</string>
-    <string name="number">Номер</string>
+    <string name="number">Номер %d</string>
     <string name="propose">Предложения</string>
     <string name="proposeSongAlertDialogLabel">Спасибо за вашу помощь</string>
     <string name="proposeSongDescription">Предоставьте информацию о песне ниже</string>

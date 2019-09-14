@@ -15,6 +15,7 @@ import com.nlapin.youthsongs.network.NetworkService;
 import com.nlapin.youthsongs.utils.SongUtils;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
@@ -22,9 +23,7 @@ import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.Maybe;
-import io.reactivex.MaybeOnSubscribe;
 import io.reactivex.Single;
-import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
@@ -48,7 +47,6 @@ public class SongCloudRepository {
     public static final String NUMBER_OF_SONG_KEY = "number";
     public static final String TEXT_OF_SONG_KEY = "text";
     public static final String CHORUS_OF_SONG_KEY = "chorus";
-    public static final String COVER_URI_LARGE = "cover_uri_large";
     public static final String COVER_URI_SMALL = "cover_uri_small";
 
     private FirebaseFirestore firebaseFirestore;
@@ -69,7 +67,8 @@ public class SongCloudRepository {
                                 List<Song> songs = SongUtils.mapToSongs(documents);
                                 emitter.onNext(songs);
                             } else {
-                                emitter.onNext(null);
+                                Log.e(TAG, "provideAllSongs: songs is empty");
+                                emitter.onNext(new ArrayList<>());
                             }
                             emitter.onComplete();
                         })
@@ -77,25 +76,23 @@ public class SongCloudRepository {
     }
 
     public Maybe<Song> provideSongById(int id) {
-        return Maybe.create((MaybeOnSubscribe<Song>) emitter -> {
-            firebaseFirestore.collection(SONGS_COLLECTION)
-                    .whereEqualTo(NUMBER_OF_SONG_KEY, id)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        QuerySnapshot result = task.getResult();
-                        if (result != null && !result.isEmpty()) {
-                            List<DocumentSnapshot> documents = result.getDocuments();
-                            List<Song> songs = SongUtils.mapToSongs(documents);
-                            Song song = songs.get(0);
+        return Maybe.create(emitter ->
+                firebaseFirestore.collection(SONGS_COLLECTION)
+                        .whereEqualTo(NUMBER_OF_SONG_KEY, id)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            QuerySnapshot result = task.getResult();
+                            if (result != null && !result.isEmpty()) {
+                                List<DocumentSnapshot> documents = result.getDocuments();
+                                List<Song> songs = SongUtils.mapToSongs(documents);
+                                Song song = songs.get(0);
 
-                            getSongCover(song).subscribe(song::setCoverUrlSmall).dispose();
-                            emitter.onSuccess(song);
-                        } else {
-                            emitter.onError(new FileNotFoundException("Song by this id not found"));
-                        }
-                    }).addOnFailureListener(emitter::onError);
-
-        });
+                                getSongCover(song).subscribe(song::setCoverUrlSmall).dispose();
+                                emitter.onSuccess(song);
+                            } else {
+                                emitter.onError(new FileNotFoundException("Song by this id not found"));
+                            }
+                        }).addOnFailureListener(emitter::onError));
     }
 
     private Single<String> getSongCover(Song song) {

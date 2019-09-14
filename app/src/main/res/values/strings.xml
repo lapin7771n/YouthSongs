@@ -3,6 +3,8 @@
     <string name="isChordsShowPref" translatable="false">is_chords_show</string>
     <string name="fontSizePref" translatable="false">font_size</string>
     <string name="lastUpdatePref" translatable="false">last_update_time</string>
+    <string name="song_opened" translatable="false">song_opened</string>
+    <string name="app_opened" translatable="false">app_opened</string>
     <string name="emptyFavLabel">You have no favorite songs</string>
     <string name="share">Share</string>
     <string name="mistakeMessageBody">Mistake in the song by number - %d. Details:</string>
@@ -23,10 +25,11 @@
     <string name="songsMigrated">Songs successfully migrated</string>
     <string name="songName">Song name</string>
     <string name="linkToSong">Link to song</string>
-    <string name="number">Number</string>
+    <string name="number">Number %d</string>
     <string name="featureNotSupported">Sorry, this feature is not supported yet</string>
     <string name="subtitle">subtitle</string>
     <string name="songImageCoverDesc">Song image cover</string>
     <string name="aboutApp">Our application is always developing and growing. We try to regularly add new content, but sometimes we lose sight of something, so you have the opportunity to contribute to the common cause.</string>
     <string name="somethingWentWrong">Something went wrong</string>
+    <string name="addToFavorite">Add to favorite</string>
 </resources>

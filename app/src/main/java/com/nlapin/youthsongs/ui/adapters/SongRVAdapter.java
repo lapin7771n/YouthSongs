@@ -2,7 +2,6 @@ package com.nlapin.youthsongs.ui.adapters;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import com.nlapin.youthsongs.ui.AboutScreenRouter;
 import com.nlapin.youthsongs.ui.CustomItemClickListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import butterknife.BindView;
@@ -34,24 +32,19 @@ public class SongRVAdapter
 
     private static final String TAG = "SongRVAdapter";
 
-    private List<Song> songList;
-    private List<Song> copySongList;
+    private List<Song> songList = new ArrayList<>();
+    private List<Song> copySongList = new ArrayList<>();
     private CustomItemClickListener clickListener;
     private FragmentActivity activity;
 
-    public SongRVAdapter(Collection<Song> songList,
-                         CustomItemClickListener clickListener, FragmentActivity activity) {
-
-        this.songList = new ArrayList<>(songList);
-        this.copySongList = new ArrayList<>(songList);
+    public SongRVAdapter(CustomItemClickListener clickListener, FragmentActivity activity) {
         this.clickListener = clickListener;
         this.activity = activity;
     }
 
     public void setSongList(List<Song> songList) {
-        this.songList.clear();
-        this.songList.addAll(songList);
-        this.copySongList.addAll(songList);
+        this.songList = new ArrayList<>(songList);
+        this.copySongList = new ArrayList<>(songList);
     }
 
     @Override
@@ -118,13 +111,11 @@ public class SongRVAdapter
         }
     }
 
-    public List<Song> filter(String filterText) {
-        Log.d(TAG, "filter: ");
-        filterText = filterText.trim().toLowerCase();
+    public void filter(String filterText) {
         songList.clear();
         if (filterText.isEmpty()) {
             songList.addAll(copySongList);
-            return null;
+            return;
         }
 
         for (Song song : copySongList) {
@@ -145,7 +136,7 @@ public class SongRVAdapter
                 Integer.parseInt(filterText);
                 isNumber = true;
             } catch (NumberFormatException e) {
-                // checking if number
+                // checking if text is number
             }
             if (!isNumber && !songList.contains(song)
                     && song.getChorus() != null
@@ -158,7 +149,6 @@ public class SongRVAdapter
             }
         }
 
-        return songList;
     }
 
     class SongViewHolder extends RecyclerView.ViewHolder {

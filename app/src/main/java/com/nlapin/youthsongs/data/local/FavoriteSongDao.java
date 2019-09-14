@@ -11,6 +11,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
+import io.reactivex.Single;
 
 @Dao
 public interface FavoriteSongDao {
@@ -22,7 +23,7 @@ public interface FavoriteSongDao {
     FavoriteSong getById(int id);
 
     @Query("SELECT * FROM favorite_song_table WHERE songId =:songId")
-    Flowable<FavoriteSong> getBySongId(int songId);
+    Single<FavoriteSong> getBySongId(int songId);
 
     @Insert
     void insertAll(FavoriteSong... favoriteSongs);
